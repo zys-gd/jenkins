@@ -1,1 +1,1 @@
-# Jenkins_Toplyvo_UA
+# Jenkins pipelines
