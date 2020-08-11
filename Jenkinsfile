@@ -38,6 +38,7 @@ pipeline {
 		stage ('Setting environment') {
 			steps {
 				sh "cp .env.dev .env"
+				sh "cp docker-compose.override.yml.dist docker-compose.override.yml"
 			}
 		}
 
