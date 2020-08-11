@@ -41,7 +41,7 @@ pipeline {
 			}
 		}
 
-		stage ('Run docker') {
+		stage ('Run docker-compose') {
 			steps {
 				sh "sh redeploy.sh"
 			}
