@@ -1,5 +1,6 @@
 pipeline {
-	agent any
+	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+
 	stages {
 
 		stage ('Checkout from git') {
