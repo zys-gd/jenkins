@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 	stages {
-		stage ('Getting from git') {
+		stage ('Checkout from git') {
 			steps {
 				checkout([
 					$class: 'GitSCM',
