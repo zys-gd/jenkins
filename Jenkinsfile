@@ -41,7 +41,7 @@ pipeline {
 			}
 		}
 
-		stage ('Setting environment') {
+		stage ('Run docker') {
 			steps {
 				sh "sh redeploy.sh"
 			}
