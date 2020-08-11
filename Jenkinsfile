@@ -41,5 +41,11 @@ pipeline {
 			}
 		}
 
+		stage ('Setting environment') {
+			steps {
+				sh "sh redeploy.sh"
+			}
+		}
+
 	}
 }
