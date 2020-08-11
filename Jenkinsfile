@@ -5,7 +5,8 @@ pipeline {
 			steps {
 				checkout([
 					$class: 'GitSCM',
-					branches: [[name: '${ghprbSourceBranch}']],
+					//branches: [[name: '${ghprbSourceBranch}']],
+					branches: [[name: '*/TPLV-662']],
 					doGenerateSubmoduleConfigurations: false,
 					extensions: [],
 					submoduleCfg: [],
