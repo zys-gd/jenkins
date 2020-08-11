@@ -36,7 +36,7 @@ pipeline {
 		}
 
 		stage ('Setting environment') {
-			//sh "cp "
+			sh "cp .env.dev .env"
 		}
 
 	}
