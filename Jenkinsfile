@@ -77,7 +77,6 @@ pipeline {
 			}
 			catch (exc) {
 				sh "docker-compose down"
-				throw
 			}
 		}
 
