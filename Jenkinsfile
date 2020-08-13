@@ -53,6 +53,7 @@ pipeline {
 				DOCKER_PREFIX="${ghprbSourceBranch}"
 				CONTAINER_NAME_PREFIX="${ghprbSourceBranch}"
 				COMPOSE_INTERACTIVE_NO_CLI=1
+				REDIS_HOST="${ghprbSourceBranch}_toplivo_back_redis"
 			}
 			steps {
 				dir("${ghprbSourceBranch}") {
@@ -78,6 +79,7 @@ pipeline {
 						}
 						catch (exc) {
 							sh "docker-compose down"
+							currentBuild.result = 'FAILURE'
 						}
 					}
 				}
