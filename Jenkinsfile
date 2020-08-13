@@ -65,11 +65,6 @@ pipeline {
 
 								docker-compose up -d --build
 
-								docker exec ${ghprbSourceBranch}_toplivo_back_mysql /bin/bash -c "echo \"
-									CREATE DATABASE IF NOT EXISTS toplivo_tracking;
-									GRANT ALL PRIVILEGES ON toplivo_tracking.* TO 'toplivo_user'
-								\" | mysql -uroot -proot123456"
-
 								docker cp ./docker/php/parameters.yml.dist ${ghprbSourceBranch}_toplivo_back_php:/var/www/html/app/config/parameters.yml
 								docker exec ${ghprbSourceBranch}_toplivo_back_php /bin/bash -c "cd /var/www/html && composer install"
 								docker exec -it ${ghprbSourceBranch}_toplivo_back_php_consumer /bin/bash -c "php bin/console rabbitmq-supervisor:rebuild"
