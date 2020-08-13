@@ -47,7 +47,6 @@ pipeline {
 			}
 
 			steps {
-				sh "mkdir ${ghprbSourceBranch}"
 				sh "cd ${ghprbSourceBranch}"
 				sh "cp .env.dev .env"
 				sh "cat .env.docker >> .env"
