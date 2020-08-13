@@ -41,11 +41,6 @@ pipeline {
 		}
 
 		stage ('Setting environment') {
-			environment {
-				DOCKER_PREFIX = "${ghprbSourceBranch}"
-				CONTAINER_NAME_PREFIX = "${ghprbSourceBranch}"
-			}
-
 			steps {
 				dir("${ghprbSourceBranch}") {
 					sh "cp .env.dev .env"
@@ -56,6 +51,10 @@ pipeline {
 		}
 
 		stage ('Run docker-compose') {
+			environment {
+				DOCKER_PREFIX = "${ghprbSourceBranch}"
+				CONTAINER_NAME_PREFIX = "${ghprbSourceBranch}"
+			}
 			steps {
 				dir("${ghprbSourceBranch}") {
 					script {
