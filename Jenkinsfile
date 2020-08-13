@@ -47,7 +47,10 @@ pipeline {
 			}
 
 			steps {
+				sh "pwd"
+				sh "ls -la"
 				sh "cd ${ghprbSourceBranch}"
+				sh "pwd"
 				sh "cp .env.dev .env"
 				sh "cat .env.docker >> .env"
 				sh "cp docker-compose.jenkins.yml docker-compose.yml"
