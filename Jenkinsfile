@@ -74,17 +74,17 @@ pipeline {
 
 								docker-compose up -d --build
 
-								docker cp ./docker/php/parameters.yml.dist ${ghprbSourceBranch}_toplivo_back_php:/var/www/html/app/config/parameters.yml
-								docker exec ${ghprbSourceBranch}_toplivo_back_php /bin/bash -c "cd /var/www/html && composer install"
-								docker exec -it ${ghprbSourceBranch}_toplivo_back_php_consumer /bin/bash -c "php bin/console rabbitmq-supervisor:rebuild"
+								docker cp ./docker/php/parameters.yml.dist php:/var/www/html/app/config/parameters.yml
+								docker-compose exec php /bin/bash -c "cd /var/www/html && composer install"
+								docker-compose exec php_consumer /bin/bash -c "php bin/console rabbitmq-supervisor:rebuild"
 								sleep 5
-								docker exec -d ${ghprbSourceBranch}_toplivo_back_php_consumer /bin/bash -c "php bin/console rabbitmq-supervisor:control --wait-for-supervisord start"
-								docker exec -it ${ghprbSourceBranch}_toplivo_back_php /bin/bash -c "php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
-								docker exec -it ${ghprbSourceBranch}_toplivo_back_php /bin/bash -c "php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
-								docker exec -it ${ghprbSourceBranch}_toplivo_back_php_cli /bin/bash -c "/bin/bash /entrypoint.sh"
-								docker exec -it ${ghprbSourceBranch}_toplivo_back_nginx /bin/bash -c "chown -R www-data:www-data /var/www/html/var/*"
-								docker exec -it --user www-data ${ghprbSourceBranch}_toplivo_back_php /bin/bash -c "php /var/www/html/bin/console assets:install --symlink"
-								docker exec -it ${ghprbSourceBranch}_toplivo_back_php bash -c "php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony"
+								docker-compose exec -d php_consumer /bin/bash -c "php bin/console rabbitmq-supervisor:control --wait-for-supervisord start"
+								docker-compose exec php /bin/bash -c "php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
+								docker-compose exec php /bin/bash -c "php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
+								docker-compose exec php_cli /bin/bash -c "/bin/bash /entrypoint.sh"
+								docker-compose exec nginx /bin/bash -c "chown -R www-data:www-data /var/www/html/var/*"
+								docker-compose exec --user www-data php /bin/bash -c "php /var/www/html/bin/console assets:install --symlink"
+								docker-compose exec php bash -c "php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony"
 							'''
 						}
 						catch (exc) {
