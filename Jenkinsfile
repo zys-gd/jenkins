@@ -66,6 +66,8 @@ pipeline {
 
 								docker-compose up -d --build
 
+								docker-compose exec -T mysql echo "CREATE DATABASE IF NOT EXISTS toplivo_tracking;GRANT ALL PRIVILEGES ON toplivo_tracking.* TO 'toplivo_user' " | mysql -uroot -proot123456"
+
 								docker-compose exec -T php composer install
 								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild
 								sleep 5
