@@ -50,8 +50,9 @@ pipeline {
 
 		stage ('Run docker-compose') {
 			environment {
-				DOCKER_PREFIX = "${ghprbSourceBranch}"
-				CONTAINER_NAME_PREFIX = "${ghprbSourceBranch}"
+				DOCKER_PREFIX="${ghprbSourceBranch}"
+				CONTAINER_NAME_PREFIX="${ghprbSourceBranch}"
+				COMPOSE_INTERACTIVE_NO_CLI=1
 			}
 			steps {
 				dir("${ghprbSourceBranch}") {
