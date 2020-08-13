@@ -19,15 +19,15 @@ pipeline {
 //							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5', url: 'git@github.com:transloyd/core.toplyvo.app.git'
 //							]]
 //						]
-				script {
-					try {
-						dir("${ghprbSourceBranch}") {
-							deleteDir()
-						}
-					} catch (err) {
-						echo "Dir doesnt exist. Continue."
-					}
-				}
+//				script {
+//					try {
+//						dir("${ghprbSourceBranch}") {
+//							deleteDir()
+//						}
+//					} catch (err) {
+//						echo "Dir doesnt exist. Continue."
+//					}
+//				}
 
 
 				checkout([
