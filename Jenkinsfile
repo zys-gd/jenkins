@@ -64,16 +64,16 @@ pipeline {
 
 								docker-compose up -d --build
 
-								docker-compose exec php composer install
-								docker-compose exec php_consumer php bin/console rabbitmq-supervisor:rebuild
+								docker-compose exec -T php composer install
+								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild
 								sleep 5
-								docker-compose exec php_consumer php bin/console rabbitmq-supervisor:control --wait-for-supervisord start
-								docker-compose exec php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
-								docker-compose exec php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
-								docker-compose exec php_cli /bin/bash /entrypoint.sh
-								docker-compose exec nginx chown -R www-data:www-data /var/www/html/var/*
-								docker-compose exec php php /var/www/html/bin/console assets:install --symlink
-								docker-compose exec php php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony
+								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:control --wait-for-supervisord start
+								docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
+								docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
+								docker-compose exec -T php_cli /bin/bash /entrypoint.sh
+								docker-compose exec -T nginx chown -R www-data:www-data /var/www/html/var/*
+								docker-compose exec -T php php /var/www/html/bin/console assets:install --symlink
+								docker-compose exec -T php php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony
 							'''
 						}
 						catch (exc) {
