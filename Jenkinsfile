@@ -61,7 +61,6 @@ pipeline {
 					script {
 						try {
 							sh '''
-								sh "cd ${ghprbSourceBranch}"
 								docker-compose stop
 								docker-compose rm -f
 
