@@ -54,6 +54,7 @@ pipeline {
 				CONTAINER_NAME_PREFIX="${ghprbSourceBranch}"
 				COMPOSE_INTERACTIVE_NO_CLI=1
 				REDIS_HOST="${ghprbSourceBranch}_toplivo_back_redis"
+				MYSQL_DATABASE_HOST="${ghprbSourceBranch}_toplivo_back_mysql"
 			}
 			steps {
 				dir("${ghprbSourceBranch}") {
