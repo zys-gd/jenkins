@@ -29,6 +29,7 @@ pipeline {
 					}
 				}
 
+
 				checkout([
 					$class: 'GitSCM',
 					//branches: [[name: '${ghprbSourceBranch}']],
