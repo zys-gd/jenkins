@@ -60,20 +60,19 @@ pipeline {
 				dir("${ghprbSourceBranch}") {
 					script {
 						try {
+						//docker-compose exec -T mysql echo "CREATE DATABASE IF NOT EXISTS toplivo_tracking;GRANT ALL PRIVILEGES ON toplivo_tracking.* TO toplivo_user" | mysql -uroot -proot123456
 							sh '''
 								docker-compose stop
 								docker-compose rm -f
 
 								docker-compose up -d --build
 
-								docker-compose exec -T mysql echo "CREATE DATABASE IF NOT EXISTS toplivo_tracking;GRANT ALL PRIVILEGES ON toplivo_tracking.* TO toplivo_user" | mysql -u root -proot123456
-
 								docker-compose exec -T php composer install
 								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild
 								sleep 5
 								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:control --wait-for-supervisord start
 								docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
-								docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
+
 								docker-compose exec -T php_cli /bin/bash /entrypoint.sh
 								docker-compose exec -T nginx chown -R www-data:www-data /var/www/html/var/*
 								docker-compose exec -T php php /var/www/html/bin/console assets:install --symlink
