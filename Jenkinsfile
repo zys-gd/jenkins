@@ -6,19 +6,6 @@ pipeline {
 		stage ('Checkout from git') {
 			steps {
 
-
-
-//				script {
-//					try {
-//						dir("${ghprbSourceBranch}") {
-//							deleteDir()
-//						}
-//					} catch (err) {
-//						echo "Dir doesnt exist. Continue."
-//					}
-//				}
-
-
 				checkout([
 					$class: 'GitSCM',
 					//branches: [[name: '${ghprbSourceBranch}']],
@@ -56,7 +43,7 @@ pipeline {
 				REDIS_HOST="${ghprbSourceBranch}_toplivo_back_redis"
 				MYSQL_DATABASE_HOST="${ghprbSourceBranch}_toplivo_back_mysql"
 				TRACKING_DATABASE_USER="root"
-                TRACKING_DATABASE_PASSWORD="root123456"
+				TRACKING_DATABASE_PASSWORD="root123456"
 			}
 			steps {
 				dir("${ghprbSourceBranch}") {
