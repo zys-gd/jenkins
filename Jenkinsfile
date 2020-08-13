@@ -73,7 +73,7 @@ pipeline {
 
 								docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
 
-								ocker-compose exec -T php php bin/console doctrine:database:create --connection=tracking
+								docker-compose exec -T php php bin/console doctrine:database:create --connection=tracking
 								docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
 
 								docker-compose exec -T php_cli bash /entrypoint.sh
