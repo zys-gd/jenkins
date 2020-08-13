@@ -63,7 +63,6 @@ pipeline {
 
 								docker-compose up -d --build
 
-								docker cp ./docker/php/parameters.yml.dist php:/var/www/html/app/config/parameters.yml
 								docker-compose exec php /bin/bash -c "cd /var/www/html && composer install"
 								docker-compose exec php_consumer /bin/bash -c "php bin/console rabbitmq-supervisor:rebuild"
 								sleep 5
