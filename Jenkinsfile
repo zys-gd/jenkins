@@ -55,6 +55,8 @@ pipeline {
 				COMPOSE_INTERACTIVE_NO_CLI=1
 				REDIS_HOST="${ghprbSourceBranch}_toplivo_back_redis"
 				MYSQL_DATABASE_HOST="${ghprbSourceBranch}_toplivo_back_mysql"
+				TRACKING_DATABASE_USER="root"
+                TRACKING_DATABASE_PASSWORD="root123456"
 			}
 			steps {
 				dir("${ghprbSourceBranch}") {
