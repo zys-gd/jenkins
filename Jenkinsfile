@@ -20,8 +20,7 @@ pipeline {
 //							]]
 //						]
 				sh "rm -R *"
-				sh "mkdir ${ghprbSourceBranch}"
-				sh "cd ${ghprbSourceBranch}"
+
 				checkout([
 					$class: 'GitSCM',
 					//branches: [[name: '${ghprbSourceBranch}']],
@@ -48,6 +47,8 @@ pipeline {
 			}
 
 			steps {
+				sh "mkdir ${ghprbSourceBranch}"
+				sh "cd ${ghprbSourceBranch}"
 				sh "cp .env.dev .env"
 				sh "cat .env.docker >> .env"
 				sh "cp docker-compose.jenkins.yml docker-compose.yml"
@@ -59,6 +60,7 @@ pipeline {
 				script {
 					try {
 						sh '''
+							sh "cd ${ghprbSourceBranch}"
 							docker-compose stop
 							docker-compose rm -f
 
