@@ -66,7 +66,7 @@ pipeline {
 
 								docker-compose up -d --build
 
-								docker exec ${ghprbSourceBranch}_toplivo_back_mysql /bin/bash -c "echo \"CREATE DATABASE IF NOT EXISTS toplivo_tracking;GRANT ALL PRIVILEGES ON toplivo_tracking.* TO 'toplivo_user'\" | mysql -uroot -proot123456"
+								docker exec ${ghprbSourceBranch}_toplivo_back_mysql /bin/bash -c "echo \"CREATE DATABASE IF NOT EXISTS toplivo_tracking;GRANT ALL PRIVILEGES ON toplivo_tracking.* TO 'toplivo_user'\" | mysql -u root -proot123456"
 
 								docker-compose exec -T php composer install
 								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild
