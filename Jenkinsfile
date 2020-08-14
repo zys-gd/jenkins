@@ -4,6 +4,9 @@ pipeline {
 	stages {
 
 		stage ('Checkout from git') {
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
 			steps {
 
 				checkout([
@@ -13,7 +16,7 @@ pipeline {
 					doGenerateSubmoduleConfigurations: false,
 					extensions: [[
 						$class: 'RelativeTargetDirectory',
-						relativeTargetDir: '${ghprbSourceBranch}'
+						relativeTargetDir: '${GITHUB_PR_SOURCE_BRANCH}'
 					]],
 					submoduleCfg: [],
 					userRemoteConfigs: [[
@@ -26,8 +29,11 @@ pipeline {
 		}
 
 		stage ('Prepare environment') {
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
 			steps {
-				dir("${ghprbSourceBranch}") {
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "cp .env.dev .env"
 					sh "cat .env.docker >> .env"
 					sh "cp docker-compose.jenkins.yml docker-compose.yml"
@@ -37,16 +43,19 @@ pipeline {
 
 		stage ('Run docker-compose') {
 			environment {
-				DOCKER_PREFIX="${ghprbSourceBranch}"
-				CONTAINER_NAME_PREFIX="${ghprbSourceBranch}"
+				DOCKER_PREFIX="${GITHUB_PR_SOURCE_BRANCH}"
+				CONTAINER_NAME_PREFIX="${GITHUB_PR_SOURCE_BRANCH}"
 				COMPOSE_INTERACTIVE_NO_CLI=1
-				REDIS_HOST="${ghprbSourceBranch}_toplivo_back_redis"
-				MYSQL_DATABASE_HOST="${ghprbSourceBranch}_toplivo_back_mysql"
+				REDIS_HOST="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis"
+				MYSQL_DATABASE_HOST="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_mysql"
 				TRACKING_DATABASE_USER="root"
 				TRACKING_DATABASE_PASSWORD="root123456"
 			}
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
 			steps {
-				dir("${ghprbSourceBranch}") {
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
 							sh "docker-compose stop"
@@ -87,6 +96,34 @@ pipeline {
 				}
 			}
 		}
+
+
+		stage ('Close PR: stop docker')
+		{
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'CLOSE' }
+			}
+			steps
+			{
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					sh 'docker-compose down'
+				}
+			}
+		}
+
+		stage ('Close PR: remove directory')
+		{
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'CLOSE' }
+			}
+			steps
+			{
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					deleteDir()
+				}
+			}
+		}
+
 
 	}
 }

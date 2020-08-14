@@ -1,0 +1,25 @@
+pipeline {
+	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+
+	stages {
+
+		stage ('Stopping docker') {
+			steps {
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					sh "docker-compose down"
+				}
+			}
+		}
+
+		stage ('Remove PR folde') {
+			steps {
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					sh "docker-compose down"
+				}
+			}
+		}
+
+
+
+	}
+}
