@@ -13,7 +13,7 @@ pipeline {
 			}
 		}
 
-		stage ('Checkout from git')
+		stage ('CLOSE PR')
 		{
 			when {
 				expression { "${GITHUB_PR_STATE}" == 'CLOSE' }
