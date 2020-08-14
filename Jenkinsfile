@@ -1,5 +1,37 @@
-pipeline {
-	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+if(${GITHUB_PR_STATE} == 'OPEN')
+{
+	pipeline {
+		agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+		stages
+		{
+			stage ('Checkout from git')
+			{
+				steps
+				{
+
+				}
+			}
+		}
+	}
+}
+else {
+	pipeline {
+		agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+		stages
+		{
+			stage ('2Checkout from git')
+			{
+				steps
+				{
+
+				}
+			}
+		}
+	}
+}
+
+//pipeline {
+//	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
 //	stages {
 //
@@ -89,4 +121,4 @@ pipeline {
 //		}
 //
 //	}
-}
+//}
