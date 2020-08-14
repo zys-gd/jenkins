@@ -1,30 +1,6 @@
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
-	if(${GITHUB_PR_STATE} == 'OPEN')
-	{
-		stages
-		{
-			stage ('Checkout from git')
-			{
-				steps
-				{
 
-				}
-			}
-		}
-	}
-	else {
-		stages
-		{
-			stage ('2Checkout from git')
-			{
-				steps
-				{
-
-				}
-			}
-		}
-	}
 //	stages {
 //
 //		stage ('Checkout from git') {
