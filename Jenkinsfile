@@ -101,7 +101,7 @@ pipeline {
 		stage ('Close PR: stop docker')
 		{
 			when {
-				expression { "${GITHUB_PR_STATE}" == 'CLOSE' }
+				expression { "${GITHUB_PR_STATE}" == 'CLOSED' }
 			}
 			steps
 			{
@@ -114,7 +114,7 @@ pipeline {
 		stage ('Close PR: remove directory')
 		{
 			when {
-				expression { "${GITHUB_PR_STATE}" == 'CLOSE' }
+				expression { "${GITHUB_PR_STATE}" == 'CLOSED' }
 			}
 			steps
 			{
