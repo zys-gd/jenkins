@@ -1,30 +1,26 @@
-if(${GITHUB_PR_STATE} == 'OPEN')
-{
-	pipeline {
-		agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
-		stages
+pipeline {
+	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+	stages
+	{
+		stage ('Open PR')
 		{
-			stage ('Checkout from git')
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
+			steps
 			{
-				steps
-				{
-
-				}
+				echo 'OPEN PR'
 			}
 		}
-	}
-}
-else {
-	pipeline {
-		agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
-		stages
-		{
-			stage ('2Checkout from git')
-			{
-				steps
-				{
 
-				}
+		stage ('Checkout from git')
+		{
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'CLOSE' }
+			}
+			steps
+			{
+				echo 'CLOSE PR'
 			}
 		}
 	}
