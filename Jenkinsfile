@@ -119,7 +119,8 @@ pipeline {
 			steps
 			{
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
-					deleteDir()
+					sh 'pwd'
+					sh 'ls -la'
 				}
 			}
 		}
