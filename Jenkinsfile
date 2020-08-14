@@ -66,7 +66,6 @@ pipeline {
 								docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
 
 								docker-compose exec -T php_cli bash /entrypoint.sh
-								docker-compose exec -T nginx chown -R www-data:www-data /var/www/html/var/
 								docker-compose exec -T php php /var/www/html/bin/console assets:install --symlink
 								docker-compose exec -T php php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony
 							'''
