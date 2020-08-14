@@ -49,26 +49,34 @@ pipeline {
 				dir("${ghprbSourceBranch}") {
 					script {
 						try {
-							sh '''
-								docker-compose stop
-								docker-compose rm -f
+							sh "docker-compose stop"
+							sh "docker-compose rm -f"
+							sh "docker-compose up -d --build"
+						}
+						catch (exc) {
+							sh "docker-compose down"
+							currentBuild.result = 'FAILURE'
+							currentStage.result = 'FAILURE'
+						}
 
-								docker-compose up -d --build
+						try {
+							sh "docker-compose exec -T php php bin/console doctrine:database:create --connection=tracking"
+						}
+						catch (exc) {
+							echo "DB tracking already exist"
+						}
 
-								docker-compose exec -T php composer install
-								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild
-								sleep 5
-								docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:control --wait-for-supervisord start
+						try {
+							sh "docker-compose exec -T php composer install"
+							sh "docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild"
+							sh "sleep 5"
+							sh "docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:control --wait-for-supervisord start"
+							sh "docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
+							sh "docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
+							sh "docker-compose exec -T php_cli bash /entrypoint.sh"
+							sh "docker-compose exec -T php php /var/www/html/bin/console assets:install --symlink"
+							sh "docker-compose exec -T php php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony"
 
-								docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
-
-								docker-compose exec -T php php bin/console doctrine:database:create --connection=tracking
-								docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug
-
-								docker-compose exec -T php_cli bash /entrypoint.sh
-								docker-compose exec -T php php /var/www/html/bin/console assets:install --symlink
-								docker-compose exec -T php php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony
-							'''
 						}
 						catch (exc) {
 							sh "docker-compose down"
