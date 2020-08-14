@@ -25,7 +25,7 @@ pipeline {
 			}
 		}
 
-		stage ('Setting environment') {
+		stage ('Prepare environment') {
 			steps {
 				dir("${ghprbSourceBranch}") {
 					sh "cp .env.dev .env"
