@@ -8,6 +8,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				gitHubPRStatus githubPRMessage('${GITHUB_PR_COND_REF} run started')
 
 				checkout([
 					$class: 'GitSCM',
