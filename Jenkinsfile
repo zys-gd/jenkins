@@ -9,7 +9,8 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-
+				gitHubPRStatus githubPRMessage('${STAGE_NAME}')
+				sh 'chmod -R 777 *'
 				checkout([
 					$class: 'GitSCM',
 					//branches: [[name: '${ghprbSourceBranch}']],
@@ -34,6 +35,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				gitHubPRStatus githubPRMessage('${STAGE_NAME}')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "cp .env.dev .env"
 					sh "cat .env.docker >> .env"
@@ -56,6 +58,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				gitHubPRStatus githubPRMessage('${STAGE_NAME}')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
@@ -108,7 +111,7 @@ pipeline {
 			}
 			steps
 			{
-			gitHubPRStatus githubPRMessage('Close process started')
+				gitHubPRStatus githubPRMessage('${STAGE_NAME}')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'docker-compose down'
 				}
@@ -122,6 +125,7 @@ pipeline {
 			}
 			steps
 			{
+				gitHubPRStatus githubPRMessage('${STAGE_NAME}')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'pwd'
 					sh 'ls -la'
