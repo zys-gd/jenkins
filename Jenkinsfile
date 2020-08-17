@@ -34,7 +34,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-				gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "cp .env.dev .env"
 					sh "cat .env.docker >> .env"
@@ -57,7 +57,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-				gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
@@ -110,7 +110,7 @@ pipeline {
 			}
 			steps
 			{
-				gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'docker-compose down'
 				}
@@ -124,7 +124,7 @@ pipeline {
 			}
 			steps
 			{
-				gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'pwd'
 					sh 'ls -la'
