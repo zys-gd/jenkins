@@ -94,7 +94,7 @@ pipeline {
 							currentStage.result = 'FAILURE'
 						}
 
-						githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
+
 					}
 				}
 			}
@@ -108,6 +108,7 @@ pipeline {
 			}
 			steps
 			{
+			gitHubPRStatus githubPRMessage('Close process started')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'docker-compose down'
 				}
@@ -131,3 +132,4 @@ pipeline {
 
 	}
 }
+githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
