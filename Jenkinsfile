@@ -10,7 +10,6 @@ pipeline {
 			}
 			steps {
 				gitHubPRStatus githubPRMessage("${env.STAGE_NAME}")
-				setGitHubPullRequestStatus context: '', message: "${env.STAGE_NAME}", state: 'PENDING'
 				sh 'chmod -R 777 *'
 				checkout([
 					$class: 'GitSCM',
