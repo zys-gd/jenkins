@@ -1,3 +1,4 @@
+setGitHubPullRequestStatus context: '', message: 'Job started', state: 'PENDING'
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
@@ -8,7 +9,6 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-				gitHubPRStatus githubPRMessage('Build started')
 
 				checkout([
 					$class: 'GitSCM',
@@ -131,5 +131,15 @@ pipeline {
 
 
 	}
+
+	post {
+      success {
+          setGitHubPullRequestStatus context: '', message: 'Job started', state: 'SUCCESS'
+          githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
+      }
+      failure {
+          setGitHubPullRequestStatus context: '', message: 'Job started', state: 'FAILURE'
+          githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
+      }
+    }
 }
-githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
