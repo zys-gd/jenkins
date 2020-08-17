@@ -134,12 +134,10 @@ pipeline {
 
 	post {
       success {
-          setGitHubPullRequestStatus context: '', message: 'Job started', state: 'SUCCESS'
-          githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
+          setGitHubPullRequestStatus context: '', message: 'Job finished', state: 'SUCCESS'
       }
       failure {
-          setGitHubPullRequestStatus context: '', message: 'Job started', state: 'FAILURE'
-          githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
+          setGitHubPullRequestStatus context: '', message: 'Job finished', state: 'FAILURE'
       }
     }
 }
