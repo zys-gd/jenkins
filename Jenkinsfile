@@ -8,7 +8,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-				gitHubPRStatus githubPRMessage('${GITHUB_PR_COND_REF} run started')
+				gitHubPRStatus githubPRMessage('Build started')
 
 				checkout([
 					$class: 'GitSCM',
@@ -93,6 +93,12 @@ pipeline {
 							currentBuild.result = 'FAILURE'
 							currentStage.result = 'FAILURE'
 						}
+
+						githubPRStatusPublisher
+							buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'),
+							successMsg: githubPRMessage('Build succeeded.')),
+							statusMsg: githubPRMessage('Build ended'),
+							unstableAs: 'FAILURE'
 					}
 				}
 			}
