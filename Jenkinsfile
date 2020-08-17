@@ -94,11 +94,7 @@ pipeline {
 							currentStage.result = 'FAILURE'
 						}
 
-						githubPRStatusPublisher
-							buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'),
-							successMsg: githubPRMessage('Build succeeded.')),
-							statusMsg: githubPRMessage('Build ended'),
-							unstableAs: 'FAILURE'
+						githubPRStatusPublisher buildMessage: message(failureMsg: githubPRMessage('Can\'t set status; build failed.'), successMsg: githubPRMessage('Can\'tsetstatus;buildsucceeded.')), statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
 					}
 				}
 			}
