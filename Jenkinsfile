@@ -1,4 +1,4 @@
-setGitHubPullRequestStatus context: '', message: 'Job started', state: 'PENDING'
+setGitHubPullRequestStatus context: 'Jenkins', message: 'Job started', state: 'PENDING'
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
@@ -9,7 +9,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-				gitHubPRStatus githubPRMessage("${env.STAGE_NAME}")
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				sh 'chmod -R 777 *'
 				checkout([
 					$class: 'GitSCM',
@@ -138,10 +138,10 @@ pipeline {
 
 	post {
       success {
-          setGitHubPullRequestStatus context: '', message: 'Job finished', state: 'SUCCESS'
+          setGitHubPullRequestStatus context: 'Jenkins', message: 'Job finished', state: 'SUCCESS'
       }
       failure {
-          setGitHubPullRequestStatus context: '', message: 'Job finished', state: 'FAILURE'
+          setGitHubPullRequestStatus context: 'Jenkins', message: 'Job finished', state: 'FAILURE'
       }
     }
 }
