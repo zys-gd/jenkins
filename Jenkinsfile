@@ -10,7 +10,6 @@ pipeline {
 			}
 			steps {
 				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
-				sh 'chmod -R 777 *'
 				checkout([
 					$class: 'GitSCM',
 					//branches: [[name: '${ghprbSourceBranch}']],
