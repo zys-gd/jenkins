@@ -7,7 +7,7 @@ def setPullRequestStatus(text, state)
 setPullRequestStatus('Job started', 'PENDING')
 
 pipeline {
-	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+	agent any
 
 	stages {
 
