@@ -1,7 +1,7 @@
 def PRWorkspaceBuilder = '/home/jenkins/workspace/Testing pipeline for PR 3'
 def setPullRequestStatus(text, state)
 {
-	setGitHubPullRequestStatus context: 'Jenkins', message: $text, state: $state
+	setGitHubPullRequestStatus context: 'Jenkins', message: text, state: state
 }
 
 setPullRequestStatus('Job started', 'PENDING')
