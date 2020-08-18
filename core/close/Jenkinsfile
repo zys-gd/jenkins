@@ -1,4 +1,4 @@
-def PRWorkspaceBuilder = '/home/jenkins/workspace/Testing pipeline for PR 3'
+def PRWorkspaceBuilder = "/home/jenkins/workspace/Testing pipeline for PR 3/${GITHUB_PR_SOURCE_BRANCH}"
 def writeGitHubPullRequestStatus(text, state)
 {
 	setGitHubPullRequestStatus context: 'Jenkins', message: text, state: state
@@ -20,10 +20,9 @@ pipeline {
 			{
 				ws("${PRWorkspaceBuilder}") {
 					writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
-					dir("${GITHUB_PR_SOURCE_BRANCH}") {
-						echo 'try work with docker'
-						sh 'docker ps'
-					}
+
+					echo 'try work with docker'
+					sh 'docker ps'
 				}
 			}
 		}
