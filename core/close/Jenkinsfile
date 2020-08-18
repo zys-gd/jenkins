@@ -1,0 +1,55 @@
+def PRWorkspaceBuilder = '/home/jenkins/workspace/Testing pipeline for PR 3'
+def setPullRequestStatus(text, state)
+{
+	setGitHubPullRequestStatus context: 'Jenkins', message: $text, state: $state
+}
+
+setPullRequestStatus('Job started', 'PENDING')
+
+pipeline {
+	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+
+	stages {
+
+		stage ('Close PR: stop docker')
+		{
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'CLOSED' }
+			}
+			steps
+			{
+				ws('${PRWorkspaceBuilder}') {
+					setPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+					dir("${GITHUB_PR_SOURCE_BRANCH}") {
+						sh 'docker-compose down'
+					}
+				}
+			}
+		}
+
+//		stage ('Close PR: remove directory')
+//		{
+//			when {
+//				expression { "${GITHUB_PR_STATE}" == 'CLOSED' }
+//			}
+//			steps
+//			{
+//				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
+//				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+//					sh 'pwd'
+//					sh 'ls -la'
+//				}
+//			}
+//		}
+	}
+
+	post {
+		success {
+			setPullRequestStatus('Job finished', 'SUCCESS')
+		  	//gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+		}
+		failure {
+			setPullRequestStatus('Job finished', 'FAILURE')
+		}
+	}
+}
