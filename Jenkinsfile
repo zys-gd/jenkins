@@ -138,6 +138,7 @@ pipeline {
 	post {
       success {
           setGitHubPullRequestStatus context: 'Jenkins', message: 'Job finished', state: 'SUCCESS'
+          //gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
       }
       failure {
           setGitHubPullRequestStatus context: 'Jenkins', message: 'Job finished', state: 'FAILURE'
