@@ -21,6 +21,7 @@ pipeline {
 				ws("${PRWorkspaceBuilder}") {
 					writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 					dir("${GITHUB_PR_SOURCE_BRANCH}") {
+						echo 'try work with docker'
 						sh 'docker ps'
 					}
 				}
