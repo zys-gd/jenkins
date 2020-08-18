@@ -1,10 +1,10 @@
 def PRWorkspaceBuilder = '/home/jenkins/workspace/Testing pipeline for PR 3'
-def setPullRequestStatus(text, state)
+def writeGitHubPullRequestStatus(text, state)
 {
 	setGitHubPullRequestStatus context: 'Jenkins', message: text, state: state
 }
 
-setPullRequestStatus('Job started', 'PENDING')
+writeGitHubPullRequestStatus('Job started', 'PENDING')
 
 pipeline {
 	agent any
@@ -19,7 +19,7 @@ pipeline {
 			steps
 			{
 				ws("${PRWorkspaceBuilder}") {
-					setPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+					writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 					dir("${GITHUB_PR_SOURCE_BRANCH}") {
 						sh 'docker-compose ps'
 					}
@@ -45,11 +45,11 @@ pipeline {
 
 	post {
 		success {
-			setPullRequestStatus('Job finished', 'SUCCESS')
+			writeGitHubPullRequestStatus('Job finished', 'SUCCESS')
 		  	//gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
 		}
 		failure {
-			setPullRequestStatus('Job finished', 'FAILURE')
+			writeGitHubPullRequestStatus('Job finished', 'FAILURE')
 		}
 	}
 }
