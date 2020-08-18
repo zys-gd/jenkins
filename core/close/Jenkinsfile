@@ -14,7 +14,7 @@ pipeline {
 		stage ('Close PR: stop docker')
 		{
 			when {
-				expression { "${GITHUB_PR_STATE}" == 'CLOSED' }
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps
 			{
