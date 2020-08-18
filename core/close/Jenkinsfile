@@ -21,7 +21,7 @@ pipeline {
 				ws("${PRWorkspaceBuilder}") {
 					setPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 					dir("${GITHUB_PR_SOURCE_BRANCH}") {
-						sh 'docker-compose down'
+						sh 'docker-compose ps'
 					}
 				}
 			}
