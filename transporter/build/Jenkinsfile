@@ -56,6 +56,8 @@ pipeline {
 				REDIS_HOST="${GITHUB_PR_SOURCE_BRANCH}_transporter_redis"
 				DATABASE_URL="mysql://transporter_user:MGM2d68ubMLT@${GITHUB_PR_SOURCE_BRANCH}_transporter_mysql:3306/transporter_test"
 				API_TOPLYVO_BASE_URL="http://dev_toplivo_back_varnish_nginx"
+				MYSQL_EXPOSE_PORT="3306"
+				NGINX_EXPOSE_PORT="80"
 			}
 			when {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
