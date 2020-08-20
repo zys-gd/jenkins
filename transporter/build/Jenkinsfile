@@ -18,20 +18,30 @@ pipeline {
 			steps {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 
-				checkout([
-					$class: 'GitSCM',
-					branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
-					doGenerateSubmoduleConfigurations: false,
-					extensions: [[
-						$class: 'RelativeTargetDirectory',
-						relativeTargetDir: '${GITHUB_PR_SOURCE_BRANCH}'
-					]],
-					submoduleCfg: [],
-					userRemoteConfigs: [[
-						credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-						url: 'git@github.com:transloyd/toplyvotransporter.git'
-					]]
-				])
+				script {
+					try {
+						checkout([
+							$class: 'GitSCM',
+							branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
+							doGenerateSubmoduleConfigurations: false,
+							extensions: [[
+								$class: 'RelativeTargetDirectory',
+								relativeTargetDir: '${GITHUB_PR_SOURCE_BRANCH}'
+							]],
+							submoduleCfg: [],
+							userRemoteConfigs: [[
+								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+								url: 'git@github.com:transloyd/toplyvotransporter.git'
+							]]
+						])
+					}
+					catch (exc) {
+						sh "docker-compose down"
+						currentBuild.result = 'FAILURE'
+						currentStage.result = 'FAILURE'
+					}
+				}
+
 
 			}
 		}
@@ -43,8 +53,19 @@ pipeline {
 			steps {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
-					sh "cp .env.test .env"
-					sh "cp docker-compose.jenkins.yml docker-compose.yml"
+					script {
+						try {
+							sh "cp .env.test .env"
+                            sh "cp docker-compose.jenkins.yml docker-compose.yml"
+						}
+						catch (exc) {
+							sh "docker-compose down"
+							currentBuild.result = 'FAILURE'
+							currentStage.result = 'FAILURE'
+						}
+
+					}
+
 				}
 			}
 		}
