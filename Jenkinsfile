@@ -1,3 +1,4 @@
+setGitHubPullRequestStatus context: 'Jenkins', message: 'Job started', state: 'PENDING'
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
@@ -8,7 +9,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				checkout([
 					$class: 'GitSCM',
 					//branches: [[name: '${ghprbSourceBranch}']],
@@ -33,6 +34,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "cp .env.dev .env"
 					sh "cat .env.docker >> .env"
@@ -55,6 +57,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
@@ -92,6 +95,8 @@ pipeline {
 							currentBuild.result = 'FAILURE'
 							currentStage.result = 'FAILURE'
 						}
+
+
 					}
 				}
 			}
@@ -105,6 +110,7 @@ pipeline {
 			}
 			steps
 			{
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'docker-compose down'
 				}
@@ -118,12 +124,24 @@ pipeline {
 			}
 			steps
 			{
+				setGitHubPullRequestStatus context: 'Jenkins', message: "${env.STAGE_NAME}", state: 'PENDING'
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
-					deleteDir()
+					sh 'pwd'
+					sh 'ls -la'
 				}
 			}
 		}
 
 
 	}
+
+	post {
+      success {
+          setGitHubPullRequestStatus context: 'Jenkins', message: 'Job finished', state: 'SUCCESS'
+          //gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+      }
+      failure {
+          setGitHubPullRequestStatus context: 'Jenkins', message: 'Job finished', state: 'FAILURE'
+      }
+    }
 }
