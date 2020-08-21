@@ -94,7 +94,6 @@ pipeline {
 								docker-compose up -d --build
 
 								docker-compose exec php composer install
-								docker-compose exec php_cli bash /entrypoint.sh
 								docker-compose exec php php bin/console rabbitmq-supervisor:rebuild
 								sleep 5
 								docker-compose exec php php bin/console rabbitmq-supervisor:control --wait-for-supervisord start
