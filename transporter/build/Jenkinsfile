@@ -149,7 +149,6 @@ pipeline {
 	post {
 		success {
 			writeGitHubPullRequestStatus('Job finished', 'SUCCESS')
-			//gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
 		}
 		failure {
 			writeGitHubPullRequestStatus('Job finished', 'FAILURE')
