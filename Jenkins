@@ -1,5 +1,4 @@
 pipeline {
-
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
 	stages {
@@ -33,6 +32,7 @@ pipeline {
 				}
 
 				sh "git branch --merged"
+				sh "git branch -v"
 			}
 		}
 	}
