@@ -1,5 +1,12 @@
 // Build project when PR open
 // Remove data when PR closed
+def writeGitHubPullRequestStatus(text, state)
+{
+	setGitHubPullRequestStatus context: 'Jenkins', message: text, state: state
+}
+
+writeGitHubPullRequestStatus('Job started', 'PENDING')
+
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
@@ -10,11 +17,10 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
-
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				checkout([
 					$class: 'GitSCM',
-					//branches: [[name: '${ghprbSourceBranch}']],
-					branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
+					branches: [[name: '*/${GITHUB_PR_STATE}']],
 					doGenerateSubmoduleConfigurations: false,
 					extensions: [[
 						$class: 'RelativeTargetDirectory',
@@ -35,6 +41,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "cp .env.dev .env"
 					sh "cat .env.docker >> .env"
@@ -57,6 +64,7 @@ pipeline {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
 			}
 			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
@@ -94,6 +102,8 @@ pipeline {
 							currentBuild.result = 'FAILURE'
 							currentStage.result = 'FAILURE'
 						}
+
+
 					}
 				}
 			}
@@ -107,6 +117,7 @@ pipeline {
 			}
 			steps
 			{
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'docker-compose down'
 				}
@@ -120,6 +131,7 @@ pipeline {
 			}
 			steps
 			{
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'pwd'
 					sh 'ls -la'
@@ -129,4 +141,14 @@ pipeline {
 
 
 	}
+
+	post {
+      success {
+          writeGitHubPullRequestStatus("Job finished", 'SUCCESS')
+          //gitHubPRStatus githubPRMessage('${env.STAGE_NAME}')
+      }
+      failure {
+          writeGitHubPullRequestStatus("Job finished", 'FAILURE')
+      }
+    }
 }

@@ -1,0 +1,11 @@
+def Dev = [id:'10107']
+def Stage = [id:'10108']
+def Prod = [id:'10109']
+def Local = [id:'10106']
+
+def issue = jiraGetIssue idOrKey: 'TPLV-662', site: 'Jira Toplyvo'
+
+def issueEnv = [fields: [customfield_10049: Dev]]
+
+// Update ENV of task after merge PR
+jiraEditIssue idOrKey: 'TPLV-662', issue: issueEnv, site: 'Jira Toplyvo'
