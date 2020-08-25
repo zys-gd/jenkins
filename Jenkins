@@ -1,38 +1,26 @@
+def Dev = [id:'10107']
+def Stage = [id:'10108']
+def Prod = [id:'10109']
+def Local = [id:'10106']
+
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
 
 	stages {
 
-		stage ('Checkout from git') {
+		stage ('Test PR merging') {
 
 			steps {
-
 				script {
-					try {
-						checkout([
-							$class: 'GitSCM',
-							branches: [[name: '*/${GITHUB_BRANCH_NAME}']],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [[
-								$class: 'RelativeTargetDirectory',
-								//relativeTargetDir: '${GITHUB_BRANCH_NAME}'
-							]],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: "${GITHUB_REPO_SSH_URL}"
-							]]
-						])
-					}
-					catch (exc) {
-						sh "docker-compose down"
-						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
-					}
-				}
+                    def issue = jiraGetIssue idOrKey: 'TPLV-687', site: 'Jira Toplyvo'
 
-				sh "git branch --merged"
-				sh "git branch -v"
+					def jsonObj = readJSON text: "${HEAD_COMMIT}"
+	                def pattern = /.*Merge pull request*/
+	                def expression = ("${jsonObj.message}" =~ pattern)
+	                if (expression.find()) {
+                        def issueEnv = [fields: [customfield_10049: Local]]
+                    }
+                }
 			}
 		}
 	}
