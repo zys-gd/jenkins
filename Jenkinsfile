@@ -1,1 +1,1 @@
-echo "123"rte
+echo "123"
