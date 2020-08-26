@@ -35,6 +35,8 @@ pipeline {
 
 		stage ('Change Jira Task ENV to Dev') {
 			when {
+				echo "Repository " + "${REPOSITORY_NAME}"
+				echo "Branch " + "${BRANCH_FULL_PATH}"
 				expression { ensureMerged() && ensureDevTargetBranch() }
 			}
 			steps {
