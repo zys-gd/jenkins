@@ -28,6 +28,9 @@ def setTaskEnv(issueID, state)
 	jiraEditIssue idOrKey: issueID, issue: issueEnv, site: 'Jira Toplyvo'
 }
 
+echo "Repository " + "${REPOSITORY_NAME}"
+echo "Branch " + "${BRANCH_FULL_PATH}"
+
 pipeline {
 	agent any
 
@@ -35,8 +38,6 @@ pipeline {
 
 		stage ('Change Jira Task ENV to Dev') {
 			when {
-				echo "Repository " + "${REPOSITORY_NAME}"
-				echo "Branch " + "${BRANCH_FULL_PATH}"
 				expression { ensureMerged() && ensureDevTargetBranch() }
 			}
 			steps {
