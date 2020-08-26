@@ -1,0 +1,230 @@
+{
+    "ref": "refs/heads/master",
+    "before": "3b48501415a926993510db64d391c265cc38fdfd",
+    "after": "6b91ea09ba83ae67ed8a5279fc2a799074a57b62",
+    "repository": {
+        "id": 286419574,
+        "node_id": "MDEwOlJlcG9zaXRvcnkyODY0MTk1NzQ=",
+        "name": "Jenkins_Toplyvo_UA",
+        "full_name": "transloyd/Jenkins_Toplyvo_UA",
+        "private": true,
+        "owner": {
+            "name": "transloyd",
+            "email": null,
+            "login": "transloyd",
+            "id": 48587610,
+            "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ4NTg3NjEw",
+            "avatar_url": "https://avatars0.githubusercontent.com/u/48587610?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/transloyd",
+            "html_url": "https://github.com/transloyd",
+            "followers_url": "https://api.github.com/users/transloyd/followers",
+            "following_url": "https://api.github.com/users/transloyd/following{/other_user}",
+            "gists_url": "https://api.github.com/users/transloyd/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/transloyd/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/transloyd/subscriptions",
+            "organizations_url": "https://api.github.com/users/transloyd/orgs",
+            "repos_url": "https://api.github.com/users/transloyd/repos",
+            "events_url": "https://api.github.com/users/transloyd/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/transloyd/received_events",
+            "type": "Organization",
+            "site_admin": false
+        },
+        "html_url": "https://github.com/transloyd/Jenkins_Toplyvo_UA",
+        "description": null,
+        "fork": false,
+        "url": "https://github.com/transloyd/Jenkins_Toplyvo_UA",
+        "forks_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/forks",
+        "keys_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/teams",
+        "hooks_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/hooks",
+        "issue_events_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/issues/events{/number}",
+        "events_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/events",
+        "assignees_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/assignees{/user}",
+        "branches_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/tags",
+        "blobs_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/git/blobs{/sha}",
+        "git_tags_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/git/tags{/sha}",
+        "git_refs_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/git/refs{/sha}",
+        "trees_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/git/trees{/sha}",
+        "statuses_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/statuses/{sha}",
+        "languages_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/languages",
+        "stargazers_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/stargazers",
+        "contributors_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/contributors",
+        "subscribers_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/subscribers",
+        "subscription_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/subscription",
+        "commits_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/commits{/sha}",
+        "git_commits_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/git/commits{/sha}",
+        "comments_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/comments{/number}",
+        "issue_comment_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/issues/comments{/number}",
+        "contents_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/contents/{+path}",
+        "compare_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/compare/{base}...{head}",
+        "merges_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/merges",
+        "archive_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/{archive_format}{/ref}",
+        "downloads_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/downloads",
+        "issues_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/issues{/number}",
+        "pulls_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/pulls{/number}",
+        "milestones_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/milestones{/number}",
+        "notifications_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/notifications{?since,all,participating}",
+        "labels_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/labels{/name}",
+        "releases_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/releases{/id}",
+        "deployments_url": "https://api.github.com/repos/transloyd/Jenkins_Toplyvo_UA/deployments",
+        "created_at": 1597048242,
+        "updated_at": "2020-08-25T12:41:55Z",
+        "pushed_at": 1598365014,
+        "git_url": "git://github.com/transloyd/Jenkins_Toplyvo_UA.git",
+        "ssh_url": "git@github.com:transloyd/Jenkins_Toplyvo_UA.git",
+        "clone_url": "https://github.com/transloyd/Jenkins_Toplyvo_UA.git",
+        "svn_url": "https://github.com/transloyd/Jenkins_Toplyvo_UA",
+        "homepage": null,
+        "size": 62,
+        "stargazers_count": 0,
+        "watchers_count": 0,
+        "language": null,
+        "has_issues": true,
+        "has_projects": false,
+        "has_downloads": true,
+        "has_wiki": true,
+        "has_pages": false,
+        "forks_count": 0,
+        "mirror_url": null,
+        "archived": false,
+        "disabled": false,
+        "open_issues_count": 0,
+        "license": null,
+        "forks": 0,
+        "open_issues": 0,
+        "watchers": 0,
+        "default_branch": "master",
+        "stargazers": 0,
+        "master_branch": "master",
+        "organization": "transloyd"
+    },
+    "pusher": {
+        "name": "zys-gd",
+        "email": "akage.gd@gmail.com"
+    },
+    "organization": {
+        "login": "transloyd",
+        "id": 48587610,
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjQ4NTg3NjEw",
+        "url": "https://api.github.com/orgs/transloyd",
+        "repos_url": "https://api.github.com/orgs/transloyd/repos",
+        "events_url": "https://api.github.com/orgs/transloyd/events",
+        "hooks_url": "https://api.github.com/orgs/transloyd/hooks",
+        "issues_url": "https://api.github.com/orgs/transloyd/issues",
+        "members_url": "https://api.github.com/orgs/transloyd/members{/member}",
+        "public_members_url": "https://api.github.com/orgs/transloyd/public_members{/member}",
+        "avatar_url": "https://avatars0.githubusercontent.com/u/48587610?v=4",
+        "description": ""
+    },
+    "sender": {
+        "login": "zys-gd",
+        "id": 25430567,
+        "node_id": "MDQ6VXNlcjI1NDMwNTY3",
+        "avatar_url": "https://avatars0.githubusercontent.com/u/25430567?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/zys-gd",
+        "html_url": "https://github.com/zys-gd",
+        "followers_url": "https://api.github.com/users/zys-gd/followers",
+        "following_url": "https://api.github.com/users/zys-gd/following{/other_user}",
+        "gists_url": "https://api.github.com/users/zys-gd/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/zys-gd/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/zys-gd/subscriptions",
+        "organizations_url": "https://api.github.com/users/zys-gd/orgs",
+        "repos_url": "https://api.github.com/users/zys-gd/repos",
+        "events_url": "https://api.github.com/users/zys-gd/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/zys-gd/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "created": false,
+    "deleted": false,
+    "forced": false,
+    "base_ref": null,
+    "compare": "https://github.com/transloyd/Jenkins_Toplyvo_UA/compare/3b48501415a9...6b91ea09ba83",
+    "commits": [
+        {
+            "id": "f3b2ac3d48af049882edb603578af5b9d72f8fc7",
+            "tree_id": "7f6fdf1aff494fc1a5c6e55d0a9679b49d9745dd",
+            "distinct": false,
+            "message": "* trigger build",
+            "timestamp": "2020-08-25T17:15:44+03:00",
+            "url": "https://github.com/transloyd/Jenkins_Toplyvo_UA/commit/f3b2ac3d48af049882edb603578af5b9d72f8fc7",
+            "author": {
+                "name": "Yurii Z",
+                "email": "akage.gd@gmail.com",
+                "username": "zys-gd"
+            },
+            "committer": {
+                "name": "Yurii Z",
+                "email": "akage.gd@gmail.com",
+                "username": "zys-gd"
+            },
+            "added": [
+                "request.json"
+            ],
+            "removed": [
+
+            ],
+            "modified": [
+                "Jenkins"
+            ]
+        },
+        {
+            "id": "6b91ea09ba83ae67ed8a5279fc2a799074a57b62",
+            "tree_id": "7f6fdf1aff494fc1a5c6e55d0a9679b49d9745dd",
+            "distinct": true,
+            "message": "Merge pull request #11 from transloyd/TPLV-687\n\n* trigger build",
+            "timestamp": "2020-08-25T17:16:53+03:00",
+            "url": "https://github.com/transloyd/Jenkins_Toplyvo_UA/commit/6b91ea09ba83ae67ed8a5279fc2a799074a57b62",
+            "author": {
+                "name": "Yurii Zakharenko",
+                "email": "akage.gd@gmail.com",
+                "username": "zys-gd"
+            },
+            "committer": {
+                "name": "GitHub",
+                "email": "noreply@github.com",
+                "username": "web-flow"
+            },
+            "added": [
+                "request.json"
+            ],
+            "removed": [
+
+            ],
+            "modified": [
+                "Jenkins"
+            ]
+        }
+    ],
+    "head_commit": {
+        "id": "6b91ea09ba83ae67ed8a5279fc2a799074a57b62",
+        "tree_id": "7f6fdf1aff494fc1a5c6e55d0a9679b49d9745dd",
+        "distinct": true,
+        "message": "Merge pull request #11 from transloyd/TPLV-687\n\n* trigger build",
+        "timestamp": "2020-08-25T17:16:53+03:00",
+        "url": "https://github.com/transloyd/Jenkins_Toplyvo_UA/commit/6b91ea09ba83ae67ed8a5279fc2a799074a57b62",
+        "author": {
+            "name": "Yurii Zakharenko",
+            "email": "akage.gd@gmail.com",
+            "username": "zys-gd"
+        },
+        "committer": {
+            "name": "GitHub",
+            "email": "noreply@github.com",
+            "username": "web-flow"
+        },
+        "added": [
+            "request.json"
+        ],
+        "removed": [
+
+        ],
+        "modified": [
+            "Jenkins"
+        ]
+    }
+}
