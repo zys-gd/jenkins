@@ -1,15 +1,18 @@
-node
-{
-	GenericTrigger {
-		genericVariables {
-			genericVariable {
-				key("BODY")
-				value("\$")
-			}
-		}
-	}
+pipeline {
+  agent any
+  triggers {
+    GenericTrigger(
+     genericVariables: [
+      [key: 'ref', value: '$']
+     ],
 
-	stage("build") {
-	    echo "${BODY}"
+    )
+  }
+  stages {
+    stage('Some step') {
+      steps {
+        sh "echo $ref"
+      }
     }
+  }
 }
