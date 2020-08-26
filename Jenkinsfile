@@ -1,6 +1,6 @@
 node
 {
-	genericTrigger {
+	GenericTrigger {
 		genericVariables {
 			genericVariable {
 				key("BODY")
