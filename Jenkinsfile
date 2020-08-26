@@ -1,8 +1,11 @@
-genericTrigger {
-	genericVariables {
-		genericVariable {
-			key("BODY")
-			value("\$")
+node
+{
+	genericTrigger {
+		genericVariables {
+			genericVariable {
+				key("BODY")
+				value("\$")
+			}
 		}
 	}
 }
