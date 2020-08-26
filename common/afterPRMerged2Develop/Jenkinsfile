@@ -33,9 +33,9 @@ pipeline {
 
 	stages {
 
-		stage ('Change Jira Task ENV') {
+		stage ('Change Jira Task ENV to Dev') {
 			when {
-				expression { ensureMerged() }
+				expression { ensureMerged() && ensureDevTargetBranch() }
 			}
 			steps {
 				script {
