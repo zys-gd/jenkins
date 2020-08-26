@@ -41,7 +41,7 @@ pipeline {
 				script {
                     def issueID = extractIssueID()
                     setTaskEnv(issueID, Dev)
-                    echo "Update issue " + issueID
+                    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
                     issueID = null
                     gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
                 }
