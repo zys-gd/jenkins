@@ -10,8 +10,6 @@ node
 	}
 
 	stage("build") {
-    sh '''
-        echo body $BODY
-    '''
+	    echo "${BODY}"
     }
 }
