@@ -42,6 +42,7 @@ pipeline {
                     def issueID = extractIssueID()
                     setTaskEnv(issueID, Dev)
                     issueID = null
+                    gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
                 }
 			}
 		}
