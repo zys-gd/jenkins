@@ -3,7 +3,7 @@ node {
 		pipelineTriggers([
 			[$class: 'GenericTrigger',
 				genericVariables: [
-					[key: 'BODY', value: '$'],
+					[expressionType: 'JSONPath', key: 'BODY', value: '$'],
 				],
 	//			genericRequestVariables: [
 	//				[key: 'requestWithNumber', regexpFilter: '[^0-9]'],
