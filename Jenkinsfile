@@ -14,7 +14,6 @@ node {
 	//				[key: 'headerWithString', regexpFilter: '']
 	//			],
 
-	//			causeString: 'Triggered on $ref',
 
 	//			token: 'abc123',
 
