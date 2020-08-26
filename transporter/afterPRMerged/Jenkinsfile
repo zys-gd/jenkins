@@ -29,7 +29,7 @@ def setTaskEnv(issueID, state)
 }
 
 pipeline {
-	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+	agent any
 
 	stages {
 
