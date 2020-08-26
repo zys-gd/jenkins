@@ -1,0 +1,50 @@
+def Dev = [id:'10107']
+def Stage = [id:'10108']
+def Prod = [id:'10109']
+def Local = [id:'10106']
+
+//def jsonObj = readJSON text: "${HEAD_COMMIT}"
+
+@NonCPS
+def extractIssueID()
+{
+	return ("${COMMIT_MESSAGE}" =~ /(TPLV-\d{1,})/)[0][1]
+}
+
+@NonCPS
+def ensureMerged()
+{
+	return ("${COMMIT_MESSAGE}" =~ /.*Merge pull request*/).find()
+}
+
+def ensureDevTargetBranch()
+{
+	return "${BRANCH_FULL_PATH}" == 'refs/heads/develop'
+}
+
+def setTaskEnv(issueID, state)
+{
+	def issueEnv = [fields: [customfield_10049: state]]
+	jiraEditIssue idOrKey: issueID, issue: issueEnv, site: 'Jira Toplyvo'
+}
+
+pipeline {
+	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+
+	stages {
+
+		stage ('Change Jira Task ENV') {
+			when {
+				expression { ensureMerged() }
+			}
+			steps {
+				script {
+                    def issueID = extractIssueID()
+                    setTaskEnv(issueID, Dev)
+                    issueID = null
+                }
+			}
+		}
+
+	}
+}
