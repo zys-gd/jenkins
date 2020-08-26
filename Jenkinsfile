@@ -1,31 +1,24 @@
 node {
 	properties([
-		pipelineTriggers([
-			[$class: 'GenericTrigger',
-				genericVariables: [
-					[expressionType: 'JSONPath', key: 'BODY', value: '$'],
-				],
-	//			genericRequestVariables: [
-	//				[key: 'requestWithNumber', regexpFilter: '[^0-9]'],
-	//				[key: 'requestWithString', regexpFilter: '']
-	//			],
-	//			genericHeaderVariables: [
-	//				[key: 'headerWithNumber', regexpFilter: '[^0-9]'],
-	//				[key: 'headerWithString', regexpFilter: '']
-	//			],
+
+		[$class: 'GenericTrigger',
+			genericVariables: [
+				[expressionType: 'JSONPath', key: 'BODY', value: '$'],
+			],
 
 
-	//			token: 'abc123',
 
-				printContributedVariables: true,
-				printPostContent: true,
 
-				silentResponse: false,
 
-	//			regexpFilterText: '$ref',
-	//			regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
-			]
-		])
+			printContributedVariables: true,
+			printPostContent: true,
+
+			silentResponse: false,
+
+			regexpFilterText: '',
+			regexpFilterExpression: ''
+		]
+
 	])
 
 	stage("build") {
