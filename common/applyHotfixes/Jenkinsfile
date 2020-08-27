@@ -44,6 +44,7 @@ pipeline {
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
 							sh "git checkout stage --"
+							sh "git fetch origin"
 							sh "git pull"
 							//def result = sh(returnStdout: true, script: 'git merge origin/master').trim()
 							//if(result != 'Already up to date.') {
@@ -74,6 +75,7 @@ pipeline {
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
 	                        sh "git checkout develop --"
+	                        sh "git fetch origin"
 	                        sh "git pull"
 	                      //  def result = sh(returnStdout: true, script: 'git merge origin/stage').trim()
                           //  if(result != 'Already up to date.') {
