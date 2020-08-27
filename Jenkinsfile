@@ -45,7 +45,10 @@ pipeline {
                             sh "git config --global user.name 'Jenkins'"
 							sh "git checkout stage --"
 							sh "git pull"
-							sh "git merge origin/master"
+							def result = sh(returnStdout: true, script: 'git merge origin/master').trim()
+							if(result != 'Already up to date.') {
+								sh "git commit -am 'Automated merge master branch to stage. ${env.BUILD_URL}'"
+							}
 							sh "git push --progress origin stage"
                         }
 					}
@@ -71,7 +74,10 @@ pipeline {
                             sh "git config --global user.name 'Jenkins'"
 	                        sh "git checkout develop --"
 	                        sh "git pull"
-	                        sh "git merge origin/stage"
+	                        def result = sh(returnStdout: true, script: 'git merge origin/stage').trim()
+                            if(result != 'Already up to date.') {
+                                sh "git commit -am 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
+                            }
                             sh "git push --progress origin develop"
                         }
                     }
