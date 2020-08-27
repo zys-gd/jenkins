@@ -48,7 +48,7 @@ pipeline {
 							sh "git pull"
 							def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
 							if(result != 'Already up to date.') {
-								sh "git commit -am 'Automated merge master branch to stage. ${env.BUILD_URL}'"
+								sh "git commit -m 'Automated merge master branch to stage. ${env.BUILD_URL}' || true"
 							}
 							//sh "git merge origin/master - m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
 							sh "git push --progress origin stage"
@@ -79,7 +79,7 @@ pipeline {
 	                        sh "git pull"
 	                        def result = sh(returnStdout: true, script: 'git merge origin/stage --no-commit').trim()
                             if(result != 'Already up to date.') {
-                                sh "git commit -am 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
+                                sh "git commit -m 'Automated merge stage branch to develop. ${env.BUILD_URL}' || true"
                             }
                             //sh "git merge origin/master - m 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
                             sh "git push --progress origin develop"
