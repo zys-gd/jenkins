@@ -1,3 +1,4 @@
+// Apply hotfixes from master to stage and develop branches
 pipeline {
 	agent any
 
