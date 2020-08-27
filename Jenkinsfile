@@ -40,9 +40,10 @@ pipeline {
 
 				script {
 					try {
-						sh "git checkout stage --"
-						sh "git merge origin/master"
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git checkout stage --"
+							sh "git pull"
+							sh "git merge origin/master"
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
 							sh "git push --progress origin stage"
@@ -65,9 +66,10 @@ pipeline {
 
                 script {
                     try {
-                        sh "git checkout develop --"
-                        sh "git merge origin/stage"
                         sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+	                        sh "git checkout develop --"
+	                        sh "git pull"
+	                        sh "git merge origin/stage"
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
                             sh "git push --progress origin develop"
