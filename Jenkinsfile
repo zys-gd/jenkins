@@ -50,6 +50,7 @@ pipeline {
 					}
 					catch (exc) {
 						echo exc
+						sh "git status"
 						currentBuild.result = 'FAILURE'
 						currentStage.result = 'FAILURE'
 					}
@@ -74,6 +75,7 @@ pipeline {
                     }
                     catch (exc) {
                         echo exc
+                        sh "git status"
                         currentBuild.result = 'FAILURE'
                         currentStage.result = 'FAILURE'
                     }
