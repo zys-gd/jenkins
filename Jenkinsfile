@@ -44,8 +44,6 @@ pipeline {
 							sh "git checkout stage --"
 							sh "git pull"
 							sh "git merge origin/master"
-							sh "git config --global user.email 'develop@toplyvo.app'"
-                            sh "git config --global user.name 'Jenkins'"
 							sh "git push --progress origin stage"
                         }
 					}
@@ -70,8 +68,6 @@ pipeline {
 	                        sh "git checkout develop --"
 	                        sh "git pull"
 	                        sh "git merge origin/stage"
-							sh "git config --global user.email 'develop@toplyvo.app'"
-                            sh "git config --global user.name 'Jenkins'"
                             sh "git push --progress origin develop"
                         }
                     }
