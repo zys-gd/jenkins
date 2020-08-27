@@ -18,7 +18,7 @@ pipeline {
 							submoduleCfg: [],
 							userRemoteConfigs: [[
 								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/Jenkins_Toplyvo_UA.git'
+								url: "git@github.com:transloyd/${env.Repository}.git"
 							]]
 						])
 
@@ -41,8 +41,12 @@ pipeline {
 				script {
 					try {
 						sh "git checkout stage --"
-						sh "git merge master"
-						sh "git push --progress origin origin/stage"
+						sh "git merge origin/master"
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git config --global user.email 'develop@toplyvo.app'"
+                            sh "git config --global user.name 'Jenkins'"
+							sh "git push --progress origin stage"
+                        }
 					}
 					catch (exc) {
 						echo exc
@@ -61,8 +65,12 @@ pipeline {
                 script {
                     try {
                         sh "git checkout develop --"
-                        sh "git merge stage"
-                        sh "git push --progress origin origin/develop"
+                        sh "git merge origin/stage"
+                        sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git config --global user.email 'develop@toplyvo.app'"
+                            sh "git config --global user.name 'Jenkins'"
+                            sh "git push --progress origin develop"
+                        }
                     }
                     catch (exc) {
                         echo exc
