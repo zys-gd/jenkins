@@ -18,7 +18,7 @@ pipeline {
 							submoduleCfg: [],
 							userRemoteConfigs: [[
 								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/Jenkins_Toplyvo_UA.git'
+								url: "git@github.com:transloyd/${env.Repository}.git"
 							]]
 						])
 
