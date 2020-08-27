@@ -23,8 +23,6 @@ pipeline {
 						])
 
 						sh "git branch -v"
-						sh "git config --global user.email 'develop@toplyvo.app'"
-                        sh "git config --global user.name 'Jenkins'"
 					}
 					catch (exc) {
 						echo exc
@@ -43,6 +41,8 @@ pipeline {
 				script {
 					try {
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git config --global user.email 'develop@toplyvo.app'"
+                            sh "git config --global user.name 'Jenkins'"
 							sh "git checkout stage --"
 							sh "git pull"
 							sh "git merge origin/master"
@@ -67,6 +67,8 @@ pipeline {
                 script {
                     try {
                         sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git config --global user.email 'develop@toplyvo.app'"
+                            sh "git config --global user.name 'Jenkins'"
 	                        sh "git checkout develop --"
 	                        sh "git pull"
 	                        sh "git merge origin/stage"
