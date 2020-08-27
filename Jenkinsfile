@@ -23,6 +23,8 @@ pipeline {
 						])
 
 						sh "git branch -v"
+						sh "git config --global user.email 'develop@toplyvo.app'"
+                        sh "git config --global user.name 'Jenkins'"
 					}
 					catch (exc) {
 						echo exc
