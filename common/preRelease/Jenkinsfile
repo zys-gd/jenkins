@@ -1,4 +1,5 @@
 // Create pre-release to stage
+dev VERSION_TAG = "v${env.Release}-rc${env.BUILD_ID}"
 pipeline {
 	agent any
 
@@ -45,11 +46,11 @@ pipeline {
 
 							sh "git fetch --tags"
 
-							def isGitTagExists = sh(returnStdout: true, script: "git tag -l 'v${env.Release}'").trim()
+							def isGitTagExists = sh(returnStdout: true, script: "git tag -l '${VERSION_TAG}'").trim()
 
 							if (isGitTagExists) {
-								echo "Tag v${env.Release} is already exists"
-								error("Tag v${env.Release} is already exists")
+								echo "Tag ${VERSION_TAG} is already exists"
+								error("Tag ${VERSION_TAG} is already exists")
 							}
                         }
 					}
@@ -72,9 +73,9 @@ pipeline {
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
 
-                            sh "git tag -a v${env.Release} -m 'Automated Jenkins build #${env.BUILD_ID}'"
+                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 
-							sh "git merge origin/develop --no-ff -m 'Automated pre-release ${env.Release}. ${env.BUILD_URL}'"
+							sh "git merge origin/develop --no-ff -m 'Automated pre-release ${VERSION_TAG}. ${env.BUILD_URL}'"
 							sh "git push --progress origin HEAD:stage --tags"
                         }
 					}
