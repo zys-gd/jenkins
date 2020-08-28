@@ -36,11 +36,13 @@ pipeline {
 		}
 
 		stage ('Check tag') {
-			sh "git fetch --tags"
-			def isGitTagExists = sh(returnStdout: true, script: "git tag -l 'v${env.Release}'").trim()
+			steps {
+				sh "git fetch --tags"
+				def isGitTagExists = sh(returnStdout: true, script: "git tag -l 'v${env.Release}'").trim()
 
-			if (isGitTagExists) {
-				error("Tag v${env.Release} is already exists")
+				if (isGitTagExists) {
+					error("Tag v${env.Release} is already exists")
+				}
 			}
 		}
 
