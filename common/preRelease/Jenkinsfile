@@ -44,7 +44,7 @@ pipeline {
 			}
 		}
 
-		stage ('Update stage') {
+		stage ('Make pre-release') {
 			steps {
 
 				script {
