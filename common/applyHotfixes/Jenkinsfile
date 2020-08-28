@@ -43,8 +43,7 @@ pipeline {
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
-							sh "git checkout stage --"
-							sh "git fetch origin"
+							sh "git checkout stage"
 							sh "git pull"
 							//def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
 							//if(result != 'Already up to date.') {
@@ -74,8 +73,7 @@ pipeline {
                         sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 							sh "git config --global user.email 'develop@toplyvo.app'"
                             sh "git config --global user.name 'Jenkins'"
-	                        sh "git checkout develop --"
-	                        sh "git fetch origin"
+	                        sh "git checkout develop"
 	                        sh "git pull"
 	                        //def result = sh(returnStdout: true, script: 'git merge origin/stage --no-commit').trim()
                             //if(result != 'Already up to date.') {
