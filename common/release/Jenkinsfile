@@ -64,7 +64,7 @@ pipeline {
 			}
 		}
 
-		stage ('Make pre-release') {
+		stage ('Make release merge') {
 			steps {
 
 				script {
