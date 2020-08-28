@@ -4,7 +4,7 @@ pipeline {
 
 	stages {
 
-		stage ('Checkout master') {
+		stage ('Checkout stage') {
 
 			steps {
 				script {
@@ -37,13 +37,23 @@ pipeline {
 
 		stage ('Check tag') {
 			steps {
-				sh "git fetch --tags"
 				script {
-					def isGitTagExists = sh(returnStdout: true, script: "git tag -l 'v${env.Release}'").trim()
+					sh "git fetch --tags"
+					try {
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							def isGitTagExists = sh(returnStdout: true, script: "git tag -l 'v${env.Release}'").trim()
 
-					if (isGitTagExists) {
-						error("Tag v${env.Release} is already exists")
+							if (isGitTagExists) {
+								error("Tag v${env.Release} is already exists")
+							}
+                        }
 					}
+					catch (exc) {
+						echo exc
+						currentBuild.result = 'FAILURE'
+						currentStage.result = 'FAILURE'
+					}
+
 				}
 			}
 		}
