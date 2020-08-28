@@ -48,6 +48,7 @@ pipeline {
 							def isGitTagExists = sh(returnStdout: true, script: "git tag -l 'v${env.Release}'").trim()
 
 							if (isGitTagExists) {
+								echo "Tag v${env.Release} is already exists"
 								error("Tag v${env.Release} is already exists")
 							}
                         }
