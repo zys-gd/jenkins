@@ -50,7 +50,7 @@ pipeline {
 							//if(result != 'Already up to date.') {
 							//	sh "git commit --author 'Jenkins <develop@toplyvo.app>' -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
 							//}
-							sh "git merge origin/master -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
+							sh "git merge origin/master --no-ff -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
 							sh "git push --progress origin stage"
                         }
 					}
@@ -81,7 +81,7 @@ pipeline {
                             //if(result != 'Already up to date.') {
                             //    sh "git commit --author 'Jenkins <develop@toplyvo.app>' -m 'Automated merge stage branch to develop. ${env.BUILD_URL}' || true"
                             //}
-                            sh "git merge origin/master -m 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
+                            sh "git merge origin/master --no-ff -m 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
                             sh "git push --progress origin develop"
                         }
                     }
