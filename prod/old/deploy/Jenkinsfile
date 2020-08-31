@@ -112,7 +112,7 @@ pipeline {
 	}
 }
 
-node ('toplivo-production-ssh') {
+node ('test-Toplyvo-core-Mayatskiy') {
 	def BRANCH = 'master'
 
 	stage ('chekout host') {
