@@ -71,95 +71,97 @@ env.APP_AUTH_RETRIES_MAX_FROM_IP=4
 pipeline {
    agent any
     environment {
-        BRANCH = 'master'
-        }
-      stages {
-            stage ('checkout ci') {
-                steps {
-                    git branch: BRANCH,
-                    credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-                    url: 'git@github.com:transloyd/core.toplyvo.app.git'
-                    sh "ls -lat"
-                }
-            }
-            stage ('docker build&push') {
-                steps  {
-                    sh "cp .env.stage .env"
-                    sh "sed -i \"s/Ujd7ojgL1ezQmKtsYCayCPDdVCwVZa3vIJaOg5oLsEV98JVc4aKoKeSTbBdCOc8c/2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd/g\" .env"
-                    sh "export RUN_ENV=prod"
-                    sh "export CONTAINER_NAME_PREFIX=prod"
-                    sh "docker-compose build instantclient"
-                    sh "docker-compose build php php_consumer php_cli"
-                    sh "docker login https://jf.toplyvo.app -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+		BRANCH = 'master'
+	}
+	stages {
+	    stage ('checkout ci') {
+	        steps {
+	            git branch: BRANCH,
+	            credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+	            url: 'git@github.com:transloyd/core.toplyvo.app.git'
+	            sh "ls -lat"
+	        }
+	    }
 
-                    sh "docker tag productiondeploytoplyvoapp_php jf.toplyvo.app/productiondeploytoplyvoapp_php"
-                    sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php"
+		stage ('docker build&push') {
+			steps  {
+				sh "cp .env.stage .env"
+				sh "sed -i \"s/Ujd7ojgL1ezQmKtsYCayCPDdVCwVZa3vIJaOg5oLsEV98JVc4aKoKeSTbBdCOc8c/2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd/g\" .env"
+				sh "export RUN_ENV=prod"
+				sh "export CONTAINER_NAME_PREFIX=prod"
+				sh "docker-compose build instantclient"
+				sh "docker-compose build php php_consumer php_cli"
+				sh "docker login https://jf.toplyvo.app -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
 
-                    sh "docker tag productiondeploytoplyvoapp_php_consumer jf.toplyvo.app/productiondeploytoplyvoapp_php_consumer"
-                    sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php_consumer"
+				sh "docker tag productiondeploytoplyvoapp_php jf.toplyvo.app/productiondeploytoplyvoapp_php"
+				sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php"
 
-                    sh "docker tag productiondeploytoplyvoapp_php_cli jf.toplyvo.app/productiondeploytoplyvoapp_php_cli"
-                    sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php_cli"
+				sh "docker tag productiondeploytoplyvoapp_php_consumer jf.toplyvo.app/productiondeploytoplyvoapp_php_consumer"
+				sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php_consumer"
 
-                    sh "docker tag instantclient_files jf.toplyvo.app/instantclient_files"
-                    sh "docker push jf.toplyvo.app/instantclient_files"
+				sh "docker tag productiondeploytoplyvoapp_php_cli jf.toplyvo.app/productiondeploytoplyvoapp_php_cli"
+				sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php_cli"
 
-                    sh "docker logout https://jf.toplyvo.app"
-                    }
-                }
-        }
-    }
+				sh "docker tag instantclient_files jf.toplyvo.app/instantclient_files"
+				sh "docker push jf.toplyvo.app/instantclient_files"
+
+				sh "docker logout https://jf.toplyvo.app"
+			}
+		}
+
+	}
+}
+
 node ('toplivo-production-ssh') {
-    def BRANCH = 'master'
+	def BRANCH = 'master'
 
-    stage ('chekout host') {
-            git branch: BRANCH,
-            credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-            url: 'git@github.com:transloyd/core.toplyvo.app.git'
-        }
-    stage ('deploy') {
-            sh "cp .env.stage .env"
-            sh "cp /home/jenkins/ci/docker-compose.yml docker-compose.yml"
-            sh "sed -i \"s/Ujd7ojgL1ezQmKtsYCayCPDdVCwVZa3vIJaOg5oLsEV98JVc4aKoKeSTbBdCOc8c/2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd/g\" .env"
-            sh "export RUN_ENV=prod"
-            sh "export CONTAINER_NAME_PREFIX=prod"
-            sh "sed -i \"s/nginx/${CONTAINER_NAME_PREFIX}_toplivo_back_nginx/g\" docker/varnish/varnish/default.vcl"
-            sh "sed -i \"s/prod_test_toplivo_back_varnish/prod_toplivo_back_nginx/g\" docker/varnish/nginx/toplivo_prod.conf"
-            sh "sed -i \"s/prod_test_toplivo_back_varnish/prod_toplivo_back_varnish/g\" docker/varnish/nginx/toplivo_prod.conf"
-            sh "sed -i \"s/dev_toplivo_back_nginx/prod_toplivo_back_nginx/g\" docker/varnish/varnish/default.vcl"
-            sh "cat docker/varnish/varnish/default.vcl"
-            sh 'docker login https://jf.toplyvo.app -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD'
-            sh "docker-compose pull instantclient"
-            sh "docker-compose pull php php_consumer php_cli oracle_stunnel"
-            sh "docker-compose up --no-deps --force-recreate -d php php_consumer php_cli oracle_stunnel"
-            // sh "docker rm -f ${CONTAINER_NAME_PREFIX}_toplivo_back_varnish"
-            // sh "docker-compose up --no-deps -d varnish"
-            // sh "docker-compose up --no-deps -d varnish_nginx"
-            //sh "docker-compose up -d mysql"
-            sh "docker exec prod_toplivo_back_nginx nginx -s reload"
-            sh "docker cp ./docker/php/parameters.yml.dist prod_toplivo_back_php:/var/www/html/app/config/parameters.yml"
-           // sh "docker exec prod_toplivo_back_php /bin/bash -c \"rm -R var/cache/prod/*\""
-           sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console cache:clear\""
-           sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console cache:warmup --env=prod\""
-            //sh 'docker exec prod_toplivo_back_redis redis-cli "flushall"'
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"cd /var/www/html && composer install\""
-            sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
+	stage ('chekout host') {
+		git branch: BRANCH,
+		credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+		url: 'git@github.com:transloyd/core.toplyvo.app.git'
+	}
 
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate  --allow-no-migration --no-interaction --no-debug -e prod\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug -e prod\""
+	stage ('deploy') {
+		sh "cp .env.stage .env"
+		sh "cp /home/jenkins/ci/docker-compose.yml docker-compose.yml"
+		sh "sed -i \"s/Ujd7ojgL1ezQmKtsYCayCPDdVCwVZa3vIJaOg5oLsEV98JVc4aKoKeSTbBdCOc8c/2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd/g\" .env"
+		sh "export RUN_ENV=prod"
+		sh "export CONTAINER_NAME_PREFIX=prod"
+		sh "sed -i \"s/nginx/${CONTAINER_NAME_PREFIX}_toplivo_back_nginx/g\" docker/varnish/varnish/default.vcl"
+		sh "sed -i \"s/prod_test_toplivo_back_varnish/prod_toplivo_back_nginx/g\" docker/varnish/nginx/toplivo_prod.conf"
+		sh "sed -i \"s/prod_test_toplivo_back_varnish/prod_toplivo_back_varnish/g\" docker/varnish/nginx/toplivo_prod.conf"
+		sh "sed -i \"s/dev_toplivo_back_nginx/prod_toplivo_back_nginx/g\" docker/varnish/varnish/default.vcl"
+		sh "cat docker/varnish/varnish/default.vcl"
+		sh 'docker login https://jf.toplyvo.app -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD'
+		sh "docker-compose pull instantclient"
+		sh "docker-compose pull php php_consumer php_cli oracle_stunnel"
+		sh "docker-compose up --no-deps --force-recreate -d php php_consumer php_cli oracle_stunnel"
+		// sh "docker rm -f ${CONTAINER_NAME_PREFIX}_toplivo_back_varnish"
+		// sh "docker-compose up --no-deps -d varnish"
+		// sh "docker-compose up --no-deps -d varnish_nginx"
+		//sh "docker-compose up -d mysql"
+		sh "docker exec prod_toplivo_back_nginx nginx -s reload"
+		sh "docker cp ./docker/php/parameters.yml.dist prod_toplivo_back_php:/var/www/html/app/config/parameters.yml"
+		// sh "docker exec prod_toplivo_back_php /bin/bash -c \"rm -R var/cache/prod/*\""
 
-            // sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug --env=prod\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console doctrine:cache:clear-metadata --env=prod\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console cache:clear --env=prod\""
-            sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chmod -R 777 ./web/public/img/uploads\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chmod -R 777 ./web/public/files\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chown -R www-data:www-data ./web/media\""
-            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chown -R www-data:www-data ./var\""
-            sh "docker exec prod_toplivo_back_php_cli /bin/bash -c \"/bin/bash /entrypoint.sh\""
-            sh "docker exec -d prod_toplivo_back_php_consumer /bin/bash -c \"php bin/console rabbitmq-supervisor:rebuild --env=prod\""
-            sh "sleep 5"
-            sh "docker exec -itd prod_toplivo_back_php_consumer /bin/bash -c \"php bin/console rabbitmq-supervisor:control start --wait-for-supervisord --env=prod\""
-            sh "docker exec prod_toplivo_back_varnish bash -c \"varnishadm ban req.url '~' '/'\""
-        }
+		//sh 'docker exec prod_toplivo_back_redis redis-cli "flushall"'
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"cd /var/www/html && composer install\""
+		sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
+
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate  --allow-no-migration --no-interaction --no-debug -e prod\""
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug -e prod\""
+
+		// sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug --env=prod\""
+
+		sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"chmod -R 777 ./web/public/img/uploads\""
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"chmod -R 777 ./web/public/files\""
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"chown -R www-data:www-data ./web/media\""
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"chown -R www-data:www-data ./var\""
+		sh "docker exec prod_toplivo_back_php_cli /bin/bash -c \"/bin/bash /entrypoint.sh\""
+		sh "docker exec -d prod_toplivo_back_php_consumer /bin/bash -c \"php bin/console rabbitmq-supervisor:rebuild --env=prod\""
+		sh "sleep 5"
+		sh "docker exec -itd prod_toplivo_back_php_consumer /bin/bash -c \"php bin/console rabbitmq-supervisor:control start --wait-for-supervisord --env=prod\""
+		sh "docker exec prod_toplivo_back_varnish bash -c \"varnishadm ban req.url '~' '/'\""
+	}
 }

@@ -1,0 +1,16 @@
+pipeline {
+	agent { node { label 'toplivo-production-ssh' } }
+
+	stages {
+
+		stage ('Clear cache') {
+			steps {
+					ws('production.deploy.toplyvo.app') {
+					sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console doctrine:cache:clear-metadata --env=prod'"
+					sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:clear --env=prod'"
+					sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:warmup --env=prod'"
+				}
+			}
+		}
+	}
+}
