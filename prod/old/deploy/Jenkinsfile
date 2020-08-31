@@ -68,11 +68,11 @@ env.APP_ORDER_SPECIAL_OFFER_FOR_EVERY_PURCHASE=8000
 env.APP_ORDER_FREE_PURCHASE_FOR_EVERY=8000
 env.APP_AUTH_RETRIES_MAX_FROM_IP=4
 
+env.BRANCH = 'stage'
+
 pipeline {
    agent any
-    environment {
-		BRANCH = 'master'
-	}
+
 	stages {
 	    stage ('checkout ci') {
 	        steps {
@@ -113,7 +113,6 @@ pipeline {
 }
 
 node ('test-Toplyvo-core-Mayatskiy') {
-	def BRANCH = 'master'
 
 	stage ('chekout host') {
 		git branch: BRANCH,
