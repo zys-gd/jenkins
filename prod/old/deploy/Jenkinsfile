@@ -1,0 +1,165 @@
+env.RUN_ENV = 'prod'
+env.CONTAINER_NAME_PREFIX='prod'
+// env.DOCKER_HOST='127.0.0.1:2375'
+env.APP_INTEGRATION_TOKEN='wFtD3Kd0uPGkCZPboKpVWsqKKgeKhoXBtnVw73AO6G7LSJuulZA5c8N4RNVqIYIf'
+env.APP_INTEGRATION_TOKEN_GLUSCO='0f45d23d7d45d677959ca0072732b9159247d95a1b891be5a3d00182c8b94f77'
+env.APP_INTEGRATION_TOKEN_SHELL='wFtD3Kd0uPGkCZPboKpVWsqKKgeKhoXBtnVw73AO6G7LSJuulZA5c8N4RNVqIYIf'
+env.APP_INTEGRATION_TOKEN_MOTTO='LLWhAg5E7hwNdDDeV4fGgZ7DJ5vtFm5J3od1V07AzJmYToBChsO2s12zh5U4081W'
+env.APP_INTEGRATION_TOKEN_WOG='HdzXeUXZuaFSjv0ubP85f2Xv8ANT5PBWwrh91kSoj8WLSY6HILoGeRAxlqzGwOId'
+env.APP_INTEGRATION_TOKEN_OKKO='nz8tBPdYge58VdASKaysX5zaAnbPNCkA6SqZkuexuHup77zthnDpkTJBzGFjfNXM'
+//env.APP_INTEGRATION_TOKEN_DESKTOP='84344cc6d2c8872eb587bb40ffcbe50ca60dcb9f49f1187010deedcf97814116'
+env.APP_INTEGRATION_TOKEN_DESKTOP='1b04c1fcbf392175004ae0e71ece657e01ad6cac2279b8cf2bde0c42dbb59227'
+env.APP_INTEGRATION_TOKEN_OVIS='ab802cdf984d8a6b3becda14f62a95881997aea0157897bf179bc893447dc716'
+env.APP_SECRET_SALT='fEieLiTiSgvkl2JHrSw2hfofcNw8UVTdt4aiJkQzIX0sU1gasozN4vqnQzxNwmw1'
+env.PORTMONE_PASSWORD='Jr2AdzaJ'
+env.PORTMONE_APPLE_MERCHANT_ID='merchant.ua.toplivo.prod.portmone'
+env.APP_WOG_ID=10
+env.APP_WOG_CABINET_ID=34
+env.APP_WOG_AES_KEY='169C8C24D1B7473C86B40D5B2378629F'
+env.INTEGRATION_DEFAULT_MOTTO_CABINET=35
+env.INTEGRATION_DEFAULT_GLUSCO_CABINET=18
+env.APP_WAYFORPAY_ACCOUNT='toplyvo_app'
+env.APP_WAYFORPAY_PASSWORD='995cf9e0175b9fa5b33f7137c1ab62dbde45d488'
+env.APP_CDN_CACHE_REGION='fra1'
+env.APP_CDN_CACHE_KEY='I6RRI4TFOIE42C5ND7CA'
+env.APP_CDN_CACHE_SECRET='iREShApsf+FCjKXdmJnHWwsg+cc6IVELSjzAhX9J9lc'
+env.APP_CDN_CACHE_BUCKET='toplyvo'
+env.APP_CACHE_CLEAR_BASE_URI='https://api.toplyvo.app'
+env.GOOGLE_REVERSE_GEOCODE_API_KEY='AIzaSyC1F_tx6S6zb-06u36bFHeldg1RQ3_OalM'
+env.ROADS_TRANSLOYD_TOKEN='2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd'
+env.ROADS_TRANSLOYD_BASE_URI='https://e-toll.toplyvo.app'
+env.MYSQL_DATABASE_HOST='10.135.189.116'
+//env.MYSQL_DATABASE_HOST='138.68.69.113'
+env.MYSQL_DATABASE='toplyvo'
+env.MYSQL_USER='toplyvo_user'
+env.MYSQL_PASSWORD='J5NXJznquN*)SJ]Sl`'
+env.FIREBASE_DYNAMIC_LINKS_TOKEN='AIzaSyCGCQJtAUp9PlZW9JaRtD686OksvjV6hRU'
+env.APP_INTEGRATION_TOKEN_BVS='dc00c3e236b32a43f235bf7b947e3035901b73a98f1dc8aecf30c2f2e30c630f'
+env.INTEGRATION_DEFAULT_BVS_CABINET=18
+env.APPSFLYER_SDK_KEY='RMg76uUfMecAQoAjWzRyni'
+env.APPSFLYER_API_KEY='9c9a9295-e697-47e0-80d2-dcfe26fc8889'
+//env.REDIS_HOST='10.135.17.247'
+env.REDIS_HOST='10.135.97.220'
+env.APP_AUTH_CODE_LIFETIME='5 minutes'
+env.APP_AUTH_CODE_MAX_PER_DAY=3
+env.APP_AUTH_CODE_TIME_BETWEEN_CODE='+3 minutes'
+env.APP_AUTH_RETRIES_MAX_ALLOWED=4
+env.SMSC_LOGIN='ezdka.ua'
+env.SMSC_PASSWORD='qP6NgErz4TVeJPEC'
+env.APP_SMS_TRANSPORT='chain'
+env.APP_ADVERTISING_NOTIFY_IF_PROMO_CODES_ARE_LEFT=50
+env.API_TRANSPORTER_URL='http://167.71.44.47:85'
+env.INTEGRATION_DEFAULT_USER_PHONE='+380500000000'
+env.DOCKER_USERNAME='jenkins'
+env.DOCKER_PASSWORD='ch1qySOXu8Q'
+env.HOST='jenkins@46.101.127.106'
+env.HOST_WORKDIR='/home/jenkins/workspace/toplivo.backend.deploy.test'
+env.TELEGRAM_NOTIFIER_API_KEY='7a3bf1c9965a3b106fe351c5d8ccd6692ce02406361db91f7734612455863f0c'
+env.TELEGRAM_NOTIFIER_BASE_URL='http://167.71.44.47:8080'
+env.TRACKING_DATABASE_HOST='10.135.189.116'
+env.TRACKING_DATABASE_NAME='toplyvo_tracking'
+env.TRACKING_DATABASE_USER='toplyvo_tracking_user'
+env.TRACKING_DATABASE_PASSWORD='cnjTRWY!D3m'
+env.APP_REGISTRATION_GIFT_FUEL_NETWORK_TYPE='wog'
+env.B2B_CABINET_URL='https://b2b.toplyvo.app'
+env.AZPETROL_PIN=7358
+env.AUTO_QR_NETWORKS='6'
+env.APP_ORDER_SPECIAL_OFFER_FOR_EVERY_PURCHASE=8000
+env.APP_ORDER_FREE_PURCHASE_FOR_EVERY=8000
+env.APP_AUTH_RETRIES_MAX_FROM_IP=4
+
+pipeline {
+   agent any
+    environment {
+        BRANCH = 'master'
+        }
+      stages {
+            stage ('checkout ci') {
+                steps {
+                    git branch: BRANCH,
+                    credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+                    url: 'git@github.com:transloyd/core.toplyvo.app.git'
+                    sh "ls -lat"
+                }
+            }
+            stage ('docker build&push') {
+                steps  {
+                    sh "cp .env.stage .env"
+                    sh "sed -i \"s/Ujd7ojgL1ezQmKtsYCayCPDdVCwVZa3vIJaOg5oLsEV98JVc4aKoKeSTbBdCOc8c/2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd/g\" .env"
+                    sh "export RUN_ENV=prod"
+                    sh "export CONTAINER_NAME_PREFIX=prod"
+                    sh "docker-compose build instantclient"
+                    sh "docker-compose build php php_consumer php_cli"
+                    sh "docker login https://jf.toplyvo.app -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+
+                    sh "docker tag productiondeploytoplyvoapp_php jf.toplyvo.app/productiondeploytoplyvoapp_php"
+                    sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php"
+
+                    sh "docker tag productiondeploytoplyvoapp_php_consumer jf.toplyvo.app/productiondeploytoplyvoapp_php_consumer"
+                    sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php_consumer"
+
+                    sh "docker tag productiondeploytoplyvoapp_php_cli jf.toplyvo.app/productiondeploytoplyvoapp_php_cli"
+                    sh "docker push jf.toplyvo.app/productiondeploytoplyvoapp_php_cli"
+
+                    sh "docker tag instantclient_files jf.toplyvo.app/instantclient_files"
+                    sh "docker push jf.toplyvo.app/instantclient_files"
+
+                    sh "docker logout https://jf.toplyvo.app"
+                    }
+                }
+        }
+    }
+node ('toplivo-production-ssh') {
+    def BRANCH = 'master'
+
+    stage ('chekout host') {
+            git branch: BRANCH,
+            credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+            url: 'git@github.com:transloyd/core.toplyvo.app.git'
+        }
+    stage ('deploy') {
+            sh "cp .env.stage .env"
+            sh "cp /home/jenkins/ci/docker-compose.yml docker-compose.yml"
+            sh "sed -i \"s/Ujd7ojgL1ezQmKtsYCayCPDdVCwVZa3vIJaOg5oLsEV98JVc4aKoKeSTbBdCOc8c/2068a7b48fa5f7314180ad23d794b6494371fe29d14cf1e2b7930466e8da8682f9e0299b9efab2573bb9993e14228e155b48704fe6381448c30a901fa345fcfd/g\" .env"
+            sh "export RUN_ENV=prod"
+            sh "export CONTAINER_NAME_PREFIX=prod"
+            sh "sed -i \"s/nginx/${CONTAINER_NAME_PREFIX}_toplivo_back_nginx/g\" docker/varnish/varnish/default.vcl"
+            sh "sed -i \"s/prod_test_toplivo_back_varnish/prod_toplivo_back_nginx/g\" docker/varnish/nginx/toplivo_prod.conf"
+            sh "sed -i \"s/prod_test_toplivo_back_varnish/prod_toplivo_back_varnish/g\" docker/varnish/nginx/toplivo_prod.conf"
+            sh "sed -i \"s/dev_toplivo_back_nginx/prod_toplivo_back_nginx/g\" docker/varnish/varnish/default.vcl"
+            sh "cat docker/varnish/varnish/default.vcl"
+            sh 'docker login https://jf.toplyvo.app -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD'
+            sh "docker-compose pull instantclient"
+            sh "docker-compose pull php php_consumer php_cli oracle_stunnel"
+            sh "docker-compose up --no-deps --force-recreate -d php php_consumer php_cli oracle_stunnel"
+            // sh "docker rm -f ${CONTAINER_NAME_PREFIX}_toplivo_back_varnish"
+            // sh "docker-compose up --no-deps -d varnish"
+            // sh "docker-compose up --no-deps -d varnish_nginx"
+            //sh "docker-compose up -d mysql"
+            sh "docker exec prod_toplivo_back_nginx nginx -s reload"
+            sh "docker cp ./docker/php/parameters.yml.dist prod_toplivo_back_php:/var/www/html/app/config/parameters.yml"
+           // sh "docker exec prod_toplivo_back_php /bin/bash -c \"rm -R var/cache/prod/*\""
+           sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console cache:clear\""
+           sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console cache:warmup --env=prod\""
+            //sh 'docker exec prod_toplivo_back_redis redis-cli "flushall"'
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"cd /var/www/html && composer install\""
+            sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
+
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate  --allow-no-migration --no-interaction --no-debug -e prod\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug -e prod\""
+
+            // sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug --env=prod\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console doctrine:cache:clear-metadata --env=prod\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console cache:clear --env=prod\""
+            sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chmod -R 777 ./web/public/img/uploads\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chmod -R 777 ./web/public/files\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chown -R www-data:www-data ./web/media\""
+            sh "docker exec prod_toplivo_back_php /bin/bash -c \"chown -R www-data:www-data ./var\""
+            sh "docker exec prod_toplivo_back_php_cli /bin/bash -c \"/bin/bash /entrypoint.sh\""
+            sh "docker exec -d prod_toplivo_back_php_consumer /bin/bash -c \"php bin/console rabbitmq-supervisor:rebuild --env=prod\""
+            sh "sleep 5"
+            sh "docker exec -itd prod_toplivo_back_php_consumer /bin/bash -c \"php bin/console rabbitmq-supervisor:control start --wait-for-supervisord --env=prod\""
+            sh "docker exec prod_toplivo_back_varnish bash -c \"varnishadm ban req.url '~' '/'\""
+        }
+}
