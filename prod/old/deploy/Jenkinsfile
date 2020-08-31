@@ -140,7 +140,7 @@ node ('test-Toplyvo-core-Mayatskiy') {
 		// sh "docker-compose up --no-deps -d varnish"
 		// sh "docker-compose up --no-deps -d varnish_nginx"
 		//sh "docker-compose up -d mysql"
-		sh "docker exec prod_toplivo_back_nginx nginx -s reload"
+		sh "docker exec prod_toplivo_back_nginx nginx -s reload || docker-compose up -d"
 		sh "docker cp ./docker/php/parameters.yml.dist prod_toplivo_back_php:/var/www/html/app/config/parameters.yml"
 		// sh "docker exec prod_toplivo_back_php /bin/bash -c \"rm -R var/cache/prod/*\""
 
