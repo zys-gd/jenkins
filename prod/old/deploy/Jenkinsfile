@@ -146,7 +146,7 @@ node ('test-Toplyvo-core-Mayatskiy') {
 		// sh "docker exec prod_toplivo_back_php /bin/bash -c \"rm -R var/cache/prod/*\""
 
 		//sh 'docker exec prod_toplivo_back_redis redis-cli "flushall"'
-		sh "docker exec prod_toplivo_back_php /bin/bash -c \"cd /var/www/html && composer install\""
+		sh "docker exec prod_toplivo_back_php /bin/bash -c \"cd /var/www/html && composer install --no-scripts\""
 		sh "docker exec prod_toplivo_back_nginx /bin/bash -c \"chmod -R 777 /var/www/html/var/*\""
 
 		sh "docker exec prod_toplivo_back_php /bin/bash -c \"php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate  --allow-no-migration --no-interaction --no-debug -e prod\""
