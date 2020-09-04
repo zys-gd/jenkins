@@ -1,0 +1,43 @@
+pipeline {
+	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+
+	stages {
+
+		stage ('Checkout from git') {
+
+			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+
+				script {
+					try {
+						checkout([
+							$class: 'GitSCM',
+							branches: [[name: '*/master']],
+							doGenerateSubmoduleConfigurations: false,
+							extensions: [[
+								$class: 'RelativeTargetDirectory'
+							]],
+							submoduleCfg: [],
+							userRemoteConfigs: [[
+								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+								url: 'git@github.com:transloyd/toplyvotransporter.git'
+							]]
+						])
+					}
+					catch (exc) {
+						currentBuild.result = 'FAILURE'
+						currentStage.result = 'FAILURE'
+					}
+				}
+
+
+			}
+		}
+
+		stage ('Clear cache') {
+			steps {
+
+			}
+		}
+	}
+}
