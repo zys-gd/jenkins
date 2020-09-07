@@ -7,27 +7,18 @@ pipeline {
 
 			steps {
 
-				script {
-					try {
-						checkout([
-							$class: 'GitSCM',
-							branches: [[name: '*/TPLV-846']],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [[
-							]],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/toplyvotransporter.git'
-							]]
-						])
-					}
-					catch (exc) {
-						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
-					}
-				}
-
+				checkout([
+					$class: 'GitSCM',
+					branches: [[name: '*/TPLV-846']],
+					doGenerateSubmoduleConfigurations: false,
+					extensions: [[
+					]],
+					submoduleCfg: [],
+					userRemoteConfigs: [[
+						credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+						url: 'git@github.com:transloyd/toplyvotransporter.git'
+					]]
+				])
 
 			}
 		}
