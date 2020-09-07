@@ -6,7 +6,6 @@ pipeline {
 		stage ('Checkout from git') {
 
 			steps {
-				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 
 				script {
 					try {
