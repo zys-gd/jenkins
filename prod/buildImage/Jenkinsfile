@@ -12,10 +12,9 @@ pipeline {
 					try {
 						checkout([
 							$class: 'GitSCM',
-							branches: [[name: '*/master']],
+							branches: [[name: '*/TPLV-846']],
 							doGenerateSubmoduleConfigurations: false,
 							extensions: [[
-								$class: 'RelativeTargetDirectory'
 							]],
 							submoduleCfg: [],
 							userRemoteConfigs: [[
@@ -34,9 +33,12 @@ pipeline {
 			}
 		}
 
-		stage ('Clear cache') {
+		stage ('Build php image') {
 			steps {
-
+				script {
+					sh "cp docker-compose.prod.yml docker-compose.yml"
+					sh "docker compose build"
+				}
 			}
 		}
 	}
