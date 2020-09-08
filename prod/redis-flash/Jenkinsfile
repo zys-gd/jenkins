@@ -1,8 +1,8 @@
 node ('toplivo-production-ssh') {
     stage ('clear') {
+            sh "redis-cli -h 157.230.116.175 flushall async"
             sh "redis-cli -h 167.71.43.0 flushall async"
-            sh "redis-cli -h 167.71.43.0 flushall async"
-            sh "redis-cli -h 167.71.43.0 flushall async"
+            sh "redis-cli -h 164.90.185.28 flushall async"
 
     }
 }
