@@ -33,7 +33,7 @@ pipeline {
 			steps {
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
-					sh "docker-compose build"
+					sh "docker-compose build --parallel"
 				}
 			}
 		}
