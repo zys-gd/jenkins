@@ -10,23 +10,17 @@ pipeline {
 
 				script {
 					try {
-						checkout([
-							$class: 'GitSCM',
-							branches: [[name: '*/master']],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: "git@github.com:transloyd/${env.Repository}.git"
-							]]
-						])
+						sh "rm -R *"
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git config --global user.email 'develop@toplyvo.app'"
+                            sh "git config --global user.name 'Jenkins'"
+							sh "git clone git@github.com:transloyd/${env.Repository}.git"
+						}
 
-						sh "git branch -v"
-						sh "git remote -v"
-						sh "git status"
-						sh "git checkout master"
-						sh "git pull"
+						dir("${env.Repository}") {
+							sh "git checkout master"
+						}
+
 					}
 					catch (exc) {
 						echo exc
@@ -45,8 +39,6 @@ pipeline {
 					try {
 						dir("${env.Repository}") {
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-								sh "git config --global user.email 'develop@toplyvo.app'"
-	                            sh "git config --global user.name 'Jenkins'"
 								sh "git checkout stage"
 								sh "git pull"
 								//def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
