@@ -8,6 +8,7 @@ pipeline {
 		stage ('Checkout master') {
 
 			steps {
+
 				script {
 					try {
 						checkout([
@@ -41,18 +42,20 @@ pipeline {
 			steps {
 				script {
 					try {
-						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-							sh "git config --global user.email 'develop@toplyvo.app'"
-                            sh "git config --global user.name 'Jenkins'"
+						dir("${env.Repository}") {
+							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+								sh "git config --global user.email 'develop@toplyvo.app'"
+	                            sh "git config --global user.name 'Jenkins'"
 
-							sh "git fetch --tags"
+								sh "git fetch --tags"
 
-							def isGitTagExists = sh(returnStdout: true, script: "git tag -l '${VERSION_TAG}'").trim()
+								def isGitTagExists = sh(returnStdout: true, script: "git tag -l '${VERSION_TAG}'").trim()
 
-							if (isGitTagExists) {
-								echo "Tag ${VERSION_TAG} is already exists"
-								error("Tag ${VERSION_TAG} is already exists")
-							}
+								if (isGitTagExists) {
+									echo "Tag ${VERSION_TAG} is already exists"
+									error("Tag ${VERSION_TAG} is already exists")
+								}
+	                        }
                         }
 					}
 					catch (exc) {
@@ -70,15 +73,17 @@ pipeline {
 
 				script {
 					try {
-						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-							sh "git config --global user.email 'develop@toplyvo.app'"
-                            sh "git config --global user.name 'Jenkins'"
+						dir("${env.Repository}") {
+							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+								sh "git config --global user.email 'develop@toplyvo.app'"
+	                            sh "git config --global user.name 'Jenkins'"
 
-                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
+	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 
-							sh "git merge origin/stage --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
-							sh "git push --progress origin master"
-							sh "git push --progress origin master --tags"
+								sh "git merge origin/stage --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
+								sh "git push --progress origin master"
+								sh "git push --progress origin master --tags"
+	                        }
                         }
 					}
 					catch (exc) {

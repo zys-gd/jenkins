@@ -7,9 +7,7 @@ pipeline {
 		stage ('Checkout master') {
 
 			steps {
-				sh "ls"
-				sh "rm -R *"
-				sh "ls"
+
 				script {
 					try {
 						checkout([
@@ -48,6 +46,7 @@ pipeline {
 								sh "git config --global user.email 'develop@toplyvo.app'"
 	                            sh "git config --global user.name 'Jenkins'"
 								sh "git checkout stage"
+								sh "git log HEAD..origin/master"
 								sh "git pull"
 								//def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
 								//if(result != 'Already up to date.') {
@@ -76,6 +75,7 @@ pipeline {
                 script {
                     try {
                         dir("${env.Repository}") {
+                            sh "git remote -v"
 	                        sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git config --global user.email 'develop@toplyvo.app'"
 	                            sh "git config --global user.name 'Jenkins'"
