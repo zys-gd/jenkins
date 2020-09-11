@@ -22,6 +22,9 @@ pipeline {
 							]]
 						])
 
+						sh "git branch -v"
+						sh "git remote -v"
+						sh "git status"
 						sh "git pull"
 					}
 					catch (exc) {
