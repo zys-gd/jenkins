@@ -7,7 +7,9 @@ pipeline {
 		stage ('Checkout master') {
 
 			steps {
+				sh "ls"
 				sh "rm -R *"
+				sh "ls"
 				script {
 					try {
 						checkout([
@@ -41,17 +43,19 @@ pipeline {
 
 				script {
 					try {
-						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-							sh "git config --global user.email 'develop@toplyvo.app'"
-                            sh "git config --global user.name 'Jenkins'"
-							sh "git checkout stage"
-							sh "git pull"
-							//def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
-							//if(result != 'Already up to date.') {
-							//	sh "git commit --author 'Jenkins <develop@toplyvo.app>' -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
-							//}
-							sh "git merge origin/master --no-ff -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
-							sh "git push --progress origin stage"
+						dir("${env.Repository}") {
+							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+								sh "git config --global user.email 'develop@toplyvo.app'"
+	                            sh "git config --global user.name 'Jenkins'"
+								sh "git checkout stage"
+								sh "git pull"
+								//def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
+								//if(result != 'Already up to date.') {
+								//	sh "git commit --author 'Jenkins <develop@toplyvo.app>' -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
+								//}
+								sh "git merge origin/master --no-ff -m 'Automated merge master branch to stage. ${env.BUILD_URL}'"
+								sh "git push --progress origin stage"
+	                        }
                         }
 					}
 					catch (exc) {
@@ -71,17 +75,19 @@ pipeline {
 
                 script {
                     try {
-                        sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-							sh "git config --global user.email 'develop@toplyvo.app'"
-                            sh "git config --global user.name 'Jenkins'"
-	                        sh "git checkout develop"
-	                        sh "git pull"
-	                        //def result = sh(returnStdout: true, script: 'git merge origin/stage --no-commit').trim()
-                            //if(result != 'Already up to date.') {
-                            //    sh "git commit --author 'Jenkins <develop@toplyvo.app>' -m 'Automated merge stage branch to develop. ${env.BUILD_URL}' || true"
-                            //}
-                            sh "git merge origin/master --no-ff -m 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
-                            sh "git push --progress origin develop"
+                        dir("${env.Repository}") {
+	                        sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+								sh "git config --global user.email 'develop@toplyvo.app'"
+	                            sh "git config --global user.name 'Jenkins'"
+		                        sh "git checkout develop"
+		                        sh "git pull"
+		                        //def result = sh(returnStdout: true, script: 'git merge origin/stage --no-commit').trim()
+	                            //if(result != 'Already up to date.') {
+	                            //    sh "git commit --author 'Jenkins <develop@toplyvo.app>' -m 'Automated merge stage branch to develop. ${env.BUILD_URL}' || true"
+	                            //}
+	                            sh "git merge origin/master --no-ff -m 'Automated merge stage branch to develop. ${env.BUILD_URL}'"
+	                            sh "git push --progress origin develop"
+	                        }
                         }
                     }
                     catch (exc) {

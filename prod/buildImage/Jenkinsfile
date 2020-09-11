@@ -6,21 +6,17 @@ pipeline {
 		stage ('Checkout from git') {
 
 			steps {
-				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
-
 				script {
 					try {
 						checkout([
 							$class: 'GitSCM',
-							branches: [[name: '*/master']],
+							branches: [[name: '*/TPLV-846']],
 							doGenerateSubmoduleConfigurations: false,
-							extensions: [[
-								$class: 'RelativeTargetDirectory'
-							]],
+							extensions: [],
 							submoduleCfg: [],
 							userRemoteConfigs: [[
 								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/toplyvotransporter.git'
+								url: 'git@github.com:transloyd/core.toplyvo.app.git'
 							]]
 						])
 					}
@@ -29,14 +25,16 @@ pipeline {
 						currentStage.result = 'FAILURE'
 					}
 				}
-
-
 			}
 		}
 
-		stage ('Clear cache') {
-			steps {
 
+		stage ('Build php image') {
+			steps {
+				script {
+					sh "cp docker-compose.prod.yml docker-compose.yml"
+					sh "docker-compose build --parallel"
+				}
 			}
 		}
 	}
