@@ -11,22 +11,16 @@ pipeline {
 
 				script {
 					try {
-						checkout([
-							$class: 'GitSCM',
-							branches: [[name: '*/master']],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [[
-								$class: 'RelativeTargetDirectory'
-							]],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: "git@github.com:transloyd/${env.Repository}.git"
-							]]
-						])
+						sh "rm -R *"
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git config --global user.email 'develop@toplyvo.app'"
+                            sh "git config --global user.name 'Jenkins'"
+							sh "git clone git@github.com:transloyd/${env.Repository}.git"
+						}
 
-						sh "git checkout master"
-						sh "git branch -v"
+						dir("${env.Repository}") {
+							sh "git checkout master"
+						}
 					}
 					catch (exc) {
 						echo exc
@@ -44,9 +38,6 @@ pipeline {
 					try {
 						dir("${env.Repository}") {
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-								sh "git config --global user.email 'develop@toplyvo.app'"
-	                            sh "git config --global user.name 'Jenkins'"
-
 								sh "git fetch --tags"
 
 								def isGitTagExists = sh(returnStdout: true, script: "git tag -l '${VERSION_TAG}'").trim()
@@ -75,9 +66,6 @@ pipeline {
 					try {
 						dir("${env.Repository}") {
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-								sh "git config --global user.email 'develop@toplyvo.app'"
-	                            sh "git config --global user.name 'Jenkins'"
-
 	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 
 								sh "git merge origin/stage --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
