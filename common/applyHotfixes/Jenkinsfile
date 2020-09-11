@@ -14,9 +14,7 @@ pipeline {
 							$class: 'GitSCM',
 							branches: [[name: '*/master']],
 							doGenerateSubmoduleConfigurations: false,
-							extensions: [[
-								$class: 'RelativeTargetDirectory'
-							]],
+							extensions: [],
 							submoduleCfg: [],
 							userRemoteConfigs: [[
 								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
@@ -24,7 +22,7 @@ pipeline {
 							]]
 						])
 
-						sh "git branch -v"
+						sh "git pull"
 					}
 					catch (exc) {
 						echo exc
@@ -46,8 +44,6 @@ pipeline {
 								sh "git config --global user.email 'develop@toplyvo.app'"
 	                            sh "git config --global user.name 'Jenkins'"
 								sh "git checkout stage"
-								sh "git status"
-								sh "git log --oneline --graph --all --color"
 								sh "git pull"
 								//def result = sh(returnStdout: true, script: 'git merge origin/master --no-commit').trim()
 								//if(result != 'Already up to date.') {
