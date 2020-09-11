@@ -7,9 +7,7 @@ pipeline {
 		stage ('Checkout master') {
 
 			steps {
-				sh "ls"
-				sh "rm -R *"
-				sh "ls"
+
 				script {
 					try {
 						checkout([
@@ -44,6 +42,7 @@ pipeline {
 				script {
 					try {
 						dir("${env.Repository}") {
+							sh "git remote -v"
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git config --global user.email 'develop@toplyvo.app'"
 	                            sh "git config --global user.name 'Jenkins'"
@@ -76,6 +75,7 @@ pipeline {
                 script {
                     try {
                         dir("${env.Repository}") {
+                            sh "git remote -v"
 	                        sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git config --global user.email 'develop@toplyvo.app'"
 	                            sh "git config --global user.name 'Jenkins'"

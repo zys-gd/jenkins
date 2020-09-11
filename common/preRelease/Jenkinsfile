@@ -8,9 +8,7 @@ pipeline {
 		stage ('Checkout stage') {
 
 			steps {
-				sh "ls"
-                sh "rm -R *"
-                sh "ls"
+
 				script {
 					try {
 						checkout([
