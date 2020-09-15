@@ -36,6 +36,7 @@ pipeline {
 	                def DOCKER_HOST='jf-dev.toplyvo.app'
 
 	                sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                sh "docker images"
 	                sh "docker logout $DOCKER_HOST"
                 }
 
