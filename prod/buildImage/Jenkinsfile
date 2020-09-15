@@ -30,12 +30,14 @@ pipeline {
 
 		stage ('Registry') {
 			steps {
-				def DOCKER_USERNAME='jenkins'
-                def DOCKER_PASSWORD='ch1qySOXu8Q'
-                def DOCKER_HOST='jf-dev.toplyvo.app'
+				script {
+					def DOCKER_USERNAME='jenkins'
+	                def DOCKER_PASSWORD='ch1qySOXu8Q'
+	                def DOCKER_HOST='jf-dev.toplyvo.app'
 
-                sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
-                sh "docker logout $DOCKER_HOST"
+	                sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                sh "docker logout $DOCKER_HOST"
+                }
 
 			}
 		}
