@@ -28,7 +28,7 @@ pipeline {
 			}
 		}
 
-		stage (' Registry') {
+		stage ('Registry') {
 			steps {
 				def DOCKER_USERNAME='jenkins'
                 def DOCKER_PASSWORD='ch1qySOXu8Q'
