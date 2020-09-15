@@ -37,7 +37,7 @@ pipeline {
 
 	                sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
 	                sh "docker push $DOCKER_HOST/testprodbuildimage_php"
-	                sh "docker tag testprodbuildimage_php:2.10 $DOCKER_HOST/testprodbuildimage_php:2.10"
+	                sh "docker tag testprodbuildimage_php $DOCKER_HOST/testprodbuildimage_php:2.10"
 	                sh "docker images"
 	                sh "docker logout $DOCKER_HOST"
                 }
