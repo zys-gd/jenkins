@@ -132,10 +132,7 @@ pipeline {
 			steps
 			{
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
-				dir("${GITHUB_PR_SOURCE_BRANCH}") {
-					sh 'pwd'
-					sh 'ls -la'
-				}
+				sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}"
 			}
 		}
 
