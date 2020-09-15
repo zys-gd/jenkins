@@ -27,7 +27,7 @@ pipeline {
 				}
 			}
 		}
-
+/*
 		stage ('Registry') {
 			steps {
 				script {
@@ -44,7 +44,8 @@ pipeline {
 
 			}
 		}
-/*
+		*/
+
 		stage ('Build php image') {
 			steps {
 				script {
@@ -52,6 +53,6 @@ pipeline {
 					sh "docker-compose build --parallel"
 				}
 			}
-		}*/
+		}
 	}
 }
