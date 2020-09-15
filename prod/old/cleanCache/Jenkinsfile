@@ -1,5 +1,5 @@
 pipeline {
-	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+	agent { node { label 'toplivo-production-ssh' } }
 
 	stages {
 
