@@ -50,6 +50,7 @@ pipeline {
 			steps {
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
+					sh "cp .env.dev .env"
 					sh "docker-compose build --parallel"
 				}
 			}
