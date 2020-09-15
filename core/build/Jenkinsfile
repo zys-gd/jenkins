@@ -20,7 +20,7 @@ pipeline {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				checkout([
 					$class: 'GitSCM',
-					branches: [[name: '*/${GITHUB_PR_STATE}']],
+					branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
 					doGenerateSubmoduleConfigurations: false,
 					extensions: [[
 						$class: 'RelativeTargetDirectory',
