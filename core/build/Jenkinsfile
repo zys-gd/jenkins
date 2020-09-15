@@ -89,9 +89,9 @@ pipeline {
 
 						try {
 							sh "docker-compose exec -T php composer install"
-							sh "docker-compose exec -it php_consumer /bin/bash -c 'php bin/console rabbitmq-supervisor:rebuild'"
+							sh "docker-compose exec -T php_consumer /bin/bash -c 'php bin/console rabbitmq-supervisor:rebuild'"
 							sh "sleep 5"
-							sh "docker-compose exec -it php_consumer /bin/bash -c 'php bin/console rabbitmq-supervisor:control --wait-for-supervisord start'"
+							sh "docker-compose exec -T php_consumer /bin/bash -c 'php bin/console rabbitmq-supervisor:control --wait-for-supervisord start'"
 							sh "docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
 							sh "docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
 							sh "docker-compose exec -T php_cli bash /entrypoint.sh"
