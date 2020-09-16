@@ -6,7 +6,7 @@ pipeline {
 		stage ('Clear cache') {
 			steps {
 				ws('Test pipeline') {
-		            sh "docker exec prod_toplivo_back_varnish bash -c 'varnishadm ban req.url '~' '/''"
+		            sh "docker exec prod_toplivo_back_varnish bash -c 'varnishadm ban req.url \'~\' \'/\''"
 		            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:clear'"
 		            sh "docker exec prod_toplivo_back_php /bin/bash -c 'chown -R www-data:www-data ./var'"
 		            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:warmup --env=prod'"
