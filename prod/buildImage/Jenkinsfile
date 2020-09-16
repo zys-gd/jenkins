@@ -31,24 +31,25 @@ pipeline {
 				}
 			}
 		}
-/*
+
 		stage ('Login to Registry') {
 			steps {
 				script {
-	                sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                //sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
 	                //sh "docker tag testprodbuildimage_php $DOCKER_HOST/testprodbuildimage_php:2.10"
 	                //sh "docker push $DOCKER_HOST/testprodbuildimage_php"
 	                //sh "docker images"
-	                sh "docker logout $DOCKER_HOST"
+	                //sh "docker logout $DOCKER_HOST"
                 }
 
 			}
 		}
-*/
+
 
 		stage ('Build php image') {
 			steps {
 				script {
+					sh "docker logout $DOCKER_HOST"
 					sh "cp docker-compose.prod.yml docker-compose.yml"
 					sh "cp .env.dev .env"
 					sh "docker images"
@@ -56,15 +57,15 @@ pipeline {
 				}
 			}
 		}
-/*
+
 		stage ('Logout from Registry') {
 			steps {
 				script {
-	                sh "docker logout $DOCKER_HOST"
+	                //sh "docker logout $DOCKER_HOST"
                 }
 
 			}
 		}
-		*/
+
 	}
 }
