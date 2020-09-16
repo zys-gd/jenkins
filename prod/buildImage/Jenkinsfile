@@ -35,26 +35,36 @@ pipeline {
 		stage ('Login to Registry') {
 			steps {
 				script {
-	                //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
 	                //sh "docker tag testprodbuildimage_php $DOCKER_REGISTRY/testprodbuildimage_php:2.10"
 	                //sh "docker push $DOCKER_REGISTRY/testprodbuildimage_php"
 	                //sh "docker images"
-	                sh "docker logout $DOCKER_REGISTRY"
+	                //sh "docker logout $DOCKER_REGISTRY"
                 }
 
 			}
 		}
 
 
-		stage ('Build php image') {
+		stage ('Build pure php image') {
 			steps {
 				script {
-					sh "docker logout $DOCKER_REGISTRY"
 					sh "cp docker-compose.prod.yml docker-compose.yml"
 					sh "cp .env.dev .env"
 					sh "docker images"
-					sh "docker-compose build"
+					sh "docker-compose build php-fpm-image"
+					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
 				}
+			}
+		}
+
+		stage ('Build production php') {
+			steps {
+				script {
+	                sh "docker-compose build php"
+	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
+                }
+
 			}
 		}
 
