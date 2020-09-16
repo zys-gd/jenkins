@@ -34,13 +34,13 @@ pipeline {
 
 		stage ('Login to Registry') {
 			steps {
-				script {
+				//script {
 	                //sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
 	                //sh "docker tag testprodbuildimage_php $DOCKER_HOST/testprodbuildimage_php:2.10"
 	                //sh "docker push $DOCKER_HOST/testprodbuildimage_php"
 	                //sh "docker images"
 	                //sh "docker logout $DOCKER_HOST"
-                }
+                //}
 
 			}
 		}
@@ -60,9 +60,9 @@ pipeline {
 
 		stage ('Logout from Registry') {
 			steps {
-				script {
+				//script {
 	                //sh "docker logout $DOCKER_HOST"
-                }
+                //}
 
 			}
 		}
