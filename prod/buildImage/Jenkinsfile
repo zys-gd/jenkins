@@ -31,7 +31,7 @@ pipeline {
 				}
 			}
 		}
-
+/*
 		stage ('Login to Registry') {
 			steps {
 				script {
@@ -39,12 +39,12 @@ pipeline {
 	                //sh "docker tag testprodbuildimage_php $DOCKER_HOST/testprodbuildimage_php:2.10"
 	                //sh "docker push $DOCKER_HOST/testprodbuildimage_php"
 	                //sh "docker images"
-	                //sh "docker logout $DOCKER_HOST"
+	                sh "docker logout $DOCKER_HOST"
                 }
 
 			}
 		}
-
+*/
 
 		stage ('Build php image') {
 			steps {
@@ -55,7 +55,7 @@ pipeline {
 				}
 			}
 		}
-
+/*
 		stage ('Logout from Registry') {
 			steps {
 				script {
@@ -64,5 +64,6 @@ pipeline {
 
 			}
 		}
+		*/
 	}
 }
