@@ -1,6 +1,10 @@
 pipeline {
 	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
-
+	environment {
+		def DOCKER_USERNAME='jenkins'
+        def DOCKER_PASSWORD='ch1qySOXu8Q'
+        def DOCKER_HOST='jf-dev.toplyvo.app'
+    }
 	stages {
 
 		stage ('Checkout from git') {
@@ -27,24 +31,20 @@ pipeline {
 				}
 			}
 		}
-/*
-		stage ('Registry') {
+
+		stage ('Login to Registry') {
 			steps {
 				script {
-					def DOCKER_USERNAME='jenkins'
-	                def DOCKER_PASSWORD='ch1qySOXu8Q'
-	                def DOCKER_HOST='jf-dev.toplyvo.app'
-
 	                sh "docker login $DOCKER_HOST -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
-	                sh "docker tag testprodbuildimage_php $DOCKER_HOST/testprodbuildimage_php:2.10"
-	                sh "docker push $DOCKER_HOST/testprodbuildimage_php"
-	                sh "docker images"
-	                sh "docker logout $DOCKER_HOST"
+	                //sh "docker tag testprodbuildimage_php $DOCKER_HOST/testprodbuildimage_php:2.10"
+	                //sh "docker push $DOCKER_HOST/testprodbuildimage_php"
+	                //sh "docker images"
+	                //sh "docker logout $DOCKER_HOST"
                 }
 
 			}
 		}
-		*/
+
 
 		stage ('Build php image') {
 			steps {
@@ -53,6 +53,15 @@ pipeline {
 					sh "cp .env.dev .env"
 					sh "docker-compose build --parallel"
 				}
+			}
+		}
+
+		stage ('Logout from Registry') {
+			steps {
+				script {
+	                sh "docker logout $DOCKER_HOST"
+                }
+
 			}
 		}
 	}
