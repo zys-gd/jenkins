@@ -53,7 +53,7 @@ pipeline {
 					sh "cp .env.dev .env"
 					sh "docker images"
 					sh "docker-compose build php-fpm-image"
-					sh "docker tag prod_toplyvo_php_fpm_image $DOCKER_REGISTRY/php-fpm-image"
+					sh "docker tag testprodbuildimage_php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
 					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
 				}
 			}
