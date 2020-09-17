@@ -1,5 +1,5 @@
 pipeline {
-	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+	agent any
 	environment {
 		def DOCKER_USERNAME='jenkins'
         def DOCKER_PASSWORD='ch1qySOXu8Q'
