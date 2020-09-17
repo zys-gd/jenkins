@@ -41,7 +41,7 @@ pipeline {
 			}
 		}
 
-		stage ('Build pure php image') {
+		stage ('Apply builds') {
 			steps {
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
