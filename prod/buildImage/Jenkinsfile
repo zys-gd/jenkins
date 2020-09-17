@@ -70,6 +70,17 @@ pipeline {
 			}
 		}
 
+		stage ('Build production nginx') {
+			steps {
+				script {
+	                sh "docker-compose build nginx"
+	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_nginx $DOCKER_REGISTRY/prod_toplyvo_nginx"
+	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_nginx"
+                }
+
+			}
+		}
+
 		stage ('Logout from Registry') {
 			steps {
 				script {
