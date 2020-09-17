@@ -1,5 +1,5 @@
 pipeline {
-	agent any
+	agent { node { label 'toplivo-test-ssh-deploy' } }
 	environment {
 		def DOCKER_USERNAME='jenkins'
         def DOCKER_PASSWORD='ch1qySOXu8Q'
@@ -41,39 +41,13 @@ pipeline {
 			}
 		}
 
-
 		stage ('Build pure php image') {
 			steps {
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
-					sh "cp .env.dev .env"
-					sh "docker images"
-					sh "docker-compose build php-fpm-image"
-					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
-					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
+					sh "docker-compose pull"
+					sh "docker-compose up -d"
 				}
-			}
-		}
-
-		stage ('Build production php') {
-			steps {
-				script {
-	                sh "docker-compose build php"
-	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
-	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
-                }
-
-			}
-		}
-
-		stage ('Build production nginx') {
-			steps {
-				script {
-	                sh "docker-compose build nginx"
-	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_nginx $DOCKER_REGISTRY/prod_toplyvo_nginx"
-	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_nginx"
-                }
-
 			}
 		}
 
