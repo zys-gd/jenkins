@@ -59,7 +59,7 @@ pipeline {
 			steps {
 				script {
 	                sh "docker-compose down"
-	                sh "docker-compose up -d composer"
+	                sh "docker-compose up -d composer redis"
 	                sh "docker-compose exec -T composer composer install --no-dev --no-scripts"
 	                sh "docker-compose exec -T composer php bin/console cache:clear --env=prod"
 	                sh "docker-compose exec -T composer php bin/console cache:warmup --env=prod"
