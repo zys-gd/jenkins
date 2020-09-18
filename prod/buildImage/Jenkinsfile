@@ -57,7 +57,7 @@ pipeline {
 
 		stage ('PHP preparations') {
 			environment {
-				SYMFONY_ENV=prod
+				SYMFONY_ENV="prod"
 			}
 			steps {
 				script {
