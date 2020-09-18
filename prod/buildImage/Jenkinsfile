@@ -58,7 +58,7 @@ pipeline {
 		stage ('PHP preparations') {
 			steps {
 				script {
-	                sh "docker-compose up composer -d"
+	                sh "docker-compose up -d composer"
 	                sh "docker-compose exec composer composer install --no-dev --no-scripts"
 	                sh "docker-compose exec composer php bin/console cache:clear"
 	                sh "docker-compose exec composer php bin/console cache:warmup --env=prod"
