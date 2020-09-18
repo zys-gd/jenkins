@@ -56,6 +56,9 @@ pipeline {
 		}
 
 		stage ('PHP preparations') {
+			environment {
+				SYMFONY_ENV=prod
+			}
 			steps {
 				script {
 	                sh "docker-compose up -d composer"
