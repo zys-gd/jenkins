@@ -49,9 +49,11 @@ pipeline {
 					sh "cp .env.dev .env"
 					sh "cp project/.env.dist project/.env"
 					sh "docker images"
-					sh "docker-compose build php-fpm-image"
+					sh "docker-compose build php-fpm-image php-cli-image"
 					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
+					sh "docker tag $DOCKER_REGISTRY/php-cli-image $DOCKER_REGISTRY/php-cli-image"
 					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
+					sh "docker push $DOCKER_REGISTRY/php-cli-image"
 				}
 			}
 		}
