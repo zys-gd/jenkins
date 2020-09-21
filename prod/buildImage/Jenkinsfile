@@ -47,6 +47,7 @@ pipeline {
 				script {
 					sh "cp docker-compose.prod_build.yml docker-compose.yml"
 					sh "cp .env.dev .env"
+					sh "cp project/.env.dist project/.env"
 					sh "docker images"
 					sh "docker-compose build php-fpm-image"
 					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
