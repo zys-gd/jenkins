@@ -50,7 +50,7 @@ pipeline {
 					sh "cp project/.env.dist project/.env"
 					sh "docker images"
 
-					sh "docker-compose build php-fpm-image php-cli-image --parallel"
+					sh "docker-compose build --parallel php-fpm-image php-cli-image"
 
 					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
 					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
@@ -81,7 +81,7 @@ pipeline {
 		stage ('Build production php') {
 			steps {
 				script {
-	                sh "docker-compose build php php-cli php-consumer --parallel"
+	                sh "docker-compose build --parallel php php-cli php-consumer"
 
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
 	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
