@@ -49,10 +49,13 @@ pipeline {
 					sh "cp .env.dev .env"
 					sh "cp project/.env.dist project/.env"
 					sh "docker images"
-					sh "docker-compose build php-fpm-image php-cli-image"
+
+					sh "docker-compose build php-fpm-image php-cli-image --parallel"
+
 					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
-					sh "docker tag $DOCKER_REGISTRY/php-cli-image $DOCKER_REGISTRY/php-cli-image"
 					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
+
+					sh "docker tag $DOCKER_REGISTRY/php-cli-image $DOCKER_REGISTRY/php-cli-image"
 					sh "docker push $DOCKER_REGISTRY/php-cli-image"
 				}
 			}
@@ -78,9 +81,16 @@ pipeline {
 		stage ('Build production php') {
 			steps {
 				script {
-	                sh "docker-compose build php"
+	                sh "docker-compose build php php-cli php-consumer --parallel"
+
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
 	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
+
+                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cli $DOCKER_REGISTRY/prod_toplyvo_php_cli"
+                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_cli"
+
+                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
+                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
                 }
 
 			}
