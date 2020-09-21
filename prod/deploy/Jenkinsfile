@@ -46,6 +46,7 @@ pipeline {
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
 					sh "cp .env.dev .env"
+					sh "cp project/.env.dist project/.env"
 					sh "docker-compose pull"
 					sh "docker-compose up -d"
 				}
