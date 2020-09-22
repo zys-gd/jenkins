@@ -1,6 +1,7 @@
 pipeline {
 	agent any
 	parameters {
+		echo 'test'
        string(defaultValue: 'dev_toplivo_back_mysql', description: '', name: 'DATABASE_HOST', trim: true)
     /*     string(defaultValue: 'root123456', description: '', name: 'MYSQL_ROOT_PASSWORD', trim: true)
         string(defaultValue: 'toplivo', description: '', name: 'DATABASE_NAME', trim: true)
