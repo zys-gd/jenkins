@@ -5,7 +5,7 @@ def ENVS = fileEnvs.split("\n")[n]
 */
 node ('toplivo-test-ssh-deploy') {
 	env.WORKSPACE = pwd()
-	new File("{env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
+	new File("${env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
 	    println line
 	}
 }
