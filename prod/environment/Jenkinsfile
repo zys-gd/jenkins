@@ -1,4 +1,4 @@
-def ENV = readFile 'prod/environment/.env'
+def ENV = readFile '.env'
 /*
 pipeline {
 	agent any
