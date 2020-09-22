@@ -8,9 +8,11 @@ pipeline {
     stages {
         stage('Example Stage') {
             steps {
-                env.WORKSPACE = pwd()
-                new File("${env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
-                    println line
+                script {
+	                env.WORKSPACE = pwd()
+	                new File("${env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
+	                    println line
+	                }
                 }
             }
         }
