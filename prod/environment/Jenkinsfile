@@ -1,9 +1,10 @@
+readFile 'prod/environment/.env'
+/*
 pipeline {
 	agent any
 	parameters {
-		echo 'test'
        string(defaultValue: 'dev_toplivo_back_mysql', description: '', name: 'DATABASE_HOST', trim: true)
-    /*     string(defaultValue: 'root123456', description: '', name: 'MYSQL_ROOT_PASSWORD', trim: true)
+        string(defaultValue: 'root123456', description: '', name: 'MYSQL_ROOT_PASSWORD', trim: true)
         string(defaultValue: 'toplivo', description: '', name: 'DATABASE_NAME', trim: true)
         string(defaultValue: 'root', description: '', name: 'DATABASE_USER', trim: true)
         string(defaultValue: 'root123456', description: '', name: 'DATABASE_PASSWORD', trim: true)
@@ -120,7 +121,7 @@ pipeline {
         string(defaultValue: 'https', description: '', name: 'B2B_CABINET_URL', trim: true)
         string(defaultValue: '7358', description: '', name: 'AZPETROL_PIN', trim: true)
         string(defaultValue: '1', description: '', name: 'AUTO_QR_NETWORKS', trim: true)
-        string(defaultValue: '4', description: '', name: 'APP_AUTH_RETRIES_MAX_FROM_IP', trim: true)*/
+        string(defaultValue: '4', description: '', name: 'APP_AUTH_RETRIES_MAX_FROM_IP', trim: true)
     }
 
     stages {
