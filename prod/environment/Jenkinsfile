@@ -1,4 +1,10 @@
-new File(".properties").eachLine { line ->
+/*
+env.WORKSPACE = pwd()
+def fileEnvs = readFile "${env.WORKSPACE}/prod/environment/.env"
+def ENVS = fileEnvs.split("\n")[n]
+*/
+env.WORKSPACE = pwd()
+new File("{env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
     println line
 }
 
