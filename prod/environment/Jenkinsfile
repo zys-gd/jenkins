@@ -124,8 +124,12 @@ pipeline {
 
     stages {
         stage ('Updat .env') {
-			params.each {param ->
-			  println "${param.key} -> ${param.value} "
+            steps {
+                script {
+					params.each {param ->
+					  println "${param.key} -> ${param.value} "
+					}
+				}
 			}
         }
     }
