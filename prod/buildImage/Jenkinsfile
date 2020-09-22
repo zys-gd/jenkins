@@ -11,7 +11,8 @@ pipeline {
                      defaultValue: 'v2.0.0',
                      description: 'Tag og docker image\'s build',
                      quickFilterEnabled: true,
-                     sortMode: 'DESCENDING_SMART'
+                     sortMode: 'DESCENDING_SMART',
+                     useRepository: 'git@github.com:transloyd/core.toplyvo.app.git'
 
     }
 	stages {
