@@ -3,9 +3,11 @@ env.WORKSPACE = pwd()
 def fileEnvs = readFile "${env.WORKSPACE}/prod/environment/.env"
 def ENVS = fileEnvs.split("\n")[n]
 */
-env.WORKSPACE = pwd()
-new File("{env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
-    println line
+node ('toplivo-test-ssh-deploy') {
+	env.WORKSPACE = pwd()
+	new File("{env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
+	    println line
+	}
 }
 
 pipeline {
