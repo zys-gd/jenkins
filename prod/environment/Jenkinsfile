@@ -1,4 +1,5 @@
-def ENV = readFile '.env'
+env.WORKSPACE = pwd()
+def ENV = readFile "${env.WORKSPACE}/prod/environment/.env"
 /*
 pipeline {
 	agent any
