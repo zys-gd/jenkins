@@ -5,6 +5,16 @@ pipeline {
         def DOCKER_PASSWORD='ch1qySOXu8Q'
         def DOCKER_REGISTRY='jf-dev.toplyvo.app'
     }
+	parameters {
+        gitParameter name: 'TAG',
+                     type: 'PT_TAG',
+                     defaultValue: 'v2.0.0',
+                     description: 'Tag og docker image\'s build',
+                     quickFilterEnabled: true,
+                     sortMode: 'DESCENDING_SMART',
+                     useRepository: 'git@github.com:transloyd/core.toplyvo.app.git'
+
+    }
 	stages {
 
 		stage ('Checkout from git') {
@@ -47,7 +57,11 @@ pipeline {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
 					sh "cp .env.dev .env"
 					sh "cp project/.env.dist project/.env"
-					sh "docker-compose pull"
+					//sh "docker-compose pull"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
 					sh "docker-compose up -d"
 				}
 			}

@@ -94,15 +94,15 @@ pipeline {
 	                sh "docker-compose build --parallel php php-cli php-consumer"
 
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
-	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm:${TAG}"
+	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm:${params.TAG}"
                     sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
 
                     sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cli $DOCKER_REGISTRY/prod_toplyvo_php_cli"
-                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cli $DOCKER_REGISTRY/prod_toplyvo_php_cli:${TAG}"
+                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cli $DOCKER_REGISTRY/prod_toplyvo_php_cli:${params.TAG}"
                     sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_cli"
 
                     sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
-                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer:${TAG}"
+                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer:${params.TAG}"
                     sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
                 }
 
