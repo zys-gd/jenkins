@@ -23,7 +23,7 @@ pipeline {
     }
 }
 
-
+/*
 pipeline {
 	agent any
 	parameters {
@@ -148,7 +148,7 @@ pipeline {
         string(defaultValue: '4', description: '', name: 'APP_AUTH_RETRIES_MAX_FROM_IP', trim: true)
 */
     }
-
+/*
     stages {
         stage ('Update .env') {
             steps {
@@ -161,3 +161,4 @@ pipeline {
         }
     }
 }
+*/
