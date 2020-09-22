@@ -3,12 +3,20 @@ env.WORKSPACE = pwd()
 def fileEnvs = readFile "${env.WORKSPACE}/prod/environment/.env"
 def ENVS = fileEnvs.split("\n")[n]
 */
-node () {
-	env.WORKSPACE = pwd()
-	new File("${env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
-	    println line
-	}
+pipeline {
+    agent none
+    stages {
+        stage('Example Stage') {
+            steps {
+                env.WORKSPACE = pwd()
+                new File("${env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
+                    println line
+                }
+            }
+        }
+    }
 }
+
 
 pipeline {
 	agent any
