@@ -1,8 +1,6 @@
-import hudson.model.ParametersAction
-import hudson.model.ParameterValue
-import hudson.model.StringParameterValue
-def newMailParameter = new StringParameterValue('DATABASE_HOST', '...')
-currentBuild.replaceAction(new ParametersAction(newMailParameter))
+new File(".properties").eachLine { line ->
+    println line
+}
 
 pipeline {
 	agent any
