@@ -10,20 +10,23 @@ def getEnvFromFile () {
         println line
     }
 }
-pipeline {
-    agent any
-    stages {
-        stage('Example Stage') {
-            steps {
-                script {
-					getEnvFromFile()
-                }
-            }
-        }
-    }
+
+def extractEnvPipeline () {
+	pipeline {
+	    agent any
+	    stages {
+	        stage('Example Stage') {
+	            steps {
+	                script {
+						getEnvFromFile()
+	                }
+	            }
+	        }
+	    }
+	}
 }
 
-
+def applyEnvPipeline() {
 pipeline {
 	agent any
 	parameters {
@@ -162,3 +165,7 @@ pipeline {
         }
     }
 }
+}
+
+extractEnvPipeline()
+applyEnvPipeline()
