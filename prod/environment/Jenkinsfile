@@ -10,7 +10,6 @@ node {
 	properties([
         parameters(dynamicParams)
     ])
-
 }
 
 pipeline {
@@ -28,6 +27,12 @@ pipeline {
 					}
 				}
 			}
+        }
+
+        stage ('Cleaner') {
+            steps {
+                sh "rm -R *"
+            }
         }
     }
 }
