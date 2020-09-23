@@ -50,13 +50,14 @@ pipeline {
 }
 
 node ('toplivo-test-ssh-deploy') {
+sh 'ls'
 	ws('Test prod deploy from registry') {
 		sh 'ls'
+		println ENV
 	}
 }
 
 node {
-println ENV
 	def props = readProperties file: "environments/b2c/.env.app"
 	dynamicParams = []
 	props.each { key, value ->
