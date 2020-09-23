@@ -80,6 +80,7 @@ pipeline {
 	                sh "docker-compose down"
 	                sh "docker-compose up -d composer redis"
 	                sh "docker-compose exec -T composer composer install --no-dev --no-scripts"
+	                sh "docker-compose exec -T composer mkdir -p var/cache var/logs"
 	                sh "docker-compose exec -T composer chown -R www-data var/cache"
 	                sh "docker-compose exec -T composer chown -R www-data var/logs"
 	                sh "docker-compose exec -T -u www-data composer /bin/bash -c 'php bin/console cache:clear --env=prod'"
