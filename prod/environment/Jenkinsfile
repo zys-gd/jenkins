@@ -3,7 +3,7 @@ node {
 	sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 		sh "git clone git@github.com:transloyd/environments.git"
 	}
-
+// this part needed only for first generate parameters to job
 /*
 	def props = readProperties file: "environments/b2c/.env.app"
 	dynamicParams = []
@@ -40,6 +40,8 @@ pipeline {
 							sh "git commit ${envFile} -m 'Pipeline update env'"
 							sh "git push"
 						}
+
+						ENV = readProperties file: envFile
 					}
 				}
 			}
@@ -47,7 +49,10 @@ pipeline {
     }
 }
 
+//node ('toplivo-test-ssh-deploy') {}
+
 node {
+println ENV
 	def props = readProperties file: "environments/b2c/.env.app"
 	dynamicParams = []
 	props.each { key, value ->
