@@ -1,50 +1,18 @@
-/*
-env.WORKSPACE = pwd()
-def fileEnvs = readFile "${env.WORKSPACE}/prod/environment/.env"
-def ENVS = fileEnvs.split("\n")[n]
-*/
-@NonCPS
-def getEnvFromFile () {
-	def WORKSPACE = pwd()
-    new File("${WORKSPACE}/prod/environment/.properties").eachLine { line ->
-        line.split("=").each { key, value ->
-             println "Param: ${key} ${value}"
-         }
-    }
-}
-
 node {
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
 	props.each { key, value ->
         echo "Walked through key $key and value $value"
-    }
-	//getEnvFromFile()
-	/*
-	def distribution= props['distribution_property']
-	def tag= props['tag_property']
-	properties([
-		parameters([
-		 string(name: 'distribution', defaultValue: "$distribution", description: 'apt distribution'),
-		 string(name: 'tag', defaultValue: "$tag", description: 'just a tag')
+
+		properties([
+			parameters([
+			    string(name: '$key', defaultValue: "$value", description: '')
+			])
 		])
-	])
-	*/
+	}
+
 }
-/*
-pipeline {
-    agent any
-    stages {
-        stage('Example Stage') {
-            steps {
-                script {
-					getEnvFromFile()
-                }
-            }
-        }
-    }
-}
-*/
+
 /*
 pipeline {
 	agent any
