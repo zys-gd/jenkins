@@ -7,8 +7,8 @@ def ENVS = fileEnvs.split("\n")[n]
 def getEnvFromFile () {
 	def WORKSPACE = pwd()
     new File("${WORKSPACE}/prod/environment/.properties").eachLine { line ->
-        line.split("=").each { param ->
-             println "Param: ${param}"
+        line.split("=").each { key, value ->
+             println "Param: ${key} ${value}"
          }
     }
 }
