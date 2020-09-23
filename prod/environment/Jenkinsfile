@@ -50,8 +50,7 @@ pipeline {
 }
 
 node ('toplivo-test-ssh-deploy') {
-sh 'ls'
-	ws('Test prod deploy from registry') {
+	ws('/home/jenkins/Test prod deploy from registry') {
 		sh 'ls'
 		println ENV
 	}
