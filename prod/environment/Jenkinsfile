@@ -6,7 +6,7 @@ node {
 
 		properties([
 			parameters([
-			    string(name: '$key', defaultValue: "$value", description: '')
+			    string(name: "$key", defaultValue: "$value", description: '')
 			])
 		])
 	}
