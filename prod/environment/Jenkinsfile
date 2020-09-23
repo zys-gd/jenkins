@@ -26,7 +26,7 @@ pipeline {
 					/*params.each {key, value ->
 						sh "echo ${key}=${value} >> ${envFile}"
 					}*/
-					echo params
+					sh "echo params >> ${envFile}"
 				}
 			}
         }
