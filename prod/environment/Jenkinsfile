@@ -32,7 +32,7 @@ pipeline {
                 script {
                     dir('environments/b2c/') {
 	                    def envFile = ".env.app"
-	                    def props = writeFile file: "${envFile}", text: ''
+	                  /*  def props = writeFile file: "${envFile}", text: ''
 						params.each {key, value ->
 							sh "echo ${key}=${value} >> ${envFile}"
 						}
@@ -40,8 +40,8 @@ pipeline {
 							sh "git commit ${envFile} -m 'Pipeline update env'"
 							sh "git push"
 						}
-
-						ENV = readProperties file: envFile
+*/
+						ENV = readFile file: envFile
 					}
 				}
 			}
