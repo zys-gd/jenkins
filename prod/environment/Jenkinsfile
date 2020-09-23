@@ -1,15 +1,17 @@
 node {
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
+	params = []
 	props.each { key, value ->
-        echo "Walked through key $key and value $value"
-
-		properties([
-			parameters([
-			    string(name: "$key", defaultValue: "$value", description: '')
-			])
-		])
+		params += [
+            string(name: "$key", defaultValue: "$value", description: ''),
+        ]
 	}
+	properties([
+        parameters([
+            params
+        ])
+    ])
 
 }
 
@@ -17,7 +19,7 @@ node {
 pipeline {
 	agent any
 	parameters {
-       string(defaultValue: 'dev_toplivo_back_mysql', description: '', name: 'DATABASE_HOST', trim: true)
+		string(defaultValue: 'dev_toplivo_back_mysql', description: '', name: 'DATABASE_HOST', trim: true)
         string(defaultValue: 'root123456', description: '', name: 'MYSQL_ROOT_PASSWORD', trim: true)
         string(defaultValue: 'toplivo', description: '', name: 'DATABASE_NAME', trim: true)
         string(defaultValue: 'root', description: '', name: 'DATABASE_USER', trim: true)
