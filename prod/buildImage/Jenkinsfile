@@ -83,6 +83,7 @@ pipeline {
 	                sh "docker-compose exec -T composer mkdir -p var/cache var/logs"
 	                sh "docker-compose exec -T composer chown -R www-data var/cache"
 	                sh "docker-compose exec -T composer chown -R www-data var/logs"
+	                sh "docker-compose exec -T composer chown -R www-data web/public/img/uploads"
 	                sh "docker-compose exec -T -u www-data composer /bin/bash -c 'php bin/console cache:clear --env=prod'"
 	                sh "docker-compose exec -T -u www-data composer php bin/console cache:warmup --env=prod"
 	                sh "docker-compose down"
