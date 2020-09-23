@@ -14,9 +14,9 @@ def getEnvFromFile () {
 node {
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
-	props.eachLine { line ->
-                 println line
-             }
+    new File("${WORKSPACE}/prod/environment/.properties").eachLine { line ->
+        println line
+    }
 	/*
 	def distribution= props['distribution_property']
 	def tag= props['tag_property']
