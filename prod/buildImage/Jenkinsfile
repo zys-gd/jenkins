@@ -21,6 +21,7 @@ pipeline {
 
 			steps {
 				script {
+				sh "rm -R *"
 					try {
 						checkout([
 							$class: 'GitSCM',
