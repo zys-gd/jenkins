@@ -16,7 +16,10 @@ def getEnvFromFile () {
 node {
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
-	getEnvFromFile()
+	props.each { key, value ->
+        echo "Walked through key $key and value $value"
+    }
+	//getEnvFromFile()
 	/*
 	def distribution= props['distribution_property']
 	def tag= props['tag_property']
