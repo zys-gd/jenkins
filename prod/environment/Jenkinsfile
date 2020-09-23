@@ -28,8 +28,10 @@ pipeline {
 						params.each {key, value ->
 							sh "echo ${key}=${value} >> ${envFile}"
 						}
-						sh "git commit ${envFile} -m 'Pipeline update env'"
-						sh "git push"
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git commit ${envFile} -m 'Pipeline update env'"
+							sh "git push"
+						}
 					}
 					sh "rm -R environments"
 				}
