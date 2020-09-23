@@ -8,9 +8,7 @@ node {
         ]
 	}
 	properties([
-        parameters([
-            params
-        ])
+        parameters(params)
     ])
 
 }
