@@ -1,5 +1,5 @@
 node {
-	sh 'git status'
+	sh 'git reset --hard HEAD'
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
 	dynamicParams = []
@@ -29,6 +29,5 @@ pipeline {
 				}
 			}
         }
-
     }
 }
