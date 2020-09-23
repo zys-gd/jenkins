@@ -23,9 +23,10 @@ pipeline {
                     def WORKSPACE = pwd()
                     def envFile = "prod/environment/.properties"
                     def props = writeFile file: "${envFile}", text: ''
-					params.each {key, value ->
+					/*params.each {key, value ->
 						sh "echo ${key}=${value} >> ${envFile}"
-					}
+					}*/
+					echo params
 				}
 			}
         }
