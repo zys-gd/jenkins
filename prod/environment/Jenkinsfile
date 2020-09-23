@@ -5,14 +5,19 @@ node {
 	}
 
 	def props = readProperties file: "environments/b2c/.env.app"
-
+	dynamicParams = []
+	params.each {key, value ->
+		dynamicParams += [
+            string(name: "$key", defaultValue: "$value", description: ''),
+        ]
+    }
 	props.each { key, value ->
-		params += [
+		dynamicParams += [
             string(name: "$key", defaultValue: "$value", description: ''),
         ]
 	}
 	properties([
-        parameters(params)
+        parameters(dynamicParams)
     ])
 }
 
