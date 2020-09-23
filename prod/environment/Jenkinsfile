@@ -50,9 +50,8 @@ pipeline {
 }
 
 node ('toplivo-test-ssh-deploy') {
-	ws('/home/jenkins/workspace/Test prod deploy from registry') {
-		sh 'ls'
-		println ENV
+	dir('/home/jenkins/workspace/Test prod deploy from registry/project') {
+		writeFile file: "${envFile}", text: ENV
 	}
 }
 
