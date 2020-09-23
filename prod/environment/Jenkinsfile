@@ -5,33 +5,47 @@ def ENVS = fileEnvs.split("\n")[n]
 */
 @NonCPS
 def getEnvFromFile () {
-	env.WORKSPACE = pwd()
-    new File("${env.WORKSPACE}/prod/environment/.properties").eachLine { line ->
+	def WORKSPACE = pwd()
+    new File("${WORKSPACE}/prod/environment/.properties").eachLine { line ->
         println line
     }
 }
 
-def extractEnvPipeline () {
-	pipeline {
-	    agent any
-	    stages {
-	        stage('Example Stage') {
-	            steps {
-	                script {
-						getEnvFromFile()
-	                }
-	            }
-	        }
-	    }
-	}
+node {
+	def WORKSPACE = pwd()
+	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
+	println props
+	/*
+	def distribution= props['distribution_property']
+	def tag= props['tag_property']
+	properties([
+		parameters([
+		 string(name: 'distribution', defaultValue: "$distribution", description: 'apt distribution'),
+		 string(name: 'tag', defaultValue: "$tag", description: 'just a tag')
+		])
+	])
+	*/
 }
-
-def applyEnvPipeline() {
+/*
+pipeline {
+    agent any
+    stages {
+        stage('Example Stage') {
+            steps {
+                script {
+					getEnvFromFile()
+                }
+            }
+        }
+    }
+}
+*/
+/*
 pipeline {
 	agent any
 	parameters {
        string(defaultValue: 'dev_toplivo_back_mysql', description: '', name: 'DATABASE_HOST', trim: true)
-/*        string(defaultValue: 'root123456', description: '', name: 'MYSQL_ROOT_PASSWORD', trim: true)
+        string(defaultValue: 'root123456', description: '', name: 'MYSQL_ROOT_PASSWORD', trim: true)
         string(defaultValue: 'toplivo', description: '', name: 'DATABASE_NAME', trim: true)
         string(defaultValue: 'root', description: '', name: 'DATABASE_USER', trim: true)
         string(defaultValue: 'root123456', description: '', name: 'DATABASE_PASSWORD', trim: true)
@@ -149,23 +163,20 @@ pipeline {
         string(defaultValue: '7358', description: '', name: 'AZPETROL_PIN', trim: true)
         string(defaultValue: '1', description: '', name: 'AUTO_QR_NETWORKS', trim: true)
         string(defaultValue: '4', description: '', name: 'APP_AUTH_RETRIES_MAX_FROM_IP', trim: true)
-*/
+
     }
 
     stages {
         stage ('Update .env') {
             steps {
                 script {
-					/*params.each {param ->
+					params.each {param ->
 					  println "${param.key} -> ${param.value} "
-					}*/
+					}
 					echo '1';
 				}
 			}
         }
     }
 }
-}
-
-extractEnvPipeline()
-applyEnvPipeline()
+*/
