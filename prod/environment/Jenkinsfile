@@ -7,17 +7,16 @@ def ENVS = fileEnvs.split("\n")[n]
 def getEnvFromFile () {
 	def WORKSPACE = pwd()
     new File("${WORKSPACE}/prod/environment/.properties").eachLine { line ->
-        println line
+        line.split("=").each { param ->
+             println "Param: ${param}"
+         }
     }
 }
 
 node {
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
-	@NonCPS
-    new File("${WORKSPACE}/prod/environment/.properties").eachLine { line ->
-        println line
-    }
+	getEnvFromFile()
 	/*
 	def distribution= props['distribution_property']
 	def tag= props['tag_property']
