@@ -1,7 +1,9 @@
 node {
-	sh 'git reset --hard HEAD'
-	def WORKSPACE = pwd()
-	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
+	sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+		sh "git clone git@github.com:transloyd/environments.git"
+	}
+
+	def props = readProperties file: "environments/b2c/.env.app"
 	dynamicParams = []
 	props.each { key, value ->
 		dynamicParams += [
@@ -20,13 +22,16 @@ pipeline {
         stage ('Update .env') {
             steps {
                 script {
-                    def WORKSPACE = pwd()
-                    def envFile = "prod/environment/.properties"
-                    def props = writeFile file: "${envFile}", text: ''
-					/*params.each {key, value ->
-						sh "echo ${key}=${value} >> ${envFile}"
-					}*/
-					sh "echo params >> ${envFile}"
+                    dir('environments/b2c/') {
+	                    def envFile = ".env.app"
+	                    def props = writeFile file: "${envFile}", text: ''
+						params.each {key, value ->
+							sh "echo ${key}=${value} >> ${envFile}"
+						}
+						sh "git commit ${envFile} -m 'Pipeline update env'"
+						sh "git push"
+					}
+					sh "rm -R environments"
 				}
 			}
         }
