@@ -1,14 +1,14 @@
 node {
 	def WORKSPACE = pwd()
 	def props = readProperties file: "${WORKSPACE}/prod/environment/.properties"
-	params = []
+	dynamicParams = []
 	props.each { key, value ->
-		params += [
+		dynamicParams += [
             string(name: "$key", defaultValue: "$value", description: ''),
         ]
 	}
 	properties([
-        parameters(params)
+        parameters(dynamicParams)
     ])
 
 }
