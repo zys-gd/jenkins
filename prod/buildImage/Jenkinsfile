@@ -59,8 +59,6 @@ pipeline {
 					sh "cp .env.dev .env"
 					sh "cp project/.env.dist project/.env"
 					sh "docker images"
-					sh "rm -R project/vendor"
-					sh "rm -R project/var"
 
 					sh "docker-compose build --parallel php-fpm-image php-cli-image"
 
