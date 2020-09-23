@@ -49,7 +49,11 @@ pipeline {
     }
 }
 
-//node ('toplivo-test-ssh-deploy') {}
+node ('toplivo-test-ssh-deploy') {
+	ws('Test prod deploy from registry') {
+		sh 'ls'
+	}
+}
 
 node {
 println ENV
