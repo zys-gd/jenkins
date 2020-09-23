@@ -70,7 +70,7 @@ pipeline {
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
 
 					sh "docker-compose up -d php_cli"
-					sh "docker-compose exec -T php_cli php bin/console d:m:m --env=prod"
+					sh "docker-compose exec -T -u www-data php_cli php bin/console d:m:m --env=prod"
 
 					sh "docker-compose up -d"
 				}
