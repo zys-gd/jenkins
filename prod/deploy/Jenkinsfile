@@ -71,7 +71,7 @@ pipeline {
 
 					sh "docker-compose up -d --build mysql"
 					sh "docker-compose up -d php_cli"
-					sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -e DATABASE_HOST=test_toplivo_back_mysql -e RABBITMQ_HOST=test_toplivo_back_rabbitmq -e DATABASE_USER=root -e DATABASE_PASSWORD=root123456 php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
+					sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -e DATABASE_HOST=test_toplivo_back_mysql -e RABBITMQ_HOST=test_toplivo_back_rabbitmq -e DATABASE_USER=root -e DATABASE_PASSWORD=root123456 php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod --allow-no-migration --no-interaction --no-debug"
 
 					sh "docker-compose up -d"
 				}
