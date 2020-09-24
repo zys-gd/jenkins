@@ -58,6 +58,13 @@ pipeline {
 					sh "cp docker-compose.override_prod_test.yml docker-compose.override.yml"
 					sh "cp .env.dev .env"
 					sh "cp project/.env.dist project/.env"
+
+					sh '''
+                        echo REDIS_HOST=test_toplivo_back_redis >> project/.env
+                        DATABASE_HOST=test_toplivo_back_mysql >> project/.env
+                        RABBITMQ_HOST=test_toplivo_back_rabbitmq >> project/.env
+                    '''
+
 					//sh "docker-compose pull"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
