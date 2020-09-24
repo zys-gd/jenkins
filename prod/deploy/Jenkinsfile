@@ -66,10 +66,10 @@ pipeline {
                     '''
 
 					//sh "docker-compose pull"
-					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:latest"
-					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:latest"
-					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_cli:latest"
-					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_nginx:latest"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
+					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
 
 					sh "docker-compose up -d --build mysql"
 					sh "docker-compose up -d --force-recreate php_cli"
