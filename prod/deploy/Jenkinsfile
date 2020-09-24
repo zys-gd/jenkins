@@ -52,11 +52,6 @@ pipeline {
 		}
 
 		stage ('Apply builds') {
-			environment {
-                REDIS_HOST="test_toplivo_back_redis"
-				DATABASE_HOST="test_toplivo_back_mysql"
-				RABBITMQ_HOST="test_toplivo_back_rabbitmq"
-            }
 			steps {
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"

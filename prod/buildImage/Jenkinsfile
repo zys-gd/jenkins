@@ -58,6 +58,13 @@ pipeline {
 					sh "cp docker-compose.prod_build.yml docker-compose.yml"
 					sh "cp .env.dev .env"
 					sh "cp project/.env.dist project/.env"
+
+					sh '''
+						echo REDIS_HOST=test_toplivo_back_redis >> project/.env
+                        DATABASE_HOST=test_toplivo_back_mysql >> project/.env
+                        RABBITMQ_HOST=test_toplivo_back_rabbitmq >> project/.env
+					'''
+
 					sh "docker images"
 
 					sh "docker-compose build --parallel php-fpm-image php-cli-image"
