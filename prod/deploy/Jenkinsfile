@@ -69,7 +69,8 @@ pipeline {
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
 
-					sh "docker-compose up -d php_cli mysql"
+					sh "docker-compose up -d mysql --build"
+					sh "docker-compose up -d php_cli"
 					sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -e DATABASE_HOST=test_toplivo_back_mysql -e RABBITMQ_HOST=test_toplivo_back_rabbitmq -e DATABASE_USER=root -e DATABASE_PASSWORD=root123456 php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
 
 					sh "docker-compose up -d"
