@@ -72,7 +72,12 @@ pipeline {
 					sh "echo 'DATABASE_NAME=toplivo' >> .env"
 
 
-					//sh "docker-compose pull"
+					sh "docker-compose down"
+					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
+					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
+					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
+					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
+
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
