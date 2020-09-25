@@ -105,6 +105,14 @@ pipeline {
 				script {
 	                sh "docker-compose build --parallel php php-cli php-consumer"
 
+	                sh "docker cp project $DOCKER_REGISTRY/prod_toplyvo_php_fpm:/var/www/html"
+	                sh "docker cp project $DOCKER_REGISTRY/prod_toplyvo_php_cli:/var/www/html"
+	                sh "docker cp project $DOCKER_REGISTRY/prod_toplyvo_php_consumer:/var/www/html"
+
+	                sh "docker cp ./docker/php/parameters.yml.dist $DOCKER_REGISTRY/prod_toplyvo_php_fpm:/var/www/html/app/config/parameters.yml"
+	                sh "docker cp ./docker/php/parameters.yml.dist $DOCKER_REGISTRY/prod_toplyvo_php_cli:/var/www/html/app/config/parameters.yml"
+	                sh "docker cp ./docker/php/parameters.yml.dist $DOCKER_REGISTRY/prod_toplyvo_php_consumer:/var/www/html/app/config/parameters.yml"
+
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm:${params.TAG}"
                     sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
