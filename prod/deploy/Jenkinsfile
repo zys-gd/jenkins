@@ -71,8 +71,10 @@ pipeline {
 					sh "echo 'TRACKING_DATABASE_NAME=toplivo_tracking' >> .env"
 					sh "echo 'DATABASE_NAME=toplivo' >> .env"
 
+					try {
+						sh "docker-compose down"
+					} catch (exc) {}
 
-					sh "docker-compose down"
 					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
 					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
 					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
