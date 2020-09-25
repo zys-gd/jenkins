@@ -54,9 +54,9 @@ pipeline {
 		stage ('Apply builds') {
 			steps {
 
-				try {
+				script {try {
 					sh "rm -R environments"
-				} catch (exc) {}
+				} catch (exc) {}}
 
 				sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 					sh "git clone git@github.com:transloyd/environments.git"
