@@ -54,16 +54,16 @@ pipeline {
 
 		stage ('Build pure php image') {
 			steps {
+
+				sh "rm -R environments"
+				sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+					sh "git clone git@github.com:transloyd/environments.git"
+				}
+
 				script {
 					sh "cp docker-compose.prod_build.yml docker-compose.yml"
-					sh "cp .env.dev .env"
-					sh "cp project/.env.dist project/.env"
-
-					sh '''
-						echo REDIS_HOST=test_toplivo_back_redis >> project/.env
-                        DATABASE_HOST=test_toplivo_back_mysql >> project/.env
-                        RABBITMQ_HOST=test_toplivo_back_rabbitmq >> project/.env
-					'''
+					sh "cp environments/b2c/.env .env"
+					sh "cp environments/b2c/.env.deploy_test project/.env"
 
 					sh "docker images"
 

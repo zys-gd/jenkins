@@ -53,17 +53,18 @@ pipeline {
 
 		stage ('Apply builds') {
 			steps {
+
+				sh "rm -R environments"
+				sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+					sh "git clone git@github.com:transloyd/environments.git"
+				}
+
 				script {
 					sh "cp docker-compose.prod.yml docker-compose.yml"
 					sh "cp docker-compose.override_prod_test.yml docker-compose.override.yml"
-					sh "cp .env.dev .env"
-					sh "cp project/.env.dist project/.env"
+					sh "cp environments/b2c/.env .env"
+					sh "cp environments/b2c/.env.deploy_test project/.env"
 
-					sh '''
-                        echo REDIS_HOST=test_toplivo_back_redis >> project/.env
-                        DATABASE_HOST=test_toplivo_back_mysql >> project/.env
-                        RABBITMQ_HOST=test_toplivo_back_rabbitmq >> project/.env
-                    '''
 
 					//sh "docker-compose pull"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
@@ -73,7 +74,7 @@ pipeline {
 
 					sh "docker-compose up -d --build mysql"
 					sh "docker-compose up -d --force-recreate php_cli"
-					sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -e DATABASE_HOST=test_toplivo_back_mysql -e RABBITMQ_HOST=test_toplivo_back_rabbitmq -e DATABASE_USER=root -e DATABASE_PASSWORD=root123456 php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod --allow-no-migration --no-interaction --no-debug"
+					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod --allow-no-migration --no-interaction --no-debug"
 
 					sh "docker-compose up -d --force-recreate --remove-orphans"
 				}
