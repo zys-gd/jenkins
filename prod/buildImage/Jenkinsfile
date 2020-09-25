@@ -89,7 +89,7 @@ pipeline {
 					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads"
 	                sh "docker-compose down"
 	                sh "docker-compose up -d composer redis"
-	                sh "docker-compose exec -T composer composer install --no-dev --no-scripts"
+	                sh "docker-compose exec -T composer composer install --no-scripts" //--no-dev
 	                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
 	                sh "docker-compose exec -T composer chown -Rc www-data ${reqDirs}"
 	                sh "docker-compose exec -T -u www-data composer /bin/bash -c 'php bin/console cache:clear --env=dev'"
