@@ -80,7 +80,7 @@ pipeline {
 
 					sh "docker-compose up -d --build mysql"
 					sh "docker-compose up -d --force-recreate php_cli"
-					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=dev --allow-no-migration --no-interaction --no-debug"
+					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=dev"
 
 					sh "docker-compose up -d --force-recreate --remove-orphans"
 				}
