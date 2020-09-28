@@ -104,10 +104,6 @@ pipeline {
 		stage ('Build production php') {
 			steps {
 				script {
-					sh "docker rmi $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
-					sh "docker rmi $DOCKER_REGISTRY/prod_toplyvo_php_cli"
-					sh "docker rmi $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
-
 	                sh "docker-compose build --parallel --no-cache php php-cli php-consumer"
 
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"

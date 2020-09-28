@@ -67,18 +67,9 @@ pipeline {
 					sh "cp environments/b2c/.env .env"
 					sh "cp environments/b2c/.env.deploy_test project/.env"
 
-					sh "echo 'MYSQL_ROOT_PASSWORD=root123456' >> .env"
-					sh "echo 'TRACKING_DATABASE_NAME=toplivo_tracking' >> .env"
-					sh "echo 'DATABASE_NAME=toplivo' >> .env"
-
 					try {
 						sh "docker-compose down"
 					} catch (exc) {}
-
-					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
-					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
-					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
-					sh "docker rmi jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
 
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
