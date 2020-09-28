@@ -84,7 +84,7 @@ pipeline {
 			}
 			steps {
 				script {
-					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads"
+					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads web/bundles/sonataadmin web/bundles/sonatacore web/bundles/sonatatranslation web/bundles/nelmioapidoc web/bundles/admin"
 	                sh "docker-compose down"
 	                sh "docker-compose up -d composer redis"
 	                sh "docker-compose exec -T composer composer install --no-scripts" //--no-dev
