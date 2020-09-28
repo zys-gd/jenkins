@@ -92,6 +92,7 @@ pipeline {
 	                sh "docker-compose exec -T composer chown -Rc www-data ${reqDirs}"
 	                sh "docker-compose exec -T -u www-data composer /bin/bash -c 'php bin/console cache:clear --env=dev'"
 	                sh "docker-compose exec -T -u www-data composer php bin/console cache:warmup --env=dev"
+	                sh "docker-compose exec -T -u www-data composer php bin/console assets:install --symlink"
 	                sh "docker-compose down"
                 }
 
