@@ -52,6 +52,9 @@ pipeline {
 		}
 
 		stage ('Apply builds') {
+			environment {
+				IMAGE_TAG="${params.TAG}"
+			}
 			steps {
 				script {
 					try {
