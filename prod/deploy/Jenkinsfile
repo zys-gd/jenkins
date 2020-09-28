@@ -83,7 +83,7 @@ pipeline {
 					sh "docker-compose up -d --force-recreate php_cli"
 					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
 
-					sh "docker-compose up -d --force-recreate --remove-orphans"
+					sh "docker-compose up -d --remove-orphans"
 					sh "docker-compose exec -T php chown -Rc www-data var/cache var/logs var/spool var/sessions web/public/img/uploads"
 				}
 			}
