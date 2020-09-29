@@ -26,6 +26,7 @@ pipeline {
 
 		stage ('Get build configuration') {
 			steps {
+				buildDescription "${params.TAG}"
 				sh 'rm -R *'
 				unstash "docker"
 			}

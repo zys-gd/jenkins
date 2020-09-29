@@ -21,6 +21,7 @@ pipeline {
 
 			steps {
 				script {
+					buildDescription "${params.TAG}"
 					try {
 						checkout([
 							$class: 'GitSCM',
