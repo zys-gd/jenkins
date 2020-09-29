@@ -2,7 +2,9 @@
 def VERSION_TAG = "v${env.Release}"
 pipeline {
 	agent any
-
+	options {
+		skipDefaultCheckout true
+	}
 	stages {
 
 		stage ('Checkout master') {

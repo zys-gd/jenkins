@@ -33,7 +33,9 @@ echo "Branch " + "${BRANCH_FULL_PATH}"
 
 pipeline {
 	agent any
-
+	options {
+		skipDefaultCheckout true
+	}
 	stages {
 
 		stage ('Change Jira Task ENV to Dev') {
