@@ -20,13 +20,13 @@ pipeline {
 		stage ('Checkout from git') {
 			steps {
 				node ('master') {
-					dir ("/var/lib/jenkins/workspace/'Test prod build image'") {
+					dir ("/var/lib/jenkins/workspace/Test prod build image") {
 						sh 'ls -la'
 						stash name: "docker", includes: "docker/*"
 					}
 				}
 				node ('toplivo-production-ssh') {
-					dir ("/home/jenkins/workspace/'Test prod deploy from registry'") {
+					dir ("/home/jenkins/workspace/Test prod deploy from registry") {
 						sh 'rm -R *'
 						unstash "docker"
 					}
