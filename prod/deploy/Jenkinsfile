@@ -8,7 +8,7 @@ node ('master') {
 pipeline {
 	agent { node { label 'toplivo-production-ssh' } }
 	options {
-	//	skipDefaultCheckout true
+		skipDefaultCheckout false
 	}
 	environment {
 		def DOCKER_USERNAME='jenkins'
