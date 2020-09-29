@@ -1,5 +1,8 @@
 pipeline {
 	agent { node { label 'master' } }
+	options {
+		skipDefaultCheckout true
+	}
 	environment {
 		def DOCKER_USERNAME='jenkins'
         def DOCKER_PASSWORD='ch1qySOXu8Q'
