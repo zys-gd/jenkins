@@ -59,39 +59,7 @@ pipeline {
 			}
 		}
 
-		stage ('Apply builds') {
-			environment {
-				IMAGE_TAG="${params.TAG}"
-			}
-			steps {
-				script {
-					try {
-						sh "rm -R environments"
-					} catch (exc) {}
 
-					sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-						sh "git clone git@github.com:transloyd/environments.git"
-					}
-
-					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
-
-					sh "cp environments/b2c/.env .env"
-
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cli:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
-
-/*
-					sh "docker-compose up -d --force-recreate php"
-					sh "docker-compose up -d --force-recreate php_cli"
-					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
-
-					sh "docker-compose up -d --remove-orphans"
-*/
-				}
-			}
-		}
 
 		stage ('Logout from Registry') {
 			steps {
