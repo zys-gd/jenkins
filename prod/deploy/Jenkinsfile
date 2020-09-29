@@ -33,7 +33,7 @@ pipeline {
 				script { try {
 					// this checkout is needed for gitParameter plugin
 
-					sh 'rm -R *'
+					sh 'rm -R docker'
 				} catch (exc) {}}
 				unstash "docker"
 			}
