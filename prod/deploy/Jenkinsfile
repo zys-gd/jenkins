@@ -30,9 +30,19 @@ pipeline {
 		stage ('Get build configuration') {
 			steps {
 				buildDescription "${params.TAG}"
-				git 'git@github.com:transloyd/core.toplyvo.app.git'
 				script { try {
-					sh 'rm -R docker'
+					checkout([
+						$class: 'GitSCM',
+						branches: [[name: '*/TPLV-846']],
+						doGenerateSubmoduleConfigurations: false,
+						extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']],
+						submoduleCfg: [],
+						userRemoteConfigs: [[
+							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+							url: 'git@github.com:transloyd/core.toplyvo.app.git'
+						]]
+					])
+					sh 'rm -R docker source'
 				} catch (exc) {}}
 				unstash "docker"
 			}
