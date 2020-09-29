@@ -4,7 +4,7 @@ node {
 		sh "git clone git@github.com:transloyd/environments.git"
 	}
 // this part needed only for first generate parameters to job
-/*
+//
 	def props = readProperties file: "environments/b2c/.env"
 	dynamicParams = []
 	params.each {key, value ->
@@ -20,7 +20,7 @@ node {
 	properties([
         parameters(dynamicParams)
     ])
-*/
+//
 }
 
 pipeline {
@@ -32,7 +32,7 @@ pipeline {
                 script {
                     dir('environments/b2c/') {
 	                    def envFile = ".env"
-	                  /*  def props = writeFile file: "${envFile}", text: ''
+	                    def props = writeFile file: "${envFile}", text: ''
 						params.each {key, value ->
 							sh "echo ${key}=${value} >> ${envFile}"
 						}
@@ -40,7 +40,7 @@ pipeline {
 							sh "git commit ${envFile} -m 'Pipeline update env'"
 							sh "git push"
 						}
-*/
+
 						ENV = readFile file: envFile
 					}
 				}
@@ -49,11 +49,13 @@ pipeline {
     }
 }
 
+/*
 node ('toplivo-test-ssh-deploy') {
 	dir('/home/jenkins/workspace/Test prod deploy from registry/project') {
 		writeFile file: ".env", text: ENV
 	}
 }
+*/
 
 node {
 	def props = readProperties file: "environments/b2c/.env"
