@@ -1,9 +1,9 @@
-	node ('master') {
-		dir ("/var/lib/jenkins/workspace/Test prod build image") {
-			sh 'ls -la docker'
-			stash name: "docker", includes: "docker/", allowEmpty: true
-		}
+node ('master') {
+	dir ("/var/lib/jenkins/workspace/Test prod build image") {
+		sh 'ls -la docker'
+		stash name: "docker", includes: "docker/", allowEmpty: true
 	}
+}
 
 pipeline {
 	agent { node { label 'toplivo-production-ssh' } }
@@ -24,10 +24,9 @@ pipeline {
     }
 	stages {
 
-		stage ('Checkout from git') {
+		stage ('Get build configuration') {
 			steps {
 				sh 'rm -R *'
-				//stashDocker()
 				unstash "docker"
 			}
 		}
