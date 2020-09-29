@@ -1,5 +1,5 @@
 node ('master') {
-	dir ("/var/lib/jenkins/workspace/Test prod build image") {
+	dir ("/var/lib/jenkins/workspace/B2C image builder (prod)") {
 		sh 'ls -la docker'
 		stash name: "docker", includes: "docker/", allowEmpty: true
 	}
@@ -62,6 +62,8 @@ pipeline {
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cli:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
+
+					sh "docker-compose up -d --force-recreate php"
 /*
 					sh "docker-compose up -d --force-recreate php_cli"
 					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
