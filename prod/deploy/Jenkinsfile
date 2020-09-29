@@ -30,10 +30,10 @@ pipeline {
 		stage ('Get build configuration') {
 			steps {
 				buildDescription "${params.TAG}"
-				sh "git init"
-				sh "git remote add origin git@github.com:transloyd/core.toplyvo.app.git"
 				script { try {
-					sh 'rm -R *'
+					sh "git init"
+					sh "git remote add origin git@github.com:transloyd/core.toplyvo.app.git"
+					sh 'rm -R docker'
 				} catch (exc) {}}
 				unstash "docker"
 			}
