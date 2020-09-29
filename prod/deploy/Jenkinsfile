@@ -42,7 +42,7 @@ pipeline {
 							url: 'git@github.com:transloyd/core.toplyvo.app.git'
 						]]
 					])
-					sh 'rm -R docker source'
+					sh 'rm -R docker'
 				} catch (exc) {}}
 				unstash "docker"
 			}
