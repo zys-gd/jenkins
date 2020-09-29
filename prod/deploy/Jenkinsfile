@@ -21,6 +21,7 @@ pipeline {
 			steps {
 				node ('master') {
 					dir ("/var/lib/jenkins/workspace/'Test prod build image'") {
+						sh 'ls -la'
 						stash name: "docker", includes: "docker/*"
 					}
 				}
