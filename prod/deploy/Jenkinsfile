@@ -1,5 +1,5 @@
 pipeline {
-	agent { node { label 'toplivo-test-ssh-deploy' } }
+	agent { node { label 'toplivo-production-ssh' } }
 	environment {
 		def DOCKER_USERNAME='jenkins'
         def DOCKER_PASSWORD='ch1qySOXu8Q'
@@ -19,25 +19,15 @@ pipeline {
 
 		stage ('Checkout from git') {
 
-			steps {
-				script {
-					try {
-						checkout([
-							$class: 'GitSCM',
-							branches: [[name: '*/TPLV-846']],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/core.toplyvo.app.git'
-							]]
-						])
-					}
-					catch (exc) {
-						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
-					}
+			node ('master') {
+				dir ("/var/lib/jenkins/workspace/'Test prod build image'") {
+					stash name: "docker", includes: "docker/*"
+				}
+			}
+			node ('toplivo-production-ssh') {
+				dir ("/home/jenkins/workspace/'Test prod deploy from registry'") {
+					sh 'rm -R *'
+					unstash "docker"
 				}
 			}
 		}
@@ -66,7 +56,6 @@ pipeline {
 					}
 
 					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
-					sh "cp docker/build/docker-compose.override_prod_test.yml docker-compose.override.yml"
 
 					sh "cp environments/b2c/.env .env"
 
@@ -74,16 +63,12 @@ pipeline {
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_cli:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_nginx:${params.TAG}"
-
-					try {
-						sh "mkdir -p project/web/public/img/uploads project/var/sessions project/var/logs"
-					} catch (exc) {}
-
+/*
 					sh "docker-compose up -d --force-recreate php_cli"
 					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
 
 					sh "docker-compose up -d --remove-orphans"
-					sh "docker-compose exec -T php chown -Rc www-data var/cache var/logs var/spool var/sessions web/public/img/uploads"
+*/
 				}
 			}
 		}

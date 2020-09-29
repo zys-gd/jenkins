@@ -1,5 +1,5 @@
 pipeline {
-	agent any
+	agent { node { label 'master' } }
 	environment {
 		def DOCKER_USERNAME='jenkins'
         def DOCKER_PASSWORD='ch1qySOXu8Q'
