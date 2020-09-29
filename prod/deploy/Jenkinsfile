@@ -67,8 +67,8 @@ pipeline {
 
 					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
 					sh "cp docker/build/docker-compose.override_prod_test.yml docker-compose.override.yml"
+
 					sh "cp environments/b2c/.env .env"
-					sh "cp environments/b2c/.env.deploy_test project/.env"
 
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_fpm:${params.TAG}"
 					sh "docker pull jf-dev.toplyvo.app/prod_toplyvo_php_consumer:${params.TAG}"

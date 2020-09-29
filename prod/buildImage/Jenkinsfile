@@ -64,8 +64,8 @@ pipeline {
 					}
 
 					sh "cp docker/build/docker-compose.prod_build.yml docker-compose.yml"
+
 					sh "cp environments/b2c/.env .env"
-					sh "cp environments/b2c/.env.deploy_test project/.env"
 
 					sh "docker-compose build --parallel php-fpm-image php-cli-image"
 
