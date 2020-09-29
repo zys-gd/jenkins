@@ -1,7 +1,7 @@
 	node ('master') {
 		dir ("/var/lib/jenkins/workspace/Test prod build image") {
 			sh 'ls -la docker'
-			stash name: "docker", includes: "docker/*"
+			stash name: "docker", includes: "docker/*", allowEmpty: true
 		}
 	}
 
