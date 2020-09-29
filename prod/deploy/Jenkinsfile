@@ -30,9 +30,9 @@ pipeline {
 		stage ('Get build configuration') {
 			steps {
 				buildDescription "${params.TAG}"
-				try {
+				script { try {
 					sh 'rm -R *'
-				} catch (exc) {}
+				} catch (exc) {}}
 				unstash "docker"
 			}
 		}
