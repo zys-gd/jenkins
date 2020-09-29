@@ -1,11 +1,9 @@
-def stashDocker() {
 	node ('master') {
 		dir ("/var/lib/jenkins/workspace/Test prod build image") {
 			sh 'ls -la'
 			stash name: "docker", includes: "docker/*"
 		}
 	}
-}
 
 pipeline {
 	agent { node { label 'toplivo-production-ssh' } }
@@ -29,7 +27,7 @@ pipeline {
 		stage ('Checkout from git') {
 			steps {
 				sh 'rm -R *'
-				stashDocker()
+				//stashDocker()
 				unstash "docker"
 			}
 		}
