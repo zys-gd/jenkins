@@ -35,7 +35,9 @@ pipeline {
 						$class: 'GitSCM',
 						branches: [[name: '*/TPLV-846']],
 						doGenerateSubmoduleConfigurations: false,
-						extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']],
+						extensions: [
+							//[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+						],
 						submoduleCfg: [],
 						userRemoteConfigs: [[
 							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
