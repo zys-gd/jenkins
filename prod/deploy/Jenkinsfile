@@ -32,8 +32,20 @@ pipeline {
 				buildDescription "${params.TAG}"
 				script { try {
 					// this checkout is needed for gitParameter plugin
-
-					sh 'rm -R docker'
+					checkout([
+						$class: 'GitSCM',
+						branches: [[name: '*/TPLV-846']],
+						doGenerateSubmoduleConfigurations: false,
+						extensions: [
+							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+						],
+						submoduleCfg: [],
+						userRemoteConfigs: [[
+							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+							url: 'git@github.com:transloyd/core.toplyvo.app.git'
+						]]
+					])
+					sh 'rm -R *'
 				} catch (exc) {}}
 				unstash "docker"
 			}
