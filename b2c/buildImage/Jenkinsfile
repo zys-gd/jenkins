@@ -95,7 +95,7 @@ pipeline {
 	                sh "docker-compose exec -T composer composer install --no-scripts --no-dev"
 	                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
 	                sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -T composer php bin/console cache:clear --env=prod"
-	                sh "docker-compose exec -T composer php bin/console cache:warmup --env=prod"
+	                sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -T composer php bin/console cache:warmup --env=prod"
 	                sh "docker-compose exec -T composer php bin/console assets:install --env=prod"
 	                sh "docker-compose down"
                 }
