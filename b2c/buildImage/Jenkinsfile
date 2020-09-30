@@ -4,9 +4,9 @@ pipeline {
 		skipDefaultCheckout true
 	}
 	environment {
-		def DOCKER_USERNAME='jenkins'
-        def DOCKER_PASSWORD='ch1qySOXu8Q'
-        def DOCKER_REGISTRY='jf-dev.toplyvo.app'
+		DOCKER_USERNAME='jenkins'
+        DOCKER_PASSWORD='ch1qySOXu8Q'
+        DOCKER_REGISTRY='jf-dev.toplyvo.app'
     }
 	parameters {
         gitParameter name: 'TAG',
@@ -83,10 +83,6 @@ pipeline {
 		}
 
 		stage ('PHP preparations') {
-			environment {
-				COMPOSER_MEMORY_LIMIT="-1"
-				REDIS_HOST="test_toplivo_back_redis"
-			}
 			steps {
 				script {
 					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads"
