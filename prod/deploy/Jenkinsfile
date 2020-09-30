@@ -59,7 +59,7 @@ pipeline {
 
 			}
 		}
-/*
+
 		stage ('Apply builds') {
 			environment {
 				IMAGE_TAG="${params.TAG}"
@@ -93,7 +93,7 @@ pipeline {
 				}
 			}
 		}
-*/
+
 		stage ('Logout from Registry') {
 			steps {
 				script {
