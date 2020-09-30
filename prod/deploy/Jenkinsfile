@@ -60,6 +60,18 @@ pipeline {
 			}
 		}
 
+		stage ('Download builds') {
+
+			steps {
+				script {
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cli:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
+				}
+			}
+		}
+
 		stage ('Apply builds') {
 			environment {
 				IMAGE_TAG="${params.TAG}"
@@ -77,12 +89,6 @@ pipeline {
 					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
 
 					sh "cp environments/b2c/.env .env"
-
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cli:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
-
 
 //					sh "docker-compose up -d --force-recreate php"
 //					sh "docker-compose up -d --force-recreate php_cli"
