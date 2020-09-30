@@ -11,6 +11,7 @@ pipeline {
 
 			steps {
 
+				buildDescription "${VERSION_TAG}"
 				script {
 					try {
 						sh "rm -R *"
