@@ -71,14 +71,14 @@ pipeline {
 
 					sh "cp environments/b2c/.env .env"
 					sh "echo 'DOCKER_REGISTRY=${DOCKER_REGISTRY}' >> .env"
-
+/*
 					sh "docker-compose build --parallel php-fpm-image php-cli-image"
 
 					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
 					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
 
 					sh "docker tag $DOCKER_REGISTRY/php-cli-image $DOCKER_REGISTRY/php-cli-image"
-					sh "docker push $DOCKER_REGISTRY/php-cli-image"
+					sh "docker push $DOCKER_REGISTRY/php-cli-image"*/
 				}
 			}
 		}
@@ -87,20 +87,23 @@ pipeline {
 			steps {
 				script {
 					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads"
-	                sh "docker-compose down"
+/*	                sh "docker-compose down"
 	                sh "docker-compose up -d composer redis"
 	                sh "docker-compose exec -T composer composer install --no-scripts --no-dev"
 	                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
 	                sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -T composer php bin/console cache:clear --env=prod"
 	                sh "docker-compose run -e REDIS_HOST=test_toplivo_back_redis -T composer php bin/console cache:warmup --env=prod"
 	                sh "docker-compose exec -T composer php bin/console assets:install --env=prod"
-	                sh "docker-compose down"
+	                sh "docker-compose down"*/
                 }
 
 			}
 		}
 
 		stage ('Build production php') {
+			environment {
+				DOCKER_REGISTRY='jf-dev.toplyvo.app'
+			}
 			steps {
 				script {
 	                sh "docker-compose build --parallel --no-cache php php-cli php-consumer"
