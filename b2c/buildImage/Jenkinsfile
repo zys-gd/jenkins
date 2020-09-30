@@ -70,6 +70,7 @@ pipeline {
 					sh "cp docker/build/docker-compose.prod_build.yml docker-compose.yml"
 
 					sh "cp environments/b2c/.env .env"
+					sh "echo 'DOCKER_REGISTRY=${DOCKER_REGISTRY}' >> .env"
 
 					sh "docker-compose build --parallel php-fpm-image php-cli-image"
 
