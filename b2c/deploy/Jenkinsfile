@@ -85,7 +85,7 @@ pipeline {
 					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
 
 					sh "cp environments/b2c/.env .env"
-
+					sh "mkdir -p var/logs var/sessions var/uploads"
 					sh "docker-compose up -d nginx varnish varnish_nginx centrifugo oracle_stunnel php"
 //					sh "docker-compose up -d --force-recreate php_cli"
 //					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
