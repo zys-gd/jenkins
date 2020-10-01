@@ -38,10 +38,6 @@ pipeline {
 					sh "cp docker/docker-compose.prod.yml docker-compose.yml"
 					sh '''
 						docker-compose down
-
-	                    go fmt ./...
-	                    go build
-
 	                    docker-compose up --build
 					'''
 				}
