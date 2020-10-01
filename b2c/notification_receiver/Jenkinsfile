@@ -38,7 +38,7 @@ pipeline {
 					sh "cp docker/docker-compose.prod.yml docker-compose.yml"
 					sh '''
 						docker-compose down
-	                    docker-compose up --build
+	                    docker-compose up -d --build
 					'''
 				}
 			}
