@@ -90,7 +90,7 @@ pipeline {
 
 					sh "cp environments/b2c/.env .env"
 
-					//sh "docker-compose up -d php nginx varnish varnish_nginx centrifugo oracle_stunnel"
+					sh "docker-compose up -d php nginx varnish varnish_nginx centrifugo oracle_stunnel"
 //					sh "docker-compose up -d --force-recreate php_cli"
 //					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
 //					sh "docker-compose run php_cli php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --env=prod"
