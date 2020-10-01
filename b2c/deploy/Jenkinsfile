@@ -46,9 +46,7 @@ pipeline {
 						]]
 					])
 					sh 'rm -rf *'
-					sh "ls -la"
 				} catch (exc) {}}
-				echo "unstash"
 				unstash "docker"
 			}
 		}
