@@ -1,5 +1,5 @@
 pipeline {
-	agent { node { label 'master' } }
+	agent { node { label 'toplivo-production-ssh' } }
 	options {
 		skipDefaultCheckout true
 	}
@@ -35,6 +35,7 @@ pipeline {
 
 			steps {
 				script {
+					sh "cp docker/docker-compose.prod.yml docker-compose.yml"
 					sh '''
 						docker-compose down
 
