@@ -54,7 +54,7 @@ pipeline {
 		stage ('Login to Registry') {
 			steps {
 				script {
-	                sh "docker login $DOCKER_REGISTRY"
+	                sh "winpty docker login $DOCKER_REGISTRY"
                 }
 
 			}
