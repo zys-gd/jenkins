@@ -66,7 +66,7 @@ pipeline {
 				script {
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cli:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
 				}
 			}
@@ -90,15 +90,15 @@ pipeline {
 					sh "docker-compose up -d nginx varnish varnish_nginx centrifugo oracle_stunnel php-fpm"
 
 					sh "docker-compose exec -T -u root php-fpm /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
-					sh "docker-compose run --rm -u root php_cli /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
-					sh "docker-compose run --rm -u root php_consumer /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+					sh "docker-compose run --rm -u root php-cron /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+					sh "docker-compose run --rm -u root php-consumer /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
 					// test sections
 
 
 
-//					sh "docker-compose up -d --force-recreate php_cli"
-//					sh "docker-compose run php_cli php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
-//					sh "docker-compose run php_cli php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --env=prod"
+//					sh "docker-compose up -d --force-recreate php-cron"
+//					sh "docker-compose run php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
+//					sh "docker-compose run php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --env=prod"
 //
 //					sh "docker-compose up -d --remove-orphans"
 

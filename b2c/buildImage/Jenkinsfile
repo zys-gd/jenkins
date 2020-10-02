@@ -102,15 +102,15 @@ pipeline {
 		stage ('Build production php') {
 			steps {
 				script {
-	                sh "docker-compose build --parallel --no-cache php php-cli php-consumer"
+	                sh "docker-compose build --parallel --no-cache php-fpm php-cron php-consumer"
 
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
 	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm:${params.TAG}"
                     sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
 
-                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cli $DOCKER_REGISTRY/prod_toplyvo_php_cli"
-                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cli $DOCKER_REGISTRY/prod_toplyvo_php_cli:${params.TAG}"
-                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_cli"
+                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cron $DOCKER_REGISTRY/prod_toplyvo_php_cron"
+                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cron $DOCKER_REGISTRY/prod_toplyvo_php_cron:${params.TAG}"
+                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_cron"
 
                     sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
                     sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer:${params.TAG}"
