@@ -87,7 +87,6 @@ pipeline {
 					sh "cp environments/b2c/.env .env"
 
 					// test sections
-					sh "mkdir -p var/logs var/sessions var/uploads"
 					sh "docker-compose up -d nginx varnish varnish_nginx centrifugo oracle_stunnel php-fpm"
 
 					sh "docker-compose exec -T -u root php-fpm /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
