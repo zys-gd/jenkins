@@ -36,9 +36,12 @@ pipeline {
                 script {
                     dir('environments/b2c/') {
 	                    def envFile = ".env"
-	                    def props = writeFile file: "${envFile}", text: ''
+                        def current = ''
+	                    def props = writeFile file: envFile, text: current
 						params.each {key, value ->
-							sh "echo '${key}=${value}' >> ${envFile}"
+							//sh "echo '${key}=${value}' >> ${envFile}"
+							current = readFile envFile
+                            writeFile file: envFile, text: current + "\n" + "${key}=${value}"
 						}
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 							sh "git commit ${envFile} -m 'Pipeline update env'"
