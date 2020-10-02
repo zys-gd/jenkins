@@ -90,9 +90,9 @@ pipeline {
 					sh "mkdir -p var/logs var/sessions var/uploads"
 					sh "docker-compose up -d nginx varnish varnish_nginx centrifugo oracle_stunnel php-fpm"
 
-					sh "docker-compose exec -T -u root php-fpm chown www-data:www-data var/cache"
-					sh "docker-compose run --rm -u root php_cli chown www-data:www-data var/cache"
-					sh "docker-compose run --rm -u root php_consumer chown www-data:www-data var/cache"
+					sh "docker-compose exec -T -u root php-fpm /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+					sh "docker-compose run --rm -u root php_cli /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+					sh "docker-compose run --rm -u root php_consumer /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
 					// test sections
 
 
