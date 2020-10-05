@@ -1,5 +1,6 @@
 // Create release to stage
 def VERSION_TAG = "v${env.Release}"
+def sourceBranch = env.HOTFIX.toBoolean() ? 'hotfix' :'stage'
 pipeline {
 	agent any
 	options {
@@ -67,7 +68,7 @@ pipeline {
 					try {
 						dir("${env.Repository}") {
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-								sh "git merge origin/stage --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
+								sh "git merge origin/${sourceBranch} --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
 
 	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 								sh "git push --progress origin master --tags"
@@ -86,6 +87,9 @@ pipeline {
 		}
 
 		stage ('Synchronize hotfix branch') {
+			when {
+				expression {!env.HOTFIX.toBoolean()}
+			}
 			steps {
 
 				script {
