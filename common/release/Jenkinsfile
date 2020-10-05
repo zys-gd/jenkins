@@ -70,8 +70,32 @@ pipeline {
 	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 
 								sh "git merge origin/stage --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
-								sh "git push --progress origin master"
 								sh "git push --progress origin master --tags"
+	                        }
+                        }
+					}
+					catch (exc) {
+						sh "git status"
+						currentBuild.result = 'FAILURE'
+						currentStage.result = 'FAILURE'
+					}
+
+				}
+
+			}
+		}
+
+		stage ('Synchronize hotfix branch') {
+			steps {
+
+				script {
+					try {
+						dir("${env.Repository}") {
+							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+	                            sh "git checkout hotfix"
+
+								sh "git merge origin/master --no-ff"
+								sh "git push --progress origin hotfix --tags"
 	                        }
                         }
 					}
