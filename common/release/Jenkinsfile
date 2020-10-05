@@ -6,6 +6,9 @@ pipeline {
 	options {
 		skipDefaultCheckout true
 	}
+	parameters{
+		string(name: "Release", defaultValue: Release, description: '')
+	}
 	stages {
 
 		stage ('Checkout master') {
@@ -117,12 +120,3 @@ pipeline {
 	}
 
 }
-/*
-node {
-	properties([
-        parameters(
-            string(name: "Release", defaultValue: VERSION_TAG, description: ''),
-        )
-    ])
-}
-*/
