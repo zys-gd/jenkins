@@ -117,7 +117,7 @@ pipeline {
 	}
 
 }
-
+/*
 node {
 	properties([
         parameters(
@@ -125,3 +125,4 @@ node {
         )
     ])
 }
+*/
