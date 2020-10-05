@@ -95,7 +95,7 @@ pipeline {
 	                            sh "git checkout hotfix"
 
 								sh "git merge origin/master --no-ff"
-								sh "git push --progress origin hotfix --tags"
+								sh "git push --progress origin hotfix"
 	                        }
                         }
 					}
