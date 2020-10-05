@@ -34,7 +34,7 @@ pipeline {
 					// this checkout is needed for gitParameter plugin
 					checkout([
 						$class: 'GitSCM',
-						branches: [[name: '*/TPLV-846']],
+						branches: [[name: '*/master']],
 						doGenerateSubmoduleConfigurations: false,
 						extensions: [
 							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']

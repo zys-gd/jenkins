@@ -28,7 +28,7 @@ pipeline {
 					try {
 						checkout([
 							$class: 'GitSCM',
-							branches: [[name: '*/TPLV-846']], //"refs/tags/${params.TAG}"
+							branches: [[name: "refs/tags/${params.TAG}"]],
 							doGenerateSubmoduleConfigurations: false,
 							extensions: [],
 							submoduleCfg: [],
