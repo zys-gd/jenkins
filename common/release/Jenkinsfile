@@ -67,9 +67,9 @@ pipeline {
 					try {
 						dir("${env.Repository}") {
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
-
 								sh "git merge origin/stage --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
+
+	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 								sh "git push --progress origin master --tags"
 	                        }
                         }
