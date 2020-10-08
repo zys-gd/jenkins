@@ -15,7 +15,7 @@ pipeline {
 
 			steps {
 
-				buildDescription "${Repository}\n${VERSION_TAG}"
+				buildDescription "${env.Repository}\n${VERSION_TAG}"
 				script {
 					try {
 						sh "rm -R *"
