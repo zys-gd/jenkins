@@ -82,7 +82,7 @@ pipeline {
 						sh "git clone git@github.com:transloyd/environments.git"
 					}
 
-					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
+					sh "cp docker/build/docker-compose.stage.yml docker-compose.yml"
 
 					sh "cp environments/b2c/.env.stage .env"
 
