@@ -1,0 +1,113 @@
+node ('master') {
+	dir ("/var/lib/jenkins/workspace/B2C image builder") {
+		sh 'ls -la docker'
+		stash name: "docker", includes: "docker/", allowEmpty: true
+	}
+}
+
+pipeline {
+	agent { node { label 'toplivo-stage' } }
+	options {
+		skipDefaultCheckout true
+	}
+	environment {
+		def DOCKER_USERNAME='jenkins'
+        def DOCKER_PASSWORD='ch1qySOXu8Q'
+        def DOCKER_REGISTRY='jf-dev.toplyvo.app'
+    }
+	parameters {
+        gitParameter name: 'TAG',
+                     type: 'PT_TAG',
+                     defaultValue: 'v2.0.0',
+                     description: 'Tag og docker image\'s build',
+                     quickFilterEnabled: true,
+                     sortMode: 'DESCENDING_SMART',
+                     useRepository: 'git@github.com:transloyd/core.toplyvo.app.git'
+
+    }
+	stages {
+
+		stage ('Get build configuration') {
+			steps {
+				buildDescription "${params.TAG}"
+				script { try {
+					// this checkout is needed for gitParameter plugin
+					checkout([
+						$class: 'GitSCM',
+						branches: [[name: '*/master']],
+						doGenerateSubmoduleConfigurations: false,
+						extensions: [
+							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+						],
+						submoduleCfg: [],
+						userRemoteConfigs: [[
+							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+							url: 'git@github.com:transloyd/core.toplyvo.app.git'
+						]]
+					])
+					sh 'rm -rf source docker environments'
+				} catch (exc) {}}
+				unstash "docker"
+			}
+		}
+
+		stage ('Login to Registry') {
+			steps {
+				script {
+	                sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+                }
+
+			}
+		}
+
+		stage ('Download builds') {
+
+			steps {
+				script {
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron:${params.TAG}"
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
+				}
+			}
+		}
+
+		stage ('Apply builds') {
+			environment {
+				IMAGE_TAG="${params.TAG}"
+			}
+			steps {
+				script {
+					sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+						sh "git clone git@github.com:transloyd/environments.git"
+					}
+
+					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
+
+					sh "cp environments/b2c/.env .env"
+
+					sh "docker-compose run --rm -u root php-fpm /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+					sh "docker-compose run --rm -u root php-cron /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+					sh "docker-compose run --rm -u root php-consumer /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
+
+					sh "docker-compose up -d php-cron"
+					sh "docker-compose run php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
+					sh "docker-compose run php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --env=prod"
+
+					sh "docker-compose up -d --remove-orphans"
+
+				}
+			}
+		}
+
+		stage ('Logout from Registry') {
+			steps {
+				script {
+	                sh "docker logout $DOCKER_REGISTRY"
+                }
+
+			}
+		}
+
+	}
+}
