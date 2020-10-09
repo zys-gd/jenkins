@@ -84,7 +84,7 @@ pipeline {
 
 					sh "cp docker/build/docker-compose.prod.yml docker-compose.yml"
 
-					sh "cp environments/b2c/.env .env"
+					sh "cp environments/b2c/.env.stage .env"
 
 					sh "docker-compose run --rm -u root php-fpm /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
 					sh "docker-compose run --rm -u root php-cron /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
