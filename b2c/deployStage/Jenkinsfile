@@ -68,6 +68,11 @@ pipeline {
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
+
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm"
+                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer"
+                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron"
+                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx"
 				}
 			}
 		}
