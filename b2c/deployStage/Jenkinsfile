@@ -51,62 +51,7 @@ pipeline {
 			}
 		}
 
-		stage ('Login to Registry') {
-			steps {
-				script {
-	                sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
-                }
 
-			}
-		}
-
-		stage ('Download builds') {
-
-			steps {
-				script {
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
-				}
-			}
-		}
-
-		stage ('Apply builds') {
-			environment {
-				IMAGE_TAG="${params.TAG}"
-			}
-			steps {
-				script {
-					sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-						sh "git clone git@github.com:transloyd/environments.git"
-					}
-
-					sh "cp docker/build/docker-compose.stage.yml docker-compose.yml"
-
-					sh "cp environments/b2c/.env.stage .env"
-
-					sh "docker-compose run --rm -u root php-fpm /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
-					sh "docker-compose run --rm -u root php-cron /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
-					sh "docker-compose run --rm -u root php-consumer /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
-
-					sh "docker-compose run php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
-					sh "docker-compose run php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --env=prod"
-
-					sh "docker-compose up -d --remove-orphans"
-
-				}
-			}
-		}
-
-		stage ('Logout from Registry') {
-			steps {
-				script {
-	                sh "docker logout $DOCKER_REGISTRY"
-                }
-
-			}
-		}
 
 	}
 }
