@@ -1,5 +1,7 @@
+def targetAgent = env.STAGE.toBoolean() ? 'toplivo-stage' : 'toplivo-production-ssh'
+def network = env.STAGE.toBoolean() ? 'stage' : 'prod'
 pipeline {
-	agent { node { label 'toplivo-production-ssh' } }
+	agent { node { label targetAgent } }
 	options {
 		skipDefaultCheckout true
 	}
@@ -32,7 +34,9 @@ pipeline {
 		}
 
 		stage ('Restart with rebuild') {
-
+			environment {
+				env="${network}"
+			}
 			steps {
 				script {
 					sh "cp docker/docker-compose.prod.yml docker-compose.yml"
