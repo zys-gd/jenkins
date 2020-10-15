@@ -97,8 +97,8 @@ pipeline {
 					sh "docker-compose run --rm -u root php-consumer /bin/bash -c 'chown -R www-data:www-data /var/www/html/var/cache && chmod -R 775 /var/www/html/var/cache'"
 					} catch (exc) {}
 
-					sh "docker-compose run php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --env=prod"
-					sh "docker-compose run php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --env=prod"
+					sh "docker-compose run php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
+					sh "docker-compose run php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
 
 					sh "docker-compose up -d --remove-orphans"
 
