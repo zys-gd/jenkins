@@ -41,6 +41,7 @@ pipeline {
 				script {
 					sh "cp docker/docker-compose.prod.yml docker-compose.yml"
 					sh "cp .env.dist .env"
+					sh "echo ${network} >> .env"
 					sh '''
 						docker-compose down
 	                    docker-compose up -d --build
