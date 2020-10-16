@@ -91,6 +91,10 @@ pipeline {
 
 					sh "cp environments/b2c/.env.stage .env"
 
+					// test sections
+					sh "docker-compose run --rm -u root php-fpm /bin/bash -c 'touch check_file'"
+					// test sections
+
 					sh "docker-compose run --rm --entrypoint '' php-cron /bin/bash -c 'php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod && php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod'"
 
 					sh "docker-compose up -d --remove-orphans"
