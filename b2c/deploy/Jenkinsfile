@@ -89,12 +89,12 @@ pipeline {
 					// test sections
 					sh "docker-compose up -d nginx varnish varnish_nginx centrifugo oracle_stunnel"
 					// test sections
-
+/*
 					sh "docker-compose up -d --force-recreate php-cron"
                     sh "docker-compose exec -T php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
                     sh "docker-compose exec -T php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
-
-					sh "docker-compose up -d --remove-orphans"
+*/
+					sh "docker-compose up -d --remove-orphans php-fpm"
 
 				}
 			}
