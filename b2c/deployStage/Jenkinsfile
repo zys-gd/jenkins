@@ -92,11 +92,9 @@ pipeline {
 
 					sh "cp environments/b2c/.env.stage .env"
 
-					sh "docker-compose up -d --force-recreate php-cron"
+					sh "docker-compose up -d --force-recreate --remove-orphans"
                     sh "docker-compose exec -T php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
                     sh "docker-compose exec -T php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
-
-					sh "docker-compose up -d --remove-orphans"
 
 				}
 			}
