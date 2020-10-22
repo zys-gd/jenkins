@@ -65,7 +65,9 @@ pipeline {
 			steps {
 				script {
 	                def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
-                    sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${previousBuild}' --filter=reference='jf-dev*/*')"
+					try {
+                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${previousBuild}' --filter=reference='${DOCKER_REGISTRY}/*')"
+					} catch (exc) {}
                 }
 
 			}
