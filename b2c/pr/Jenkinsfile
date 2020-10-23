@@ -82,7 +82,7 @@ pipeline {
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
-							sh "cp ./docker/php/parameters.yml.dist app/config/parameters.yml"
+							sh "cp docker/php/parameters.yml.dist app/config/parameters.yml"
 							sh "docker-compose up -d --build --force-recreate"
 						}
 						catch (exc) {
