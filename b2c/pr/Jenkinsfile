@@ -32,7 +32,7 @@ pipeline {
 				}
 				//sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}/"
 
-				try {
+				script { try {
 					checkout([
 						$class: 'GitSCM',
 						branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
@@ -51,7 +51,7 @@ pipeline {
                 catch (exc) {
                     echo exc
                     currentBuild.result = 'FAILURE'
-                }
+                }}
 
 			}
 		}
