@@ -65,7 +65,7 @@ pipeline {
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "cp .env.dev .env"
 					sh "cat .env.docker >> .env"
-					sh "cp docker/build/docker-compose.jenkins.yml docker-compose.yml"
+					sh "cp project/docker/build/docker-compose.jenkins.yml docker-compose.yml"
 				}
 			}
 		}
