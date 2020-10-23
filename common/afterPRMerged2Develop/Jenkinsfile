@@ -31,6 +31,7 @@ def setTaskEnv(issueID, state)
 echo "Repository " + "${REPOSITORY_NAME}"
 echo "Branch " + "${BRANCH_FULL_PATH}"
 
+buildName "${GITHUB_PR_SOURCE_BRANCH}"
 buildDescription "Checking for ${GITHUB_PR_SOURCE_BRANCH}"
 if(ensureMerged() && ensureDevTargetBranch()) {
     def issueID = extractIssueID()
