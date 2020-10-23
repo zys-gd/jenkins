@@ -156,7 +156,11 @@ pipeline {
 			steps
 			{
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
-				sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}"
+				script {
+					dir("${GITHUB_PR_SOURCE_BRANCH}") {
+						deleteDir()
+					}
+				}
 			}
 		}
 
