@@ -30,7 +30,7 @@ pipeline {
 						catch (exc) {}
 					}
 				}
-				//sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}/"
+				sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}/"
 
 				script { try {
 					checkout([
