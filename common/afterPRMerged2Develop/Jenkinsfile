@@ -31,16 +31,16 @@ def setTaskEnv(issueID, state)
 echo "Repository " + "${REPOSITORY_NAME}"
 echo "Branch " + "${BRANCH_FULL_PATH}"
 
-buildName "${GITHUB_PR_SOURCE_BRANCH} in ${REPOSITORY_NAME}"
-buildDescription "Checking for ${GITHUB_PR_SOURCE_BRANCH}"
+def issueID = extractIssueID()
+buildName "${issueID} in ${REPOSITORY_NAME}"
+buildDescription "Checking for ${issueID}"
 
 if(ensureMerged() && ensureDevTargetBranch()) {
-    def issueID = extractIssueID()
     setTaskEnv(issueID, Dev)
     echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
 
     gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
-    buildDescription "Set Jira issue ${GITHUB_PR_SOURCE_BRANCH} ENV to Dev "
+    buildDescription "Set Jira issue ${issueID} ENV to Dev "
 
 	try {
 		checkout([
