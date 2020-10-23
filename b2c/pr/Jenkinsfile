@@ -10,7 +10,9 @@ buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 
 pipeline {
 	agent { node { label 'master'} }
-
+	options {
+		skipDefaultCheckout true
+	}
 	stages {
 
 		stage ('Checkout from git') {
