@@ -8,7 +8,7 @@ def writeGitHubPullRequestStatus(text, state)
 writeGitHubPullRequestStatus('Job started', 'PENDING')
 
 pipeline {
-	agent { node { label 'test-Toplyvo-core-Mayatskiy' } }
+	agent { node { label 'master'} }
 
 	stages {
 
@@ -18,6 +18,12 @@ pipeline {
 			}
 			steps {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					sh "docker-compose down"
+				}
+				//sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}/"
+
 				checkout([
 					$class: 'GitSCM',
 					branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
@@ -56,8 +62,6 @@ pipeline {
 				CONTAINER_NAME_PREFIX="${GITHUB_PR_SOURCE_BRANCH}"
 				COMPOSE_INTERACTIVE_NO_CLI=1
 				REDIS_HOST="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis"
-				REDIS_HOST2="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis"
-				REDIS_HOST3="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis"
 				MYSQL_DATABASE_HOST="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_mysql"
 				TRACKING_DATABASE_USER="root"
 				TRACKING_DATABASE_PASSWORD="root123456"
@@ -70,9 +74,8 @@ pipeline {
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
 						try {
-							sh "docker-compose stop"
-							sh "docker-compose rm -f"
-							sh "docker-compose up -d --build"
+							sh "cp ./docker/php/parameters.yml.dist app/config/parameters.yml"
+							sh "docker-compose up -d --build --force-recreate"
 						}
 						catch (exc) {
 							sh "docker-compose down"
@@ -89,14 +92,21 @@ pipeline {
 
 						try {
 							sh "docker-compose exec -T php composer install"
-							//sh "docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:rebuild"
-							//sh "sleep 5"
-							//sh "docker-compose exec -T php_consumer php bin/console rabbitmq-supervisor:control --wait-for-supervisord start"
+
 							sh "docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
 							sh "docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
+
+							sh "chown -R www-data:www-data var/ web/"
+				            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:clear'"
+				            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:warmup --env=dev'"
+				            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console doctrine:cache:clear-metadata --env=dev'"
+
+							sh "docker-compose stop php_consumer"
+							sh "docker-compose run -w /var/www/html --rm php_consumer bin/console rabbitmq-supervisor:rebuild"
+							sh "docker-compose start php_consumer"
+
 							sh "docker-compose exec -T php_cli bash /entrypoint.sh"
 							sh "docker-compose exec -T php php /var/www/html/bin/console assets:install --symlink"
-							sh "docker-compose exec -T php php vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard/Symfony"
 
 						}
 						catch (exc) {
