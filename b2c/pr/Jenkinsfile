@@ -23,7 +23,10 @@ pipeline {
 				buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
-					sh "docker-compose down"
+					try {
+						sh "docker-compose down"
+					}
+					catch (exc) {}
 				}
 				//sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}/"
 
