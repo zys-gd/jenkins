@@ -31,8 +31,9 @@ def setTaskEnv(issueID, state)
 echo "Repository " + "${REPOSITORY_NAME}"
 echo "Branch " + "${BRANCH_FULL_PATH}"
 
-buildName "${GITHUB_PR_SOURCE_BRANCH}"
+buildName "${GITHUB_PR_SOURCE_BRANCH} in ${REPOSITORY_NAME}"
 buildDescription "Checking for ${GITHUB_PR_SOURCE_BRANCH}"
+
 if(ensureMerged() && ensureDevTargetBranch()) {
     def issueID = extractIssueID()
     setTaskEnv(issueID, Dev)
@@ -41,6 +42,27 @@ if(ensureMerged() && ensureDevTargetBranch()) {
     gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
     buildDescription "Set Jira issue ${GITHUB_PR_SOURCE_BRANCH} ENV to Dev "
 
-
+	try {
+		checkout([
+			$class: 'GitSCM',
+			branches: [[name: '*/${issueID}']],
+			doGenerateSubmoduleConfigurations: false,
+			extensions: [[
+				$class: 'RelativeTargetDirectory',
+				relativeTargetDir: '${issueID}'
+			]],
+			submoduleCfg: [],
+			userRemoteConfigs: [[
+				credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+				url: 'git@github.com:transloyd/${REPOSITORY_NAME}.git'
+			]]
+		])
+		dir("${issueID}") {
+		    sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+		        sh "git branch -d ${issueID}"
+		    }
+		}
+	} catch (exc) {}
 
 }
+cleanWs()
