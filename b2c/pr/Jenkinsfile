@@ -73,6 +73,7 @@ pipeline {
 				MYSQL_DATABASE_HOST="${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_mysql"
 				TRACKING_DATABASE_USER="root"
 				TRACKING_DATABASE_PASSWORD="root123456"
+				CENTRIFUGO_EXPOSE_PORT="${GITHUB_PR_NUMBER}"
 			}
 			when {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
