@@ -74,6 +74,7 @@ pipeline {
 				TRACKING_DATABASE_USER="root"
 				TRACKING_DATABASE_PASSWORD="root123456"
 				CENTRIFUGO_EXPOSE_PORT="${GITHUB_PR_NUMBER}"
+				CENTRIFUGO_BASE_URL="http://${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_centrifugo:8000"
 			}
 			when {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
@@ -89,7 +90,7 @@ pipeline {
 						catch (exc) {
 							sh "docker-compose down"
 							currentBuild.result = 'FAILURE'
-							currentStage.result = 'FAILURE'
+							stageResult."{STAGE_NAME}" = "FAILURE"
 						}
 
 						try {
@@ -121,7 +122,7 @@ pipeline {
 						catch (exc) {
 							sh "docker-compose down"
 							currentBuild.result = 'FAILURE'
-							currentStage.result = 'FAILURE'
+							stageResult."{STAGE_NAME}" = "FAILURE"
 						}
 
 
