@@ -37,7 +37,10 @@ if(ensureMerged() && ensureDevTargetBranch()) {
     def issueID = extractIssueID()
     setTaskEnv(issueID, Dev)
     echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
+
     gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
     buildDescription "Set Jira issue ${GITHUB_PR_SOURCE_BRANCH} ENV to Dev "
-    sh "git branch -d ${issueID}"
+
+
+
 }
