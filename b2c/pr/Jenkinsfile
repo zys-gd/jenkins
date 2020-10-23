@@ -6,7 +6,6 @@ def writeGitHubPullRequestStatus(text, state)
 }
 
 writeGitHubPullRequestStatus('Job started', 'PENDING')
-buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 
 pipeline {
 	agent { node { label 'toplivo-dev-ssh'} }
@@ -21,6 +20,7 @@ pipeline {
 			}
 			steps {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+				buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh "docker-compose down"
