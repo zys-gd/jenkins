@@ -28,9 +28,9 @@ pipeline {
 							sh "docker-compose down"
 						}
 						catch (exc) {}
+						deleteDir()
 					}
 				}
-				sh "rm -R ${GITHUB_PR_SOURCE_BRANCH}/"
 
 				script { try {
 					checkout([
