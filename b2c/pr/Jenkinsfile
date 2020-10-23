@@ -74,6 +74,7 @@ pipeline {
 				DOCKER_PREFIX="${GITHUB_PR_SOURCE_BRANCH}"
 				CONTAINER_NAME_PREFIX="${GITHUB_PR_SOURCE_BRANCH}"
 				COMPOSE_INTERACTIVE_NO_CLI=1
+				MYSQL_PORT="${GITHUB_PR_SOURCE_BRANCH}${GITHUB_PR_SOURCE_BRANCH}"
 			}
 			when {
 				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
@@ -82,7 +83,7 @@ pipeline {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
-						def env = "-e REDIS_HOST=${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis -e CENTRIFUGO_BASE_URL=http://${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_centrifugo:8000 -e DATABASE_HOST=${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_mysql -e MYSQL_PORT=${GITHUB_PR_SOURCE_BRANCH}${GITHUB_PR_SOURCE_BRANCH}"
+						def env = "-e REDIS_HOST=${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis -e CENTRIFUGO_BASE_URL=http://${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_centrifugo:8000 -e DATABASE_HOST=${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_mysql"
 						try {
 							sh "cp docker/php/parameters.yml.dist project/app/config/parameters.yml"
 							sh "docker-compose up -d --build"
