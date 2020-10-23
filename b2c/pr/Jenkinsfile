@@ -6,6 +6,7 @@ def writeGitHubPullRequestStatus(text, state)
 }
 
 writeGitHubPullRequestStatus('Job started', 'PENDING')
+buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 
 pipeline {
 	agent { node { label 'master'} }
