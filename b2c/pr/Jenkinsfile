@@ -96,11 +96,11 @@ pipeline {
 							sh "docker-compose exec -T php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
 							sh "docker-compose exec -T php php bin/console --em=tracking --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --no-debug"
 
-							sh "chown -R www-data:www-data var/ web/"
-				            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:clear'"
-				            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console cache:warmup --env=dev'"
-				            sh "docker exec prod_toplivo_back_php /bin/bash -c 'php bin/console doctrine:cache:clear-metadata --env=dev'"
+				            sh "docker-compose exec -T php php bin/console cache:clear"
+				            sh "docker-compose exec -T php php bin/console cache:warmup --env=dev"
+				            sh "docker-compose exec -T php php bin/console doctrine:cache:clear-metadata --env=dev"
 
+							sh "chown -R www-data:www-data var/ web/"
 							sh "docker-compose stop php_consumer"
 							sh "docker-compose run -w /var/www/html --rm php_consumer bin/console rabbitmq-supervisor:rebuild"
 							sh "docker-compose start php_consumer"
