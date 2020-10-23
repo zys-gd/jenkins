@@ -9,7 +9,7 @@ writeGitHubPullRequestStatus('Job started', 'PENDING')
 buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 
 pipeline {
-	agent { node { label 'master'} }
+	agent { node { label 'toplivo-dev-ssh'} }
 	options {
 		skipDefaultCheckout true
 	}
