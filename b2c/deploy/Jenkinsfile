@@ -22,7 +22,7 @@ pipeline {
                      description: 'Tag og docker image\'s build',
                      quickFilterEnabled: true,
                      sortMode: 'DESCENDING_SMART',
-                     useRepository: 'git@github.com:transloyd/core.toplyvo.app.git'
+                     useRepository: 'git@github.com:transloyd/core.toplyvo.app.git',
                      tagFilter: 'v[0-9]*\\.[0-9]*\\.[0-9]'
 
     }
