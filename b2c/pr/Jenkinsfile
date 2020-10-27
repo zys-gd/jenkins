@@ -142,6 +142,7 @@ pipeline {
 			}
 			steps
 			{
+				buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					sh 'docker-compose down'
