@@ -113,11 +113,7 @@ pipeline {
 				            sh "docker-compose exec ${env} -T php php bin/console cache:warmup --env=dev"
 				            sh "docker-compose exec ${env} -T php php bin/console doctrine:cache:clear-metadata --env=dev"
 
-							 sh "docker-compose exec -T php chown -R www-data:www-data var/ web/"
-							sh ""
-							sh "docker-compose stop php_consumer"
-							sh "docker-compose run -w /var/www/html --rm php_consumer bin/console rabbitmq-supervisor:rebuild"
-							sh "docker-compose start php_consumer"
+						    sh "docker-compose exec -T php chown -R www-data:www-data var/ web/"
 
 							sh "docker-compose exec -T php_cli bash /entrypoint.sh"
 							sh "docker-compose exec ${env} -T php php /var/www/html/bin/console assets:install --symlink"
