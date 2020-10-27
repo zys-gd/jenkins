@@ -25,7 +25,7 @@ pipeline {
 				script {
 					dir("${GITHUB_PR_SOURCE_BRANCH}") {
 						try {
-							sh "docker-compose exec -T php rm -R *"
+							sh "docker-compose run --rm php rm -R *"
 							sh "docker-compose down"
 						}
 						catch (exc) {}
