@@ -84,7 +84,7 @@ pipeline {
 				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
 				dir("${GITHUB_PR_SOURCE_BRANCH}") {
 					script {
-						echo $MYSQL_PORT
+						echo "${MYSQL_PORT}"
 						def env = "-e REDIS_HOST=${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_redis -e CENTRIFUGO_BASE_URL=http://${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_centrifugo:8000 -e DATABASE_HOST=${GITHUB_PR_SOURCE_BRANCH}_toplivo_back_mysql"
 						try {
 							sh "cp docker/php/parameters.yml.dist project/app/config/parameters.yml"
