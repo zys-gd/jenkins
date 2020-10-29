@@ -23,7 +23,7 @@ pipeline {
                      quickFilterEnabled: true,
                      sortMode: 'DESCENDING_SMART',
                      useRepository: 'git@github.com:transloyd/core.toplyvo.app.git',
-                     tagFilter: 'v[0-9]*\\.[0-9]*\\.[0-9]'
+                     tagFilter: 'v[0-9]*\\.[0-9]*\\.[0-9]*'
 
     }
 	stages {
@@ -81,6 +81,11 @@ pipeline {
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron:${params.TAG}"
 					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
+
+					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm"
+                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer"
+                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron"
+                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx"
 				}
 			}
 		}
