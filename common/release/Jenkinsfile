@@ -14,8 +14,8 @@ pipeline {
 		stage ('Checkout master') {
 
 			steps {
-
-				buildDescription "${env.Repository}\n${VERSION_TAG}" + env.HOTFIX.toBoolean() ? ' HOTFIX' : ''
+				def postfix = env.HOTFIX.toBoolean() ? ' HOTFIX' : ''
+				buildDescription "${env.Repository}\n${VERSION_TAG} ${postfix}"
 				script {
 					try {
 						sh "rm -R *"
