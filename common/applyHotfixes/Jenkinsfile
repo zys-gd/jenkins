@@ -11,6 +11,7 @@ pipeline {
 			steps {
 
 				script {
+					buildDescription "${env.Repository}"
 					try {
 						sh "rm -R *"
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
