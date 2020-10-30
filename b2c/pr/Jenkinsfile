@@ -31,6 +31,7 @@ pipeline {
 				script {
 					dir("${GITHUB_PR_SOURCE_BRANCH}") {
 						try {
+							sh "docker-compose run --rm php ls -la /var/www/html/*"
 							sh "docker-compose run --rm php rm -rf /var/www/html/*"
 							sh "docker-compose down"
 						}
