@@ -15,7 +15,7 @@ pipeline {
 
 			steps {
 
-				buildDescription "${env.Repository}\n${VERSION_TAG}"
+				buildDescription "${env.Repository}\n${VERSION_TAG}" + env.HOTFIX.toBoolean() ? ' HOTFIX' : ''
 				script {
 					try {
 						sh "rm -R *"
