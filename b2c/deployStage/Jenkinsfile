@@ -23,7 +23,7 @@ pipeline {
                      quickFilterEnabled: true,
                      sortMode: 'DESCENDING_SMART',
                      useRepository: 'git@github.com:transloyd/core.toplyvo.app.git',
-                     tagFilter: '*-rc[0-9]*'
+                     tagFilter: 'rc*'
 
     }
 	stages {

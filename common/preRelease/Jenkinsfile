@@ -1,5 +1,5 @@
 // Create pre-release to stage
-def VERSION_TAG = "v${env.Release}-rc${env.BUILD_ID}"
+def VERSION_TAG = "rc${env.Release}-${env.BUILD_ID}"
 pipeline {
 	agent any
 	options {

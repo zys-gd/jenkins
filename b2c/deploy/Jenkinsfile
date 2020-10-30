@@ -23,7 +23,7 @@ pipeline {
                      quickFilterEnabled: true,
                      sortMode: 'DESCENDING_SMART',
                      useRepository: 'git@github.com:transloyd/core.toplyvo.app.git',
-                     tagFilter: 'v[0-9]*\\.[0-9]*\\.[0-9]*'
+                     tagFilter: 'v*'
 
     }
 	stages {
