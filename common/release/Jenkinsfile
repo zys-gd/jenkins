@@ -14,9 +14,10 @@ pipeline {
 		stage ('Checkout master') {
 
 			steps {
-				def postfix = env.HOTFIX.toBoolean() ? ' HOTFIX' : ''
-				buildDescription "${env.Repository}\n${VERSION_TAG} ${postfix}"
 				script {
+					def postfix = env.HOTFIX.toBoolean() ? ' HOTFIX' : ''
+					buildDescription "${env.Repository}\n${VERSION_TAG} ${postfix}"
+
 					try {
 						sh "rm -R *"
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
