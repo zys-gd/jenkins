@@ -1,9 +1,9 @@
-node ('master') {
+/*node ('master') {
 	dir ("/var/lib/jenkins/workspace/B2C image builder") {
 		sh 'ls -la docker'
 		stash name: "docker", includes: "docker/", allowEmpty: true
 	}
-}
+}*/
 
 pipeline {
 	agent { node { label 'toplivo-stage' } }
@@ -46,9 +46,10 @@ pipeline {
 							url: 'git@github.com:transloyd/core.toplyvo.app.git'
 						]]
 					])
-					sh 'rm -rf source docker environments'
+					sh 'rm -rf docker environments || true'
+					sh "cd source && mv docker ../"
+					sh 'rm -rf source'
 				} catch (exc) {}}
-				unstash "docker"
 			}
 		}
 
@@ -115,6 +116,7 @@ pipeline {
 		stage ('Logout from Registry') {
 			steps {
 				script {
+	                sh 'rm -rf docker'
 	                sh "docker logout $DOCKER_REGISTRY"
                 }
 
