@@ -50,6 +50,7 @@ pipeline {
 					sh "cd source && mv docker ../"
 					sh 'rm -rf source'
 				} catch (exc) {}}
+				//unstash "docker"
 			}
 		}
 
@@ -116,7 +117,6 @@ pipeline {
 		stage ('Logout from Registry') {
 			steps {
 				script {
-	                sh 'rm -rf docker'
 	                sh "docker logout $DOCKER_REGISTRY"
                 }
 
