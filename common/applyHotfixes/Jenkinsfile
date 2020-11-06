@@ -6,7 +6,7 @@ pipeline {
 	}
 	stages {
 
-		stage ('Checkout master') {
+		stage ('Checkout hotfix') {
 
 			steps {
 
@@ -21,7 +21,7 @@ pipeline {
 						}
 
 						dir("${env.Repository}") {
-							sh "git checkout master"
+							sh "git checkout hotfix"
 						}
 
 					}
@@ -33,6 +33,31 @@ pipeline {
 
 			}
 		}
+
+		stage ('Update master') {
+        			steps {
+
+        				script {
+        					try {
+        						dir("${env.Repository}") {
+        							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+        								sh "git checkout master"
+        								sh "git pull"
+        								sh "git merge origin/hotfix --no-ff -m 'Automated merge hotfix branch to master. ${env.BUILD_URL}'"
+        								sh "git push --progress origin master"
+        	                        }
+                                }
+        					}
+        					catch (exc) {
+        						sh "git status"
+        						currentBuild.result = 'FAILURE'
+        						currentStage.result = 'FAILURE'
+        					}
+
+        				}
+
+        			}
+        		}
 
 		stage ('Update stage') {
 			steps {
