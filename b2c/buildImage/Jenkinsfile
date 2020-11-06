@@ -97,7 +97,7 @@ pipeline {
 			steps {
 				script {
 					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads"
-					def envs = "-e REDIS_HOST=test_toplivo_back_redis -e RABBITMQ_HOST=test_toplyvo_rabbitmq -e DATABASE_HOST=test_toplyvo_mysql"
+					def envs = "-e REDIS_HOST=test_toplivo_back_redis -e RABBITMQ_HOST=test_toplyvo_rabbitmq -e DATABASE_HOST=test_toplyvo_mysql -e SHELL_DATABASE_HOST='' -e SHELL_DATABASE_PORT=''"
 	                sh "docker-compose down"
 	                sh "docker-compose up -d composer redis rabbitmq mysql"
 	                sh "docker-compose exec -T composer composer install --no-scripts --no-dev"
