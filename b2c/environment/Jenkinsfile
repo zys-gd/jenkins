@@ -48,6 +48,7 @@ pipeline {
                             def user = specificCause ? specificCause.userName : '-'
 							sh "git commit ${envFile} -m 'Pipeline update env by ${user}'"
 							sh "git push"
+							buildDescription "Update env by ${user}"
 						}
 
 						ENV = readFile file: envFile
