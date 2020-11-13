@@ -57,7 +57,8 @@ pipeline {
 		stage ('Login to Registry') {
 			steps {
 				script {
-	                sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                sh "doctl registry login"
                 }
 
 			}
@@ -117,7 +118,8 @@ pipeline {
 		stage ('Logout from Registry') {
 			steps {
 				script {
-	                sh "docker logout $DOCKER_REGISTRY"
+	                //sh "docker logout $DOCKER_REGISTRY"
+	                sh "doctl registry logout"
                 }
 
 			}
