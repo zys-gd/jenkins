@@ -6,7 +6,7 @@ pipeline {
 	environment {
 		DOCKER_USERNAME='jenkins'
         DOCKER_PASSWORD='ch1qySOXu8Q'
-        DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
+        DOCKER_REGISTRY='jf-dev.toplyvo.app'
     }
 	parameters {
         gitParameter name: 'TAG',
@@ -49,8 +49,8 @@ pipeline {
 		stage ('Login to Registry') {
 			steps {
 				script {
-	                //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
-	                sh "doctl registry login"
+	                sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                //sh "doctl registry login"
                 }
 
 			}
@@ -148,7 +148,8 @@ pipeline {
 		stage ('Logout from Registry') {
 			steps {
 				script {
-	                sh "doctl registry logout"
+	                sh "docker logout $DOCKER_REGISTRY"
+	                //sh "doctl registry logout"
                 }
 
 			}
