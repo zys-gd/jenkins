@@ -25,6 +25,8 @@ pipeline {
 
 			steps {
 				script {
+					sh "printenv"
+					sh "ls /usr/bin"
 					buildDescription "${params.TAG}"
 					try {
 						checkout([
