@@ -4,9 +4,9 @@ pipeline {
 		skipDefaultCheckout true
 	}
 	environment {
-		def DOCKER_USERNAME='jenkins'
-        def DOCKER_PASSWORD='ch1qySOXu8Q'
-        def DOCKER_REGISTRY='jf-dev.toplyvo.app'
+		DOCKER_USERNAME='jenkins'
+        DOCKER_PASSWORD='ch1qySOXu8Q'
+        DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
     }
 	parameters {
         gitParameter name: 'TAG',
