@@ -57,7 +57,7 @@ def setTaskEnv(issueID, state)
 
 def getJiraIssue(issueID)
 {
-	return objIssue = jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo'
+	return jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo'
 }
 
 node ('master') {
