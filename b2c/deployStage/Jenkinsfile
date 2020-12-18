@@ -47,6 +47,9 @@ pipeline {
 		stage ('Login to Registry') {
 			steps {
 				script {
+					def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+					def user = specificCause ? specificCause.userName : '-'
+                    buildDescription "Started by ${user}"
 	                //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
 	                sh "doctl registry login"
                 }

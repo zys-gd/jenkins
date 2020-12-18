@@ -14,6 +14,9 @@ pipeline {
 
 			steps {
 				script {
+					def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+					def user = specificCause ? specificCause.userName : '-'
+					buildDescription "Started by ${user}"
 					try {
 						checkout([
 							$class: 'GitSCM',
