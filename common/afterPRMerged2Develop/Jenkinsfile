@@ -97,6 +97,7 @@ node ('master') {
 	} else if(env[0] == 'Local') {
 		setTaskEnv(issueID, env[1])
 		buildDescription "LOCAL"
+		println(jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo')
 	}
 	cleanWs()
 }
