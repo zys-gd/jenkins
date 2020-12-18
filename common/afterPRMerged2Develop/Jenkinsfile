@@ -39,7 +39,8 @@ def getEnvironment()
 			env = ['LOCAL', Local];
 			break;
 	}
-	println(env)
+	println(BRANCH_FULL_PATH)
+	println('BRANCH_FULL_PATH')
 	return env
 }
 
