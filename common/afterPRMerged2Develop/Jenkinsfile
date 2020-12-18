@@ -45,9 +45,7 @@ def getEnvironment()
 			env = ['LOCAL', Local];
 			break;
 	}
-println('DEBUG ////////////');
-println(Local);
-println(env);
+
 	return env
 }
 
@@ -67,7 +65,9 @@ node ('master') {
 	buildDescription "Checking for ${issueID}"
 
 	def env = getEnvironment();
-
+println env[0]
+println env[1]
+println 'DEBUG//////'
 
 	if(ensureMerged() && ensureDevTargetBranch()) {
 	    setTaskEnv(issueID, Dev)
