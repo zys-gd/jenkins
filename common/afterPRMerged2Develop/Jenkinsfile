@@ -24,6 +24,8 @@ def ensureDevTargetBranch()
 
 def getEnvironment()
 {
+	println(BRANCH_FULL_PATH)
+	println('BRANCH_FULL_PATH')
 	def env = [];
 	switch("${BRANCH_FULL_PATH}") {
 		case 'refs/heads/develop':
@@ -39,8 +41,7 @@ def getEnvironment()
 			env = ['LOCAL', Local];
 			break;
 	}
-	println(BRANCH_FULL_PATH)
-	println('BRANCH_FULL_PATH')
+
 	return env
 }
 
