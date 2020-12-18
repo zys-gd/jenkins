@@ -64,39 +64,39 @@ node ('master') {
 	buildName "${issueID} in ${REPOSITORY_NAME}"
 	buildDescription "Checking for ${issueID}"
 
-	def env = getEnvironment();
-println env[0]
-println env[1]
-println 'DEBUG//////'
 
-	if(ensureMerged() && ensureDevTargetBranch()) {
-	    setTaskEnv(issueID, Dev)
+
+	if(ensureMerged()) {
+		def env = getEnvironment();
+	    setTaskEnv(issueID, env[1])
 	    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
 
-	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
-	    buildDescription "Set Jira issue ${issueID} ENV to Dev "
+	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to ' + env[0])
+	    buildDescription "Set Jira issue ${issueID} ENV to " + env[0]
 
-		try {
-			checkout([
-				$class: 'GitSCM',
-				branches: [[name: '*/${issueID}']],
-				doGenerateSubmoduleConfigurations: false,
-				extensions: [[
-					$class: 'RelativeTargetDirectory',
-					relativeTargetDir: '${issueID}'
-				]],
-				submoduleCfg: [],
-				userRemoteConfigs: [[
-					credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-					url: 'git@github.com:transloyd/${REPOSITORY_NAME}.git'
-				]]
-			])
-			dir("${issueID}") {
-			    sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-			        sh "git branch -d ${issueID}"
-			    }
-			}
-		} catch (exc) {}
+		if(env[0]!='Local') {
+			try {
+				checkout([
+					$class: 'GitSCM',
+					branches: [[name: '*/${issueID}']],
+					doGenerateSubmoduleConfigurations: false,
+					extensions: [[
+						$class: 'RelativeTargetDirectory',
+						relativeTargetDir: '${issueID}'
+					]],
+					submoduleCfg: [],
+					userRemoteConfigs: [[
+						credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+						url: 'git@github.com:transloyd/${REPOSITORY_NAME}.git'
+					]]
+				])
+				dir("${issueID}") {
+				    sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+				        sh "git branch -d ${issueID}"
+				    }
+				}
+			} catch (exc) {}
+		}
 
 	}
 	cleanWs()
