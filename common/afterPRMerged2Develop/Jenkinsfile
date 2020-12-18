@@ -1,6 +1,10 @@
+@Field
 def Dev = [id:'10107']
+@Field
 def Stage = [id:'10108']
+@Field
 def Prod = [id:'10109']
+@Field
 def Local = [id:'10106']
 
 //def jsonObj = readJSON text: "${HEAD_COMMIT}"
@@ -60,7 +64,7 @@ node ('master') {
 	def issueID = extractIssueID()
 	buildName "${issueID} in ${REPOSITORY_NAME}"
 	buildDescription "Checking for ${issueID}"
-	println(BRANCH_FULL_PATH)
+
 	def env = getEnvironment();
 
 
