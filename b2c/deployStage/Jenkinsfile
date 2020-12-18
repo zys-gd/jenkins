@@ -20,28 +20,30 @@ pipeline {
 
 		stage ('Get build configuration') {
 			steps {
-				def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-				def user = specificCause ? specificCause.userName : '-'
-                buildDescription "Started by ${user}"
-				script { try {
-					// this checkout is needed for gitParameter plugin
-					checkout([
-						$class: 'GitSCM',
-						branches: [[name: '*/TPLV-1151']],
-						doGenerateSubmoduleConfigurations: false,
-						extensions: [
-							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
-						],
-						submoduleCfg: [],
-						userRemoteConfigs: [[
-							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-							url: 'git@github.com:transloyd/core.toplyvo.app.git'
-						]]
-					])
-					sh 'rm -rf docker environments || true'
-					sh "cd source && mv docker ../"
-					sh 'rm -rf source'
-				} catch (exc) {}}
+				script {
+					def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+					def user = specificCause ? specificCause.userName : '-'
+	                buildDescription "Started by ${user}"
+					try {
+						// this checkout is needed for gitParameter plugin
+						checkout([
+							$class: 'GitSCM',
+							branches: [[name: '*/TPLV-1151']],
+							doGenerateSubmoduleConfigurations: false,
+							extensions: [
+								[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+							],
+							submoduleCfg: [],
+							userRemoteConfigs: [[
+								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+								url: 'git@github.com:transloyd/core.toplyvo.app.git'
+							]]
+						])
+						sh 'rm -rf docker environments || true'
+						sh "cd source && mv docker ../"
+						sh 'rm -rf source'
+					} catch (exc) {}
+				}
 				//unstash "docker"
 			}
 		}
