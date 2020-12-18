@@ -65,6 +65,7 @@ node ('master') {
 	buildDescription "Checking for ${issueID}"
 
 	def env = getEnvironment();
+	println env[0]
 	if(ensureMerged()) {
 	    setTaskEnv(issueID, env[1])
 	    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
@@ -97,8 +98,8 @@ node ('master') {
 	} else if(env[0] == 'Local') {
 		setTaskEnv(issueID, env[1])
 		buildDescription "LOCAL"
+	}
 		objIssue = jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo'
 		println(objIssue)
-	}
 	cleanWs()
 }
