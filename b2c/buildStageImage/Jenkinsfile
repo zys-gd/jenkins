@@ -20,7 +20,7 @@ pipeline {
 					try {
 						checkout([
 							$class: 'GitSCM',
-							branches: [[name: '*/TPLV-1151']],
+							branches: [[name: '*/stage']],
 							doGenerateSubmoduleConfigurations: false,
 							extensions: [],
 							submoduleCfg: [],
