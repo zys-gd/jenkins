@@ -26,7 +26,7 @@ def getEnvironment()
 {
 
 	def env = [];
-	switch("${BRANCH_FULL_PATH}") {
+	switch(BRANCH_FULL_PATH) {
 		case 'refs/heads/develop':
 			env = ['DEV', Dev];
 			break;
@@ -40,7 +40,9 @@ def getEnvironment()
 			env = ['LOCAL', Local];
 			break;
 	}
-
+println('DEBUG ////////////');
+println(Local);
+println(env);
 	return env
 }
 
@@ -58,10 +60,9 @@ node ('master') {
 	def issueID = extractIssueID()
 	buildName "${issueID} in ${REPOSITORY_NAME}"
 	buildDescription "Checking for ${issueID}"
-    println('BRANCH_FULL_PATH')
 	println(BRANCH_FULL_PATH)
-	def env = getEnvironment();
-	println(env);
+// 	def env = getEnvironment();
+
 
 	if(ensureMerged() && ensureDevTargetBranch()) {
 	    setTaskEnv(issueID, Dev)
