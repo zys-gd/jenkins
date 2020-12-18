@@ -80,7 +80,7 @@ pipeline {
 					sh "docker push $DOCKER_REGISTRY/stage-php-fpm-image"
 
 					sh "docker tag $DOCKER_REGISTRY/stage-php-cli-image $DOCKER_REGISTRY/stage-php-cli-image"
-					sh "docker push $DOCKER_REGISTRY/stage-stage-php-cli-image"
+					sh "docker push $DOCKER_REGISTRY/stage-php-cli-image"
 				}
 			}
 		}
