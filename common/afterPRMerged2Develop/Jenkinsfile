@@ -55,7 +55,7 @@ def setTaskEnv(issueID, state)
 	jiraEditIssue idOrKey: issueID, issue: issueEnv, site: 'Jira Toplyvo'
 }
 
-def getJiraIssue()
+def getJiraIssue(issueID)
 {
 	return objIssue = jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo'
 }
@@ -99,7 +99,7 @@ node ('master') {
 			}
 		} catch (exc) {}
 
-	} else if(env[0] == 'LOCAL' && getJiraIssue().data.fields.customfield_10049.id != 10106) {
+	} else if(env[0] == 'LOCAL' && getJiraIssue(issueID).data.fields.customfield_10049.id != 10106) {
 		setTaskEnv(issueID, env[1])
 		buildDescription "LOCAL"
 	}
