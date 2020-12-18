@@ -22,6 +22,26 @@ def ensureDevTargetBranch()
 	return "${BRANCH_FULL_PATH}" == 'refs/heads/develop'
 }
 
+def getEnvironment()
+{
+	def env;
+	switch("${BRANCH_FULL_PATH}") {
+		case 'refs/heads/develop':
+			env = ['DEV', Dev];
+			break;
+		case 'refs/heads/stage':
+            env = ['STAGE', Stage];
+            break;
+		case 'refs/heads/master':
+            env = ['PROD', Prod];
+            break;
+		default:
+			env = ['LOCAL', Local];
+			break;
+	}
+	return env;
+}
+
 def setTaskEnv(issueID, state)
 {
 	def issueEnv = [fields: [customfield_10049: state]]
@@ -36,6 +56,8 @@ node ('master') {
 	def issueID = extractIssueID()
 	buildName "${issueID} in ${REPOSITORY_NAME}"
 	buildDescription "Checking for ${issueID}"
+	def env = getEnvironment();
+	println(env);
 
 	if(ensureMerged() && ensureDevTargetBranch()) {
 	    setTaskEnv(issueID, Dev)
