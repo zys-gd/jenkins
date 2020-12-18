@@ -74,7 +74,7 @@ pipeline {
 
 					sh "cp .env.dev .env"
 
-					sh "docker-compose build --parallel php-fpm-image php-cli-image"
+					sh "docker-compose build --parallel stage-php-fpm-image stage-php-cli-image"
 
 					sh "docker tag $DOCKER_REGISTRY/stage-php-fpm-image $DOCKER_REGISTRY/stage-php-fpm-image"
 					sh "docker push $DOCKER_REGISTRY/stage-php-fpm-image"
