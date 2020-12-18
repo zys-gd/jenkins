@@ -1,3 +1,4 @@
+import groovy.transform.Field
 @Field
 def Dev = [id:'10107']
 @Field
