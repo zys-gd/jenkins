@@ -24,7 +24,7 @@ def ensureDevTargetBranch()
 
 def getEnvironment()
 {
-	def env;
+	def env = [];
 	switch("${BRANCH_FULL_PATH}") {
 		case 'refs/heads/develop':
 			env = ['DEV', Dev];
@@ -39,7 +39,8 @@ def getEnvironment()
 			env = ['LOCAL', Local];
 			break;
 	}
-	return env;
+	println(env)
+	return env
 }
 
 def setTaskEnv(issueID, state)
