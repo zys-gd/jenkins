@@ -99,6 +99,8 @@ node ('master') {
 		buildDescription "LOCAL"
 	}
 		objIssue = jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo'
-		println(objIssue.data.customfield_10049)
+		println(objIssue.data.fields)
+		println('////////////////////////')
+		println(objIssue.data.fields.customfield_10049)
 	cleanWs()
 }
