@@ -15,44 +15,34 @@ pipeline {
         DOCKER_PASSWORD='ch1qySOXu8Q'
         DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
     }
-	parameters {
-        gitParameter name: 'TAG',
-                     type: 'PT_TAG',
-                     defaultValue: 'v2.0.0',
-                     description: 'Tag og docker image\'s build',
-                     quickFilterEnabled: true,
-                     sortMode: 'DESCENDING_SMART',
-                     useRepository: 'git@github.com:transloyd/core.toplyvo.app.git',
-                     tagFilter: 'rc*'
 
-    }
 	stages {
 
-		stage ('Get build configuration') {
-			steps {
-				buildDescription "${params.TAG}"
-				script { try {
-					// this checkout is needed for gitParameter plugin
-					checkout([
-						$class: 'GitSCM',
-						branches: [[name: '*/master']],
-						doGenerateSubmoduleConfigurations: false,
-						extensions: [
-							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
-						],
-						submoduleCfg: [],
-						userRemoteConfigs: [[
-							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-							url: 'git@github.com:transloyd/core.toplyvo.app.git'
-						]]
-					])
-					sh 'rm -rf docker environments || true'
-					sh "cd source && mv docker ../"
-					sh 'rm -rf source'
-				} catch (exc) {}}
-				//unstash "docker"
-			}
-		}
+// 		stage ('Get build configuration') {
+// 			steps {
+// 				buildDescription "${params.TAG}"
+// 				script { try {
+// 					// this checkout is needed for gitParameter plugin
+// 					checkout([
+// 						$class: 'GitSCM',
+// 						branches: [[name: '*/master']],
+// 						doGenerateSubmoduleConfigurations: false,
+// 						extensions: [
+// 							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+// 						],
+// 						submoduleCfg: [],
+// 						userRemoteConfigs: [[
+// 							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+// 							url: 'git@github.com:transloyd/core.toplyvo.app.git'
+// 						]]
+// 					])
+// 					sh 'rm -rf docker environments || true'
+// 					sh "cd source && mv docker ../"
+// 					sh 'rm -rf source'
+// 				} catch (exc) {}}
+// 				//unstash "docker"
+// 			}
+// 		}
 
 		stage ('Login to Registry') {
 			steps {
@@ -67,9 +57,8 @@ pipeline {
 		stage ('Remove previous builds') {
 			steps {
 				script {
-	                def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
 					try {
-                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${previousBuild}' --filter=reference='${DOCKER_REGISTRY}/*')"
+                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/stage_toplyvo_php_fpm --filter=reference='${DOCKER_REGISTRY}/*')"
 					} catch (exc) {}
                 }
 
@@ -80,23 +69,15 @@ pipeline {
 
 			steps {
 				script {
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron:${params.TAG}"
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx:${params.TAG}"
-
-					sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_fpm"
-                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_consumer"
-                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_php_cron"
-                    sh "docker pull ${DOCKER_REGISTRY}/prod_toplyvo_nginx"
+					sh "docker pull ${DOCKER_REGISTRY}/stage_toplyvo_php_fpm"
+					sh "docker pull ${DOCKER_REGISTRY}/stage_toplyvo_php_consumer"
+					sh "docker pull ${DOCKER_REGISTRY}/stage_toplyvo_php_cron"
+					sh "docker pull ${DOCKER_REGISTRY}/stage_toplyvo_nginx"
 				}
 			}
 		}
 
 		stage ('Apply builds') {
-			environment {
-				IMAGE_TAG="${params.TAG}"
-			}
 			steps {
 				script {
 					sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {

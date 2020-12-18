@@ -14,7 +14,6 @@ pipeline {
 
 			steps {
 				script {
-					buildDescription "${params.TAG}"
 					try {
 						checkout([
 							$class: 'GitSCM',
@@ -49,9 +48,8 @@ pipeline {
 		stage ('Remove previous builds') {
 			steps {
 				script {
-	                def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
 					try {
-                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/prod_toplyvo_php_fpm:${previousBuild}' --filter=reference='${DOCKER_REGISTRY}/*')"
+                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/stage_toplyvo_php_fpm' --filter=reference='${DOCKER_REGISTRY}/*')"
 					} catch (exc) {}
                 }
 
@@ -69,17 +67,17 @@ pipeline {
 						sh "git clone git@github.com:transloyd/environments.git"
 					}
 
-					sh "cp docker/build/docker-compose.prod_build.yml docker-compose.yml"
+					sh "cp docker/build/docker-compose.stage_build.yml docker-compose.yml"
 
 					sh "cp .env.dev .env"
 
 					sh "docker-compose build --parallel php-fpm-image php-cli-image"
 
-					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/php-fpm-image"
+					sh "docker tag $DOCKER_REGISTRY/php-fpm-image $DOCKER_REGISTRY/stage-php-fpm-image"
 					sh "docker push $DOCKER_REGISTRY/php-fpm-image"
 
-					sh "docker tag $DOCKER_REGISTRY/php-cli-image $DOCKER_REGISTRY/php-cli-image"
-					sh "docker push $DOCKER_REGISTRY/php-cli-image"
+					sh "docker tag $DOCKER_REGISTRY/php-cli-image $DOCKER_REGISTRY/stage-php-cli-image"
+					sh "docker push $DOCKER_REGISTRY/stage-php-cli-image"
 				}
 			}
 		}
@@ -107,14 +105,14 @@ pipeline {
 				script {
 	                sh "docker-compose build --parallel --no-cache php-fpm php-cron php-consumer"
 
-	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_fpm $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
-                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_fpm"
+	                sh "docker tag $DOCKER_REGISTRY/stage_toplyvo_php_fpm $DOCKER_REGISTRY/stage_toplyvo_php_fpm"
+                    sh "docker push $DOCKER_REGISTRY/stage_toplyvo_php_fpm"
 
-                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_cron $DOCKER_REGISTRY/prod_toplyvo_php_cron"
-                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_cron"
+                    sh "docker tag $DOCKER_REGISTRY/stage_toplyvo_php_cron $DOCKER_REGISTRY/stage_toplyvo_php_cron"
+                    sh "docker push $DOCKER_REGISTRY/stage_toplyvo_php_cron"
 
-                    sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_php_consumer $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
-                    sh "docker push $DOCKER_REGISTRY/prod_toplyvo_php_consumer"
+                    sh "docker tag $DOCKER_REGISTRY/stage_toplyvo_php_consumer $DOCKER_REGISTRY/stage_toplyvo_php_consumer"
+                    sh "docker push $DOCKER_REGISTRY/stage_toplyvo_php_consumer"
                 }
 
 			}
@@ -124,8 +122,8 @@ pipeline {
 			steps {
 				script {
 	                sh "docker-compose build nginx"
-	                sh "docker tag $DOCKER_REGISTRY/prod_toplyvo_nginx $DOCKER_REGISTRY/prod_toplyvo_nginx"
-	                sh "docker push $DOCKER_REGISTRY/prod_toplyvo_nginx"
+	                sh "docker tag $DOCKER_REGISTRY/stage_toplyvo_nginx $DOCKER_REGISTRY/stage_toplyvo_nginx"
+	                sh "docker push $DOCKER_REGISTRY/stage_toplyvo_nginx"
                 }
 
 			}
