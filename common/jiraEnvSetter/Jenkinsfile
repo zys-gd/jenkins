@@ -1,6 +1,11 @@
+import groovy.transform.Field
+@Field
 def Dev = [id:'10107']
+@Field
 def Stage = [id:'10108']
+@Field
 def Prod = [id:'10109']
+@Field
 def Local = [id:'10106']
 
 //def jsonObj = readJSON text: "${HEAD_COMMIT}"
@@ -22,10 +27,38 @@ def ensureDevTargetBranch()
 	return "${BRANCH_FULL_PATH}" == 'refs/heads/develop'
 }
 
+def getEnvironment()
+{
+
+	def env = [];
+	switch(BRANCH_FULL_PATH) {
+		case 'refs/heads/develop':
+			env = ['DEV', Dev];
+			break;
+		case 'refs/heads/stage':
+            env = ['STAGE', Stage];
+            break;
+		case 'refs/heads/master':
+            env = ['PROD', Prod];
+            break;
+		default:
+			env = ['LOCAL', Local];
+			break;
+	}
+
+	return env
+}
+
 def setTaskEnv(issueID, state)
 {
 	def issueEnv = [fields: [customfield_10049: state]]
 	jiraEditIssue idOrKey: issueID, issue: issueEnv, site: 'Jira Toplyvo'
+}
+
+def getJiraIssue(issueID)
+{
+	def objIssue = jiraGetIssue idOrKey: issueID, site: 'Jira Toplyvo'
+	return objIssue
 }
 
 node ('master') {
@@ -37,12 +70,15 @@ node ('master') {
 	buildName "${issueID} in ${REPOSITORY_NAME}"
 	buildDescription "Checking for ${issueID}"
 
-	if(ensureMerged() && ensureDevTargetBranch()) {
-	    setTaskEnv(issueID, Dev)
+	def env = getEnvironment()
+	def objIssue = getJiraIssue(issueID)
+	println objIssue
+	if(ensureMerged()) {
+	    setTaskEnv(issueID, env[1])
 	    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
 
-	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to Dev')
-	    buildDescription "Set Jira issue ${issueID} ENV to Dev "
+	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to ' + env[0])
+	    buildDescription "Set Jira issue ${issueID} ENV to " + env[0]
 
 		try {
 			checkout([
@@ -66,6 +102,9 @@ node ('master') {
 			}
 		} catch (exc) {}
 
+	} else if(env[0] == 'LOCAL' && (objIssue.data.fields.customfield_10049 == null || objIssue.data.fields.customfield_10049.id != 10106)) {
+		setTaskEnv(issueID, env[1])
+		buildDescription "LOCAL"
 	}
 	cleanWs()
 }
