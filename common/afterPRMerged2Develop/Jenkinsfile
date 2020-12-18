@@ -61,7 +61,7 @@ node ('master') {
 	buildName "${issueID} in ${REPOSITORY_NAME}"
 	buildDescription "Checking for ${issueID}"
 	println(BRANCH_FULL_PATH)
-// 	def env = getEnvironment();
+	def env = getEnvironment();
 
 
 	if(ensureMerged() && ensureDevTargetBranch()) {
