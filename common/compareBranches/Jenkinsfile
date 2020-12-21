@@ -32,7 +32,7 @@ pipeline {
 							])
 							dir("${value}") {
 								def devStageDiff = sh (
-									script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk 'BEGIN{FS=\"\<br\/\>\n\"; RS=\"\<br\/\>\"} {print \$0}' ",
+									script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | print \$0 ",
 									returnStdout: true
 								)
 								echo "${value}: develop -> stage\n${devStageDiff}\n"
@@ -42,7 +42,7 @@ pipeline {
 								}
 
 								def masterStageDiff = sh (
-									script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
+									script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | print \$0 ",
 									returnStdout: true
 								)
 								echo "${value}: stage -> master\n${masterStageDiff}\n"
