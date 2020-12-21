@@ -1,3 +1,13 @@
+import groovy.transform.Field
+@Field
+def Dev = [id:'10107']
+@Field
+def Stage = [id:'10108']
+@Field
+def Prod = [id:'10109']
+@Field
+def Local = [id:'10106']
+
 // Create pre-release to stage
 def VERSION_TAG = "rc${env.Release}-${env.BUILD_ID}"
 pipeline {
@@ -86,6 +96,20 @@ pipeline {
 
 				}
 
+			}
+		}
+
+		stage('Set Jira env') {
+			steps {
+				script {
+					def logs = sh (
+						script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk -F, '{print \$0}' ",
+						returnStdout: true
+					).split( '\n' )
+					logs.each {value ->
+                        jiraEditIssue idOrKey: value, issue: Stage, site: 'Jira Toplyvo'
+                    }
+				}
 			}
 		}
 

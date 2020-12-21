@@ -22,11 +22,6 @@ def ensureMerged()
 	return ("${COMMIT_MESSAGE}" =~ /.*Merge pull request*/).find()
 }
 
-def ensureDevTargetBranch()
-{
-	return "${BRANCH_FULL_PATH}" == 'refs/heads/develop'
-}
-
 def getEnvironment()
 {
 
