@@ -10,6 +10,8 @@ def Local = [id:'10106']
 // Create release to stage
 def VERSION_TAG = "v${env.Release}"
 def sourceBranch = env.HOTFIX.toBoolean() ? 'hotfix' :'stage'
+def masterStageDiff = '';
+def logs = '';
 pipeline {
 	agent any
 	options {
@@ -84,6 +86,10 @@ pipeline {
 								script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
 								returnStdout: true
 							)
+							logs = sh (
+								script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
+								returnStdout: true
+							).split( '\n' )
 
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git merge origin/${sourceBranch} --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
@@ -140,10 +146,6 @@ pipeline {
 		stage('Set Jira env') {
 			steps {
 				script {
-					def logs = sh (
-						script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
-						returnStdout: true
-					).split( '\n' )
 					logs.each {value ->
                         jiraEditIssue idOrKey: value, issue: Prod, site: 'Jira Toplyvo'
                     }
