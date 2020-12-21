@@ -61,7 +61,7 @@ pipeline {
 									teamsNotif = teamsNotif+ "${value}: develop -> stage<br/>${devStageDiff}<br/>"
 								}
 								masterStageDiff = sh (
-									script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\}' ",
+									script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
 									returnStdout: true
 								)
 								if(masterStageDiff!='') {
