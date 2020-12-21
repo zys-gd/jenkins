@@ -38,7 +38,7 @@ pipeline {
 								echo "${value}: develop -> stage\n${devStageDiff}\n"
 								if(devStageDiff!='') {
 									description = description+ "${value}: develop -> stage\n${devStageDiff}\n"
-									teamsNotif = teamsNotif+ "${value}: develop -> stage\n${devStageDiff}<br/>"
+									teamsNotif = teamsNotif+ "${value}: develop -> stage<br/>${devStageDiff}<br/>"
 								}
 
 								def masterStageDiff = sh (
@@ -48,7 +48,7 @@ pipeline {
 								echo "${value}: stage -> master\n${masterStageDiff}\n"
 								if(masterStageDiff!='') {
 									description = description + "${value}: stage -> master\n${masterStageDiff}\n"
-									teamsNotif = teamsNotif + "${value}: stage -> master\n${masterStageDiff}<br/>"
+									teamsNotif = teamsNotif + "${value}: stage -> master<br/>${masterStageDiff}<br/>"
 								}
 							}
 						}
