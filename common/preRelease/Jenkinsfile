@@ -10,6 +10,8 @@ def Local = [id:'10106']
 
 // Create pre-release to stage
 def VERSION_TAG = "rc${env.Release}-${env.BUILD_ID}"
+def devStageDiff = '';
+def logs = '';
 pipeline {
 	agent any
 	options {
@@ -56,12 +58,15 @@ pipeline {
 								script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
 								returnStdout: true
 							)
-							echo 'Start merging'
+							logs = sh (
+                                script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
+                                returnStdout: true
+                            ).split( '\n' )
+
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git merge origin/develop --no-ff -m 'Automated pre-release. ${env.BUILD_URL}'"
 								sh "git push --progress origin stage"
 	                        }
-	                        echo 'Finish merging'
 
 							if(devStageDiff!='') {
 								def teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
@@ -82,10 +87,6 @@ pipeline {
 		stage('Set Jira env') {
 			steps {
 				script {
-					def logs = sh (
-						script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
-						returnStdout: true
-					).split( '\n' )
 					logs.each {value ->
                         jiraEditIssue idOrKey: value, issue: Stage, site: 'Jira Toplyvo'
                     }
