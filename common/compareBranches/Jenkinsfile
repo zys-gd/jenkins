@@ -52,7 +52,7 @@ pipeline {
 
 					} catch (exc) {}
 					buildDescription description
-					sh "curl -H 'Content-Type: application/json' -d '{'text': \'${description}\'}' https://outlook.office.com/webhook/48bc9880-4b14-45b3-9ee3-93d0be4bd4f1@ef26001e-365b-4295-8511-2417ac86a68b/IncomingWebhook/662cfe3708cc4d769f4e5b268e9696c7/01797945-d308-43e9-b9c8-d9ed3f116bcf"
+					sh "curl -H 'Content-Type: application/json' -d '{\"text\": \"${description}\"}' https://outlook.office.com/webhook/48bc9880-4b14-45b3-9ee3-93d0be4bd4f1@ef26001e-365b-4295-8511-2417ac86a68b/IncomingWebhook/662cfe3708cc4d769f4e5b268e9696c7/01797945-d308-43e9-b9c8-d9ed3f116bcf"
 					cleanWs()
 				}
 			}
