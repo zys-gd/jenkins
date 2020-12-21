@@ -131,7 +131,7 @@ pipeline {
 			steps {
 				script {
 					def logs = sh (
-						script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk -F, '{print \$0}' ",
+						script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
 						returnStdout: true
 					).split( '\n' )
 					logs.each {value ->
