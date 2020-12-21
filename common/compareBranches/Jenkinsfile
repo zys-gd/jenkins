@@ -34,8 +34,10 @@ pipeline {
 									script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
 									returnStdout: true
 								)
-								echo "${value}: develop -> stage\n${logs}\n"
-								description = description+ "${value}: develop -> stage\n${logs}\n"
+								if(logs!='') {
+									echo "${value}: develop -> stage\n${logs}\n"
+									description = description+ "${value}: develop -> stage\n${logs}\n"
+								}
 							}
 						}
 
