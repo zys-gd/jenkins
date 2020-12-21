@@ -12,6 +12,7 @@ pipeline {
 			steps {
 				script {
 					cleanWs()
+					def description;
 					try {
 						REPOSITORIES.each {value ->
 							checkout([
@@ -34,10 +35,12 @@ pipeline {
 									returnStdout: true
 								)
 								echo "${value}: develop -> stage\n${logs}\n"
+								description = description+ "${value}: develop -> stage\n${logs}\n"
 							}
 						}
 
 					} catch (exc) {}
+					buildDescription description
 					cleanWs()
 				}
 			}
