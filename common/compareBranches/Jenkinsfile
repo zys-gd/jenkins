@@ -34,8 +34,8 @@ pipeline {
 									script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
 									returnStdout: true
 								)
+								echo "${value}: develop -> stage\n${devStageDiff}\n"
 								if(devStageDiff!='') {
-									echo "${value}: develop -> stage\n${devStageDiff}\n"
 									description = description+ "${value}: develop -> stage\n${devStageDiff}\n"
 								}
 
@@ -43,8 +43,8 @@ pipeline {
 									script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
 									returnStdout: true
 								)
+								echo "${value}: stage -> master\n${masterStageDiff}\n"
 								if(masterStageDiff!='') {
-									echo "${value}: stage -> master\n${masterStageDiff}\n"
 									description = description + "${value}: stage -> master\n${masterStageDiff}\n"
 								}
 							}
