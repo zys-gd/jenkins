@@ -80,12 +80,22 @@ pipeline {
 				script {
 					try {
 						dir("${env.Repository}") {
+							masterStageDiff = sh (
+								script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
+								returnStdout: true
+							)
+
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git merge origin/${sourceBranch} --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
 
 	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 								sh "git push --progress origin master --tags"
 	                        }
+
+							if(masterStageDiff!='') {
+								teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
+								sh "curl -H 'Content-Type: application/json' -d '{\"text\": \"${teamsNotif}\"}' https://outlook.office.com/webhook/48bc9880-4b14-45b3-9ee3-93d0be4bd4f1@ef26001e-365b-4295-8511-2417ac86a68b/IncomingWebhook/662cfe3708cc4d769f4e5b268e9696c7/01797945-d308-43e9-b9c8-d9ed3f116bcf"
+							}
                         }
 					}
 					catch (exc) {

@@ -79,6 +79,11 @@ pipeline {
 				script {
 					try {
 						dir("${env.Repository}") {
+							devStageDiff = sh (
+								script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
+								returnStdout: true
+							)
+
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git merge origin/develop --no-ff -m 'Automated pre-release ${VERSION_TAG}. ${env.BUILD_URL}'"
 
@@ -86,6 +91,11 @@ pipeline {
 								sh "git push --progress origin stage"
 								sh "git push --progress origin stage --tags"
 	                        }
+
+							if(devStageDiff!='') {
+								teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
+								sh "curl -H 'Content-Type: application/json' -d '{\"text\": \"${teamsNotif}\"}' https://outlook.office.com/webhook/48bc9880-4b14-45b3-9ee3-93d0be4bd4f1@ef26001e-365b-4295-8511-2417ac86a68b/IncomingWebhook/662cfe3708cc4d769f4e5b268e9696c7/01797945-d308-43e9-b9c8-d9ed3f116bcf"
+							}
                         }
 					}
 					catch (exc) {
