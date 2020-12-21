@@ -12,7 +12,7 @@ pipeline {
 			steps {
 				script {
 					cleanWs()
-					def description;
+					def description = '';
 					try {
 						REPOSITORIES.each {value ->
 							checkout([
@@ -37,6 +37,15 @@ pipeline {
 								if(logs!='') {
 									echo "${value}: develop -> stage\n${logs}\n"
 									description = description+ "${value}: develop -> stage\n${logs}\n"
+								}
+
+								logs = sh (
+									script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
+									returnStdout: true
+								)
+								if(logs!='') {
+									echo "${value}: stage -> master\n${logs}\n"
+									description = description+ "${value}: stage -> master\n${logs}\n"
 								}
 							}
 						}
