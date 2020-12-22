@@ -56,7 +56,7 @@ pipeline {
 						def TEXT = teamsheader + teamsNotif
 						try {
 							withCredentials([string(credentialsId: 'teams_channel_jenkins', variable: 'URL')]) {
-								sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "(champagne)'+TEXT+'"}\' $URL'
+								sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+TEXT+'"}\' $URL'
 							}
 						} catch (exc) {
 							buildDescription "\nCouldn't send to channel.\nRepeat later"
