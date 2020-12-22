@@ -57,6 +57,8 @@ pipeline {
 						try {
 							withCredentials([string(credentialsId: 'teams_channel_jenkins', variable: 'URL')]) {
 								println URL
+								println credentials('teams_channel_jenkins')
+								println '++++++++++++'
 								sh "curl -H 'Content-Type: application/json' -d '{\"text\": \"${text}\"}' ${URL}"
 							}
 						} catch (exc) {
