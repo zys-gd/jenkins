@@ -95,11 +95,11 @@ node ('master') {
 			        sh "git push --progress --porcelain origin :${issueID}"
 			    }
 			}
-			withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
-				def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
-				sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
-			}
 		} catch (exc) {}
+		withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+			def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
+			sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
+		}
 
 	} else if(env[0] == 'LOCAL' && (objIssue.data.fields.customfield_10049 == null || objIssue.data.fields.customfield_10049.id != 10106)) {
 		setTaskEnv(issueID, env[1])
