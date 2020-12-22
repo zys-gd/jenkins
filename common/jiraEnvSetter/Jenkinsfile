@@ -67,7 +67,7 @@ node ('master') {
 		buildDescription "Checking for ${issueID}"
 	} catch (exc) {
         buildName "${REPOSITORY_NAME}"
-        buildDescription "Something went wrong"
+        buildDescription "${COMMIT_MESSAGE}\nSomething went wrong"
     }
 
 	def env = getEnvironment()
