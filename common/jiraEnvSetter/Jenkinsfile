@@ -61,13 +61,18 @@ node ('master') {
 	echo "Repository " + "${REPOSITORY_NAME}"
 	echo "Branch " + "${BRANCH_FULL_PATH}"
 
-	def issueID = extractIssueID()
-	buildName "${issueID} in ${REPOSITORY_NAME}"
-	buildDescription "Checking for ${issueID}"
+	try {
+		def issueID = extractIssueID()
+		buildName "${issueID} in ${REPOSITORY_NAME}"
+		buildDescription "Checking for ${issueID}"
+	} catch (exc) {
+        buildName "${REPOSITORY_NAME}"
+        buildDescription "${COMMIT_MESSAGE}\nSomething went wrong"
+    }
 
 	def env = getEnvironment()
 	def objIssue = getJiraIssue(issueID)
-	println objIssue
+
 	if(ensureMerged()) {
 	    setTaskEnv(issueID, env[1])
 	    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
