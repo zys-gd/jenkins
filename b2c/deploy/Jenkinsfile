@@ -108,7 +108,9 @@ pipeline {
                     sh "docker-compose exec -T php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
 
 					sh "docker-compose up -d --remove-orphans --force-recreate"
-
+					withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+						sh 'curl -H \'Content-Type: application/json\' -d \'{"text": ":champagne: PROD was deployed"}\' $URL'
+					}
 				}
 			}
 		}
