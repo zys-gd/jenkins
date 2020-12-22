@@ -95,6 +95,10 @@ node ('master') {
 			        sh "git branch -d ${issueID}"
 			    }
 			}
+			withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+				def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
+				sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
+			}
 		} catch (exc) {}
 
 	} else if(env[0] == 'LOCAL' && (objIssue.data.fields.customfield_10049 == null || objIssue.data.fields.customfield_10049.id != 10106)) {
