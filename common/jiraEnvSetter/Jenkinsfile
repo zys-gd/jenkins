@@ -73,9 +73,10 @@ node ('master') {
 	    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
 
 	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to ' + env[0])
-	    buildDescription "Set Jira issue ${issueID} ENV to " + env[0]
+	    def jobDesc = "Set Jira issue ${issueID} ENV to " + env[0]
+	    buildDescription jobDesc
 
-// 		try {
+		try {
 			sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 				sh "git config --global user.email 'develop@toplyvo.app'"
                 sh "git config --global user.name 'Jenkins'"
@@ -86,10 +87,19 @@ node ('master') {
 			        sh "git push --progress --porcelain origin :${issueID}"
 			    }
 			}
-// 		} catch (exc) {}
-		withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
-			def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
-// 			sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
+		} catch (exc) {
+			jobDesc = jobDesc + "\nError while deleting branch"
+			buildDescription jobDesc
+		}
+
+		try {
+			withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+				def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
+				sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
+			}
+		} catch (exc) {
+			jobDesc = jobDesc + "\nError while sending to teams"
+            buildDescription jobDesc
 		}
 
 	} else if(env[0] == 'LOCAL' && (objIssue.data.fields.customfield_10049 == null || objIssue.data.fields.customfield_10049.id != 10106)) {
