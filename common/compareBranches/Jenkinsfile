@@ -54,8 +54,9 @@ pipeline {
 
 					if(teamsNotif!='') {
 						def text = teamsheader + teamsNotif
+						def url = credentials('teams_channel_jenkins')
 						try {
-						sh "curl -H 'Content-Type: application/json' -d '{\"text\": \"${text}\"}' https://outlook.office.com/webhook/48bc9880-4b14-45b3-9ee3-93d0be4bd4f1@ef26001e-365b-4295-8511-2417ac86a68b/IncomingWebhook/662cfe3708cc4d769f4e5b268e9696c7/01797945-d308-43e9-b9c8-d9ed3f116bcf"
+							curl -H 'Content-Type: application/json' -d '{"text": "${text}"}' url
 						} catch (exc) {
 							buildDescription "\nCouldn't send to channel.\nRepeat later"
 						}
