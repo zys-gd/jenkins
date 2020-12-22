@@ -92,7 +92,7 @@ node ('master') {
 			])
 			dir("${issueID}") {
 			    sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-			        sh "git push --progress --porcelain origin :${issueID}"
+// 			        sh "git push --progress --porcelain origin :${issueID}"
 			    }
 			}
 // 		} catch (exc) {}
