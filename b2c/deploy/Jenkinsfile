@@ -109,7 +109,9 @@ pipeline {
 
 					sh "docker-compose up -d --remove-orphans --force-recreate"
 					withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
-						sh 'curl curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "PROD was deployed"}\' $URL'
+						try {
+							sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "PROD was deployed"}\' $URL'
+						} catch (e){}
 					}
 				}
 			}
