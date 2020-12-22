@@ -96,7 +96,7 @@ pipeline {
                     sh "docker-compose exec -T php-cron php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
                     sh "docker-compose exec -T php-cron php bin/console --em=tracking  --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=prod"
 					withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
-						sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "STAGE was deployed"}\' $URL'
+						sh 'curl curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "STAGE was deployed"}\' $URL'
 					}
 				}
 			}

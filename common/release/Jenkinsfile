@@ -101,7 +101,7 @@ pipeline {
 							if(masterStageDiff!='') {
 								def teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
 								withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
-									sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+teamsNotif+'"}\' $URL'
+									sh 'curl curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "'+teamsNotif+'"}\' $URL'
 								}
 							}
                         }

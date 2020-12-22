@@ -102,7 +102,7 @@ node ('master') {
 		try {
 			withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 				def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
-				sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
+				sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
 			}
 		} catch (exc) {
 			jobDesc = jobDesc + "\nError while sending to teams"
