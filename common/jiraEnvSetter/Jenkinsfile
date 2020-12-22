@@ -75,7 +75,7 @@ node ('master') {
 	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to ' + env[0])
 	    buildDescription "Set Jira issue ${issueID} ENV to " + env[0]
 
-		try {
+// 		try {
 			checkout([
 				$class: 'GitSCM',
 				branches: [[name: '*/${issueID}']],
@@ -95,10 +95,10 @@ node ('master') {
 			        sh "git push --progress --porcelain origin :${issueID}"
 			    }
 			}
-		} catch (exc) {}
+// 		} catch (exc) {}
 		withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 			def text = "${REPOSITORY_NAME}: ${issueID} -> " + env[0]
-			sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
+// 			sh 'curl -H \'Content-Type: application/json\' -d \'{"text": "'+text+'"}\' $URL'
 		}
 
 	} else if(env[0] == 'LOCAL' && (objIssue.data.fields.customfield_10049 == null || objIssue.data.fields.customfield_10049.id != 10106)) {
