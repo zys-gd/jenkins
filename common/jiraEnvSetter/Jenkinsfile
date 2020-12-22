@@ -7,6 +7,8 @@ def Stage = [id:'10108']
 def Prod = [id:'10109']
 @Field
 def Local = [id:'10106']
+@Field
+def issueID = ''
 
 //def jsonObj = readJSON text: "${HEAD_COMMIT}"
 
@@ -62,7 +64,7 @@ node ('master') {
 	echo "Branch " + "${BRANCH_FULL_PATH}"
 
 	try {
-		def issueID = extractIssueID()
+		issueID = extractIssueID()
 		buildName "${issueID} in ${REPOSITORY_NAME}"
 		buildDescription "Checking for ${issueID}"
 	} catch (exc) {
