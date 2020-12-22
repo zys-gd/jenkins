@@ -76,23 +76,14 @@ node ('master') {
 	    buildDescription "Set Jira issue ${issueID} ENV to " + env[0]
 
 // 		try {
-			checkout([
-				$class: 'GitSCM',
-				branches: [[name: '*/${issueID}']],
-				doGenerateSubmoduleConfigurations: false,
-				extensions: [[
-					$class: 'RelativeTargetDirectory',
-					relativeTargetDir: '${issueID}'
-				]],
-				submoduleCfg: [],
-				userRemoteConfigs: [[
-					credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-					url: 'git@github.com:transloyd/${REPOSITORY_NAME}.git'
-				]]
-			])
+			sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+				sh "git config --global user.email 'develop@toplyvo.app'"
+                sh "git config --global user.name 'Jenkins'"
+				sh "git clone git@github.com:transloyd/${REPOSITORY_NAME}.git ${issueID}"
+			}
 			dir("${issueID}") {
 			    sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
-// 			        sh "git push --progress --porcelain origin :${issueID}"
+			        sh "git push --progress --porcelain origin :${issueID}"
 			    }
 			}
 // 		} catch (exc) {}
