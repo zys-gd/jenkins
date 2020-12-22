@@ -56,7 +56,8 @@ pipeline {
 						def text = teamsheader + teamsNotif
 						try {
 							withCredentials([string(credentialsId: 'teams_channel_jenkins', variable: 'URL')]) {
-								println $URL
+								println URL
+								println "${URL}"
 								sh "curl -H 'Content-Type: application/json' -d '{\"text\": \"${text}\"}' $URL"
 							}
 						} catch (exc) {
