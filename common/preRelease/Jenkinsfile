@@ -92,7 +92,8 @@ pipeline {
 			steps {
 				script {
 					logs.each {value ->
-                        jiraEditIssue idOrKey: value, issue: Stage, site: 'Jira Toplyvo'
+						def issueEnv = [fields: [customfield_10049: Stage]]
+                        jiraEditIssue idOrKey: value, issue: issueEnv, site: 'Jira Toplyvo'
                     }
 				}
 			}
