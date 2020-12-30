@@ -27,7 +27,6 @@ pipeline {
 					}
 					catch (exc) {
 						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
 					}
 				}
 
@@ -51,7 +50,6 @@ pipeline {
         					catch (exc) {
         						sh "git status"
         						currentBuild.result = 'FAILURE'
-        						currentStage.result = 'FAILURE'
         					}
 
         				}
@@ -76,7 +74,6 @@ pipeline {
 					catch (exc) {
 						sh "git status"
 						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
 					}
 
 				}
@@ -102,7 +99,6 @@ pipeline {
                     catch (exc) {
                         sh "git status"
                         currentBuild.result = 'FAILURE'
-                        currentStage.result = 'FAILURE'
                     }
 
                 }

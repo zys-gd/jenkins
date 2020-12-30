@@ -38,7 +38,6 @@ pipeline {
 					catch (exc) {
 						sh "docker-compose down"
 						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
 					}
 				}
 
@@ -61,7 +60,6 @@ pipeline {
 						catch (exc) {
 							sh "docker-compose down"
 							currentBuild.result = 'FAILURE'
-							currentStage.result = 'FAILURE'
 						}
 
 					}
@@ -102,7 +100,6 @@ pipeline {
 						catch (exc) {
 							sh "docker-compose down"
 							currentBuild.result = 'FAILURE'
-							currentStage.result = 'FAILURE'
 						}
 
 					}

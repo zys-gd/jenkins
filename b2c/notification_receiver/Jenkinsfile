@@ -27,7 +27,6 @@ pipeline {
 					}
 					catch (exc) {
 						currentBuild.result = 'FAILURE'
-						currentStage.result = 'FAILURE'
 					}
 				}
 			}
