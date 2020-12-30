@@ -88,17 +88,6 @@ pipeline {
 			}
 		}
 
-		stage('Set Jira env') {
-			steps {
-				script {
-					logs.each {value ->
-						def issueEnv = [fields: [customfield_10049: Stage]]
-                        jiraEditIssue idOrKey: value, issue: issueEnv, site: 'Jira Toplyvo'
-                    }
-				}
-			}
-		}
-
 	}
 
 }
