@@ -1,3 +1,12 @@
+import groovy.transform.Field
+@Field
+def Dev = [id:'10107']
+@Field
+def Stage = [id:'10108']
+@Field
+def Prod = [id:'10109']
+@Field
+def Local = [id:'10106']
 // Create release to stage
 def VERSION_TAG = "v${env.Release}"
 def sourceBranch = env.HOTFIX.toBoolean() ? 'hotfix' :'stage'
@@ -86,22 +95,23 @@ pipeline {
 	                            sh "git tag -a ${VERSION_TAG} -m 'Automated Jenkins build #${env.BUILD_ID}'"
 								sh "git push --progress origin master --tags"
 	                        }
-
-							if(masterStageDiff!='') {
-								def teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
-								withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
-									try {
-										sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "'+teamsNotif+'"}\' $URL'
-									} catch (e){}
-								}
-							}
                         }
 					}
 					catch (exc) {
-						sh "git status"
+						echo 'DEBUG: PUSHING error'
 						currentBuild.result = 'FAILURE'
 					}
 
+					if(masterStageDiff!='') {
+						def teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
+						withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+							try {
+								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "'+teamsNotif+'"}\' $URL'
+							} catch (e){
+								echo 'DEBUG: TEAMS sending error'
+							}
+						}
+					}
 				}
 
 			}
@@ -125,12 +135,22 @@ pipeline {
                         }
 					}
 					catch (exc) {
-						sh "git status"
 						currentBuild.result = 'FAILURE'
 					}
 
 				}
 
+			}
+		}
+
+		stage('Set Jira env') {
+			steps {
+				script {
+					logs.each {value ->
+						def issueEnv = [fields: [customfield_10049: Prod]]
+                        jiraEditIssue idOrKey: value, issue: issueEnv, site: 'Jira Toplyvo'
+                    }
+				}
 			}
 		}
 
