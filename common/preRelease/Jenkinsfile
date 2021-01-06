@@ -62,8 +62,6 @@ pipeline {
                                 script: "git log origin/stage...origin/develop | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
                                 returnStdout: true
                             ).split( '\n' )
-                            echo "DEBUG: logs"
-                            println logs
 
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git merge origin/develop --no-ff -m 'Automated pre-release. ${env.BUILD_URL}'"
@@ -97,7 +95,6 @@ pipeline {
 					echo "DEBUG: logs"
 					logs.each {value ->
 						def issueEnv = [fields: [customfield_10049: Stage]]
-						echo value
                         jiraEditIssue idOrKey: value, issue: issueEnv, site: 'Jira Toplyvo'
                     }
 				}

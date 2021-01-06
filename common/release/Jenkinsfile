@@ -81,15 +81,13 @@ pipeline {
 					try {
 						dir("${env.Repository}") {
 							masterStageDiff = sh (
-								script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
+								script: "git log origin/master...origin/${sourceBranch} | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0\"<br/>\"}' ",
 								returnStdout: true
 							)
 							logs = sh (
-								script: "git log origin/master...origin/stage | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
+								script: "git log origin/master...origin/${sourceBranch} | grep -e '[A-Z]\\+-[0-9]\\+' -o | sort | uniq | awk '{print \$0}' ",
 								returnStdout: true
 							).split( '\n' )
-							echo "DEBUG: logs"
-							println logs
 
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git merge origin/${sourceBranch} --no-ff -m 'Automated release ${VERSION_TAG}. ${env.BUILD_URL}'"
@@ -151,7 +149,6 @@ pipeline {
 					echo "DEBUG: logs"
 					logs.each {value ->
 						def issueEnv = [fields: [customfield_10049: Prod]]
-						echo value
                         jiraEditIssue idOrKey: value, issue: issueEnv, site: 'Jira Toplyvo'
                     }
 				}
