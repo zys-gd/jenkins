@@ -75,7 +75,7 @@ pipeline {
 					}
 
 					if(devStageDiff!='') {
-						def teamsNotif = "${value}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
+						def teamsNotif = "${env.Repository}: MERGED develop -> stage<br/>${devStageDiff}<br/>"
 						withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 							try {
 								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "'+teamsNotif+'"}\' $URL'
