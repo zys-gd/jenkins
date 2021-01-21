@@ -141,5 +141,14 @@ pipeline {
 			}
 		}
 
+		stage ('Run B2C deploy (stage)') {
+			steps {
+				script {
+	                build wait: false, job: 'B2C deploy (stage)'
+                }
+
+			}
+		}
+
 	}
 }
