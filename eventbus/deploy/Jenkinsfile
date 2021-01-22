@@ -1,0 +1,114 @@
+pipeline {
+	agent { node { label 'toplivo-production-ssh' } }
+	options {
+		skipDefaultCheckout true
+	}
+	environment {
+		DOCKER_USERNAME='jenkins'
+        DOCKER_PASSWORD='ch1qySOXu8Q'
+        DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
+    }
+	parameters {
+        gitParameter name: 'TAG',
+                     type: 'PT_TAG',
+                     defaultValue: 'v1.0.0',
+                     description: 'Tag og docker image\'s build',
+                     quickFilterEnabled: true,
+                     sortMode: 'DESCENDING_SMART',
+                     useRepository: 'git@github.com:transloyd/eventbus.git',
+                     tagFilter: 'v*'
+
+    }
+	stages {
+
+		stage ('Get build configuration') {
+			steps {
+				buildDescription "${params.TAG}"
+				script { try {
+					// this checkout is needed for gitParameter plugin
+					checkout([
+						$class: 'GitSCM',
+						branches: [[name: '*/master']],
+						doGenerateSubmoduleConfigurations: false,
+						extensions: [
+							[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+						],
+						submoduleCfg: [],
+						userRemoteConfigs: [[
+							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+							url: 'git@github.com:transloyd/eventbus.git'
+						]]
+					])
+					sh 'rm -rf docker environments || true'
+                    sh "cd source && mv docker ../"
+                    sh 'rm -rf source'
+				} catch (exc) {}}
+			}
+		}
+
+		stage ('Login to Registry') {
+			steps {
+				script {
+	                //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+	                sh "doctl registry login"
+                }
+
+			}
+		}
+
+		stage ('Remove previous builds') {
+			steps {
+				script {
+	                def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
+					try {
+                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/eventbus-app-prod:${previousBuild}' --filter=reference='${DOCKER_REGISTRY}/*')"
+					} catch (exc) {}
+                }
+
+			}
+		}
+
+		stage ('Download builds') {
+
+			steps {
+				script {
+					sh "docker pull ${DOCKER_REGISTRY}/eventbus-app-prod:${params.TAG}"
+				}
+			}
+		}
+
+		stage ('Apply builds') {
+			environment {
+				IMAGE_TAG="${params.TAG}"
+			}
+			steps {
+				script {
+					sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+						sh "git clone git@github.com:transloyd/environments.git"
+					}
+
+					sh "cp environments/eventbus/.env .env"
+
+					sh "docker-compose -f docker-compose-prod.yml up -d --remove-orphans --force-recreate"
+
+					withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+						try {
+							sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "EventBus PROD was deployed"}\' $URL'
+						} catch (e){}
+					}
+				}
+			}
+		}
+
+		stage ('Logout from Registry') {
+			steps {
+				script {
+	                //sh "docker logout $DOCKER_REGISTRY"
+	                sh "doctl registry logout"
+                }
+
+			}
+		}
+
+	}
+}
