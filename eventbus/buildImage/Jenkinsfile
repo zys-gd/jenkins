@@ -71,11 +71,7 @@ pipeline {
 			steps {
 				script {
 					sh "cp .docker/build/docker-compose.yml docker-compose.yml"
-
-					sh "cp .env.dist .env"
-
 					sh "docker-compose build node-app-image"
-
 					sh "docker tag $DOCKER_REGISTRY/eventbus-app-prod $DOCKER_REGISTRY/eventbus-app-prod"
 					sh "docker push $DOCKER_REGISTRY/eventbus-app-prod"
 				}
