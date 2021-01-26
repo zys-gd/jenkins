@@ -49,7 +49,7 @@ def getEnvironment()
 def setTaskEnv(issueID, state, isLocal = 0)
 {
 	def issueEnv = [fields: [customfield_10049: state]]
-	if(isLocal) {
+	if(isLocal == 0) {
 		issueEnv << [fields: [assignee: [accountId:'5f23c383ef11df0025a5b003']]]
 	}
 	jiraEditIssue idOrKey: issueID, issue: issueEnv, site: 'Jira Toplyvo'
