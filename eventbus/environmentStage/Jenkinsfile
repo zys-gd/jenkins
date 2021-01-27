@@ -1,0 +1,85 @@
+node {
+	try {
+		sh "rm -R environments"
+	} catch (exc) {}
+	sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+		sh "git clone git@github.com:transloyd/environments.git"
+	}
+// this part needed only for first generate parameters to job
+
+	def props = readProperties file: "environments/eventbus/.env"
+	dynamicParams = []
+	params.each {key, value ->
+		dynamicParams += [
+            string(name: "$key", defaultValue: "$value", description: ''),
+        ]
+    }
+	props.each { key, value ->
+		dynamicParams += [
+            string(name: "$key", defaultValue: "$value", description: ''),
+        ]
+	}
+	properties([
+        parameters(dynamicParams)
+    ])
+
+}
+
+pipeline {
+	agent any
+	options {
+		skipDefaultCheckout true
+	}
+	environment {
+		ENV_DIRECTORY='environments/eventbus/'
+		ENV_FILE='.env'
+    }
+    stages {
+        stage ('Update .env') {
+            steps {
+                script {
+                    dir('$ENV_DIRECTORY') {
+	                    def envFile = "$ENV_FILE"
+                        def current = ''
+	                    def props = writeFile file: envFile, text: current
+						params.each {key, value ->
+							//sh "echo '${key}=${value}' >> ${envFile}"
+							current = readFile envFile
+                            writeFile file: envFile, text: current + "\n" + "${key}=${value}"
+						}
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+                            def user = specificCause ? specificCause.userName : '-'
+							sh "git commit ${envFile} -m 'Pipeline update env by ${user}'"
+							sh "git push"
+							buildDescription "Update env by ${user}"
+						}
+
+						ENV = readFile file: envFile
+					}
+				}
+			}
+        }
+    }
+}
+
+/*
+node ('toplivo-test-ssh-deploy') {
+	dir('/home/jenkins/workspace/Test prod deploy from registry/project') {
+		writeFile file: ".env", text: ENV
+	}
+}
+*/
+
+node {
+	def props = readProperties file: "$ENV_DIRECTORY$ENV_FILE"
+	dynamicParams = []
+	props.each { key, value ->
+		dynamicParams += [
+            string(name: "$key", defaultValue: "$value", description: ''),
+        ]
+	}
+	properties([
+        parameters(dynamicParams)
+    ])
+}
