@@ -6,6 +6,7 @@ node {
 		sh "git clone git@github.com:transloyd/environments.git"
 	}
 // this part needed only for first generate parameters to job
+/*
 	def props = readProperties file: "environments/eventbus/.env"
 	dynamicParams = []
 	params.each {key, value ->
@@ -21,6 +22,7 @@ node {
 	properties([
         parameters(dynamicParams)
     ])
+*/
 }
 
 pipeline {
