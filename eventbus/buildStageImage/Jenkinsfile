@@ -7,38 +7,30 @@ pipeline {
 		DOCKER_USERNAME='jenkins'
         DOCKER_PASSWORD='ch1qySOXu8Q'
         DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
-        DOCKER_IMAGE_SUFFIX='prod'
-    }
-	parameters {
-        gitParameter name: 'TAG',
-                     type: 'PT_TAG',
-                     defaultValue: 'v1.0.0',
-                     description: 'Tag og docker image\'s build',
-                     quickFilterEnabled: true,
-                     sortMode: 'DESCENDING_SMART',
-                     useRepository: 'git@github.com:transloyd/eventbus.git'
-                     tagFilter: 'v*'
+        DOCKER_IMAGE_SUFFIX='stage'
     }
 	stages {
 
 		stage ('Checkout from git') {
+
 			steps {
 				script {
-					buildDescription "${params.TAG}"
+					def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+					def user = specificCause ? specificCause.userName : '-'
+					buildDescription "Started by ${user}"
 					try {
 						checkout([
 							$class: 'GitSCM',
-							branches: [[name: "refs/tags/${params.TAG}"]],
+							branches: [[name: '*/stage']],
 							doGenerateSubmoduleConfigurations: false,
 							extensions: [],
 							submoduleCfg: [],
 							userRemoteConfigs: [[
 								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/eventbus.git'
+								url: 'git@github.com:transloyd/core.toplyvo.app.git'
 							]]
 						])
-					}
-					catch (exc) {
+					} catch (exc) {
 						currentBuild.result = 'FAILURE'
 					}
 				}
@@ -58,9 +50,8 @@ pipeline {
 		stage ('Remove previous builds') {
 			steps {
 				script {
-	                def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
 					try {
-                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/eventbus-app-${DOCKER_IMAGE_SUFFIX}:${previousBuild}' --filter=reference='${DOCKER_REGISTRY}/*')"
+                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/eventbus-app-${DOCKER_IMAGE_SUFFIX}' --filter=reference='${DOCKER_REGISTRY}/*')"
 					} catch (exc) {}
                 }
 
@@ -72,7 +63,7 @@ pipeline {
 				script {
 					sh "cp .docker/build/docker-compose.yml docker-compose.yml"
 					sh "docker-compose build node-app-image"
-					sh "docker tag $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX} $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}:${params.TAG}"
+					sh "docker tag $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX} $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}"
 					sh "docker push $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}"
 				}
 			}
@@ -88,5 +79,15 @@ pipeline {
 			}
 		}
 
+        /*
+		stage ('Run EventBus deploy (Stage)') {
+			steps {
+				script {
+	                build wait: false, job: 'EventBus deploy (Stage)'
+                }
+
+			}
+		}
+        */
 	}
 }
