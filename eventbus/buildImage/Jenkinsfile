@@ -16,7 +16,7 @@ pipeline {
                      description: 'Tag og docker image\'s build',
                      quickFilterEnabled: true,
                      sortMode: 'DESCENDING_SMART',
-                     useRepository: 'git@github.com:transloyd/eventbus.git'
+                     useRepository: 'git@github.com:transloyd/eventbus.git',
                      tagFilter: 'v*'
     }
 	stages {
