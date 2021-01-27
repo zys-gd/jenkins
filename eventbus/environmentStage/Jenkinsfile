@@ -30,16 +30,12 @@ pipeline {
 	options {
 		skipDefaultCheckout true
 	}
-	environment {
-		ENV_DIRECTORY='environments/eventbus/'
-		ENV_FILE='.env'
-    }
     stages {
         stage ('Update .env') {
             steps {
                 script {
-                    dir('$ENV_DIRECTORY') {
-	                    def envFile = "$ENV_FILE"
+                    dir('environments/eventbus/') {
+	                    def envFile = ".env.stage"
                         def current = ''
 	                    def props = writeFile file: envFile, text: current
 						params.each {key, value ->
@@ -72,7 +68,7 @@ node ('toplivo-test-ssh-deploy') {
 */
 
 node {
-	def props = readProperties file: "$ENV_DIRECTORY$ENV_FILE"
+	def props = readProperties file: "environments/eventbus/.env.stage"
 	dynamicParams = []
 	props.each { key, value ->
 		dynamicParams += [
