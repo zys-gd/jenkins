@@ -148,7 +148,7 @@ pipeline {
 				script {
 					echo "DEBUG: logs"
 					logs.each {value ->
-						def issueEnv = [fields: [customfield_10049: Prod, assignee: [accountId:'5f23c383ef11df0025a5b003']]]
+						def issueEnv = [fields: [customfield_10049: Prod/*, assignee: [accountId:'5f23c383ef11df0025a5b003']*/]]
                         jiraEditIssue idOrKey: value, issue: issueEnv, site: 'Jira Toplyvo'
                     }
 				}
