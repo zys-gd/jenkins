@@ -54,7 +54,7 @@ pipeline {
                         sh "git clone git@github.com:transloyd/environments.git"
                     }
                     sh "mv environments/eventbus/${ENV_FILENAME} .env"
-                    sh 'rm -rf source'
+                    sh 'rm -rf environments'
                 }
             }
         }
@@ -102,7 +102,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
                         try {
-                            sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "EventBus PROD was deployed"}\' $URL'
+                            sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "EventBus STAGE was deployed"}\' $URL'
                         } catch (e){}
                     }
                 }
