@@ -8,7 +8,7 @@ pipeline {
         DOCKER_PASSWORD='ch1qySOXu8Q'
         DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
         DOCKER_IMAGE_SUFFIX='stage'
-        DOCKER_COMPOSE_FILENAME='.docker-compose-stage.yml'
+        DOCKER_COMPOSE_FILENAME='docker-compose-stage.yml'
         ENV_FILENAME='.env.stage'
     }
     stages {
