@@ -7,7 +7,7 @@ node {
 	}
 // this part needed only for first generate parameters to job
 /*
-	def props = readProperties file: "environments/eventbus/.env"
+	def props = readProperties file: "environments/eventbus/.env.prod"
 	dynamicParams = []
 	params.each {key, value ->
 		dynamicParams += [
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     dir('environments/eventbus/') {
-	                    def envFile = ".env"
+	                    def envFile = ".env.prod"
                         def current = ''
 	                    def props = writeFile file: envFile, text: current
 						params.each {key, value ->
@@ -68,7 +68,7 @@ node ('toplivo-test-ssh-deploy') {
 */
 
 node {
-	def props = readProperties file: "environments/eventbus/.env"
+	def props = readProperties file: "environments/eventbus/.env.prod"
 	dynamicParams = []
 	props.each { key, value ->
 		dynamicParams += [
