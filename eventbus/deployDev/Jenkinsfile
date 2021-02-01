@@ -1,0 +1,123 @@
+pipeline {
+    agent { node { label 'toplivo-eventbus-stage' } }
+    options {
+        skipDefaultCheckout true
+    }
+    environment {
+        DOCKER_USERNAME='jenkins'
+        DOCKER_PASSWORD='ch1qySOXu8Q'
+        DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
+        DOCKER_IMAGE_SUFFIX='dev'
+        DOCKER_COMPOSE_FILENAME='docker-compose-dev.yml'
+        ENV_FILENAME='.env.dev'
+    }
+    stages {
+
+        stage ('Get build configuration') {
+            steps {
+                script {
+                    def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+                    def user = specificCause ? specificCause.userName : '-'
+                    buildDescription "Started by ${user}"
+                    try {
+                        // this checkout is needed for gitParameter plugin
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: '*/develop']],
+                            doGenerateSubmoduleConfigurations: false,
+                            extensions: [
+                                [$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']
+                            ],
+                            submoduleCfg: [],
+                            userRemoteConfigs: [[
+                                credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+                                url: 'git@github.com:transloyd/eventbus.git'
+                            ]]
+                        ])
+                        sh 'rm -rf .docker documentation docker-compose.yml || true'
+                        sh 'mkdir .docker'
+                        sh "mv ./source/.docker/mysql ./.docker/mysql"
+                        sh "mv ./source/documentation ./documentation"
+                        sh "mv ./source/${DOCKER_COMPOSE_FILENAME} ./docker-compose.yml"
+                        sh 'rm -rf source'
+                    } catch (exc) {}
+                }
+                //unstash "docker"
+            }
+        }
+
+        stage ('Get environments') {
+            steps {
+                script {
+                    sh 'rm -rf environments .env || true'
+                    sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+                        sh "git clone git@github.com:transloyd/environments.git"
+                    }
+                    sh "mv environments/eventbus/${ENV_FILENAME} .env"
+                    sh 'rm -rf environments'
+                }
+            }
+        }
+
+        stage ('Login to Registry') {
+            steps {
+                script {
+                    //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
+                    sh "doctl registry login"
+                }
+
+            }
+        }
+
+        stage ('Remove previous builds') {
+            steps {
+                script {
+                    try {
+                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/eventbus-app-${DOCKER_IMAGE_SUFFIX}' --filter=reference='${DOCKER_REGISTRY}/*')"
+                    } catch (exc) {}
+                }
+
+            }
+        }
+
+        stage ('Download builds') {
+
+            steps {
+                script {
+                    sh "docker pull ${DOCKER_REGISTRY}/eventbus-app-${DOCKER_IMAGE_SUFFIX}"
+                }
+            }
+        }
+
+        stage ('Apply builds') {
+            steps {
+                script {
+                    sh "docker-compose up -d --remove-orphans --force-recreate"
+                }
+            }
+        }
+
+        stage ('Send notification') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+                        try {
+                            // sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "EventBus STAGE was deployed"}\' $URL'
+                        } catch (e){}
+                    }
+                }
+            }
+        }
+
+        stage ('Logout from Registry') {
+            steps {
+                script {
+                    //sh "docker logout $DOCKER_REGISTRY"
+                    sh "doctl registry logout"
+                }
+
+            }
+        }
+
+    }
+}
