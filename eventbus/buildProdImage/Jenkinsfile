@@ -1,15 +1,13 @@
 pipeline {
-	agent { node { label 'master' } }
-	options {
-		skipDefaultCheckout true
-	}
-	environment {
-		DOCKER_USERNAME='jenkins'
-        DOCKER_PASSWORD='ch1qySOXu8Q'
+    agent { node { label 'master' } }
+    options {
+        skipDefaultCheckout true
+    }
+    environment {
         DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
         DOCKER_IMAGE_SUFFIX='prod'
     }
-	parameters {
+    parameters {
         gitParameter name: 'TAG',
                      type: 'PT_TAG',
                      defaultValue: 'v1.0.0',
@@ -19,74 +17,68 @@ pipeline {
                      useRepository: 'git@github.com:transloyd/eventbus.git',
                      tagFilter: 'v*'
     }
-	stages {
-
-		stage ('Checkout from git') {
-			steps {
-				script {
-					buildDescription "${params.TAG}"
-					try {
-						checkout([
-							$class: 'GitSCM',
-							branches: [[name: "refs/tags/${params.TAG}"]],
-							doGenerateSubmoduleConfigurations: false,
-							extensions: [],
-							submoduleCfg: [],
-							userRemoteConfigs: [[
-								credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
-								url: 'git@github.com:transloyd/eventbus.git'
-							]]
-						])
-					}
-					catch (exc) {
-						currentBuild.result = 'FAILURE'
-					}
-				}
-			}
-		}
-
-		stage ('Login to Registry') {
-			steps {
-				script {
-	                //sh "docker login $DOCKER_REGISTRY -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD"
-	                sh "doctl registry login"
+    stages {
+        stage ('Checkout from git') {
+            steps {
+                script {
+                    buildDescription "${params.TAG}"
+                    try {
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: "refs/tags/${params.TAG}"]],
+                            doGenerateSubmoduleConfigurations: false,
+                            extensions: [],
+                            submoduleCfg: [],
+                            userRemoteConfigs: [[
+                                credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+                                url: 'git@github.com:transloyd/eventbus.git'
+                            ]]
+                        ])
+                    }
+                    catch (exc) {
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
+            }
+        }
 
-			}
-		}
+        stage ('Login to Registry') {
+            steps {
+                script {
+                    sh "doctl registry login"
+                }
+            }
+        }
 
-		stage ('Remove previous builds') {
-			steps {
-				script {
-	                def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
-					try {
+        stage ('Remove previous builds') {
+            steps {
+                script {
+                    def previousBuild = currentBuild.getPreviousBuild().getRawBuild().actions.find{ it instanceof ParametersAction }?.parameters.find{it.name == 'TAG'}?.value
+                    try {
                         sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/eventbus-app-${DOCKER_IMAGE_SUFFIX}:${previousBuild}' --filter=reference='${DOCKER_REGISTRY}/*')"
-					} catch (exc) {}
+                    } catch (exc) {}
                 }
+            }
+        }
 
-			}
-		}
-
-		stage ('Build app image') {
-			steps {
-				script {
-					sh "cp .docker/build/docker-compose.yml docker-compose.yml"
-					sh "docker-compose build node-app-image"
-					sh "docker tag $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX} $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}:${params.TAG}"
-					sh "docker push $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}"
-				}
-			}
-		}
-
-		stage ('Logout from Registry') {
-			steps {
-				script {
-	                //sh "docker logout $DOCKER_REGISTRY"
-	                sh "doctl registry logout"
+        stage ('Build app image') {
+            steps {
+                script {
+                    sh "cp .docker/build/docker-compose.yml docker-compose.yml"
+                    sh "docker-compose build node-app-image"
+                    sh "docker tag $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX} $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}:${params.TAG}"
+                    sh "docker push $DOCKER_REGISTRY/eventbus-app-${DOCKER_IMAGE_SUFFIX}"
                 }
+            }
+        }
 
-			}
-		}
+        stage ('Logout from Registry') {
+            steps {
+                script {
+                    sh "doctl registry logout"
+                }
+            }
+        }
 
-	}
+    }
 }
