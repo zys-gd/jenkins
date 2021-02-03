@@ -90,7 +90,19 @@ pipeline {
 							currentBuild.result = 'FAILURE'
 							stageResult."{STAGE_NAME}" = "FAILURE"
 						}
+					}
+				}
+			}
+		}
 
+		stage ('Run tests') {
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
+			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					script {
 						parallel(
 							unitTest: {
 								sh 'docker-compose exec -T php vendor/bin/codecept run unit'
