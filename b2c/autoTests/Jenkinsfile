@@ -1,0 +1,138 @@
+// Build project when PR open
+// Remove data when PR closed
+def writeGitHubPullRequestStatus(text, state)
+{
+	setGitHubPullRequestStatus context: 'Jenkins', message: text, state: state
+}
+
+writeGitHubPullRequestStatus('Job started', 'PENDING')
+
+pipeline {
+	agent { node { label 'toplivo-dev-ssh'} }
+	options {
+		skipDefaultCheckout true
+		parallelsAlwaysFailFast()
+	}
+	stages {
+
+		stage ('Checkout from git') {
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
+			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+				buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
+
+				script { try {
+					checkout([
+						$class: 'GitSCM',
+						branches: [[name: '*/${GITHUB_PR_SOURCE_BRANCH}']],
+						doGenerateSubmoduleConfigurations: false,
+						extensions: [[
+							$class: 'RelativeTargetDirectory',
+							relativeTargetDir: '${GITHUB_PR_SOURCE_BRANCH}'
+						]],
+						submoduleCfg: [],
+						userRemoteConfigs: [[
+							credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+							url: 'git@github.com:transloyd/core.toplyvo.app.git'
+						]]
+					])
+				}
+                catch (exc) {
+                    currentBuild.result = 'FAILURE'
+                }}
+
+			}
+		}
+
+		stage ('Prepare environment') {
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
+			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					sh "cp .env.dev .env"
+					sh "cp docker/build/docker-compose.tests.yml docker-compose.yml"
+				}
+			}
+		}
+
+		stage ('Run docker-compose') {
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'OPEN' }
+			}
+			steps {
+				writeGitHubPullRequestStatus("${env.STAGE_NAME}", 'PENDING')
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					script {
+						sh "doctl registry login"
+
+						try {
+							sh "cp docker/php/parameters.yml.dist project/app/config/parameters.yml"
+							sh "docker-compose up -d --build"
+						}
+						catch (exc) {
+							sh "docker-compose down"
+							currentBuild.result = 'FAILURE'
+							stageResult."{STAGE_NAME}" = "FAILURE"
+						}
+
+						try {
+							sh "docker-compose exec -T php composer install"
+						}
+						catch (exc) {
+							sh "docker-compose down"
+							currentBuild.result = 'FAILURE'
+							stageResult."{STAGE_NAME}" = "FAILURE"
+						}
+
+						parallel(
+							unitTest: {
+								sh 'docker-compose exec -T php vendor/bin/codecept run unit'
+							},
+							functionalTest: {
+								sh 'docker-compose exec -T php vendor/bin/codecept run functional'
+							},
+                            acceptanceTest: {
+                                sh 'docker-compose exec -T php vendor/bin/codecept run acceptance'
+                            }
+							phpstan: {
+								sh 'docker-compose exec -T php vendor/bin/phpstan analyze'
+							}
+						)
+
+						sh 'docker-compose down'
+						sh "doctl registry logout"
+					}
+				}
+			}
+		}
+
+
+		stage ('Close PR')
+		{
+			when {
+				expression { "${GITHUB_PR_STATE}" == 'CLOSED' }
+			}
+			steps
+			{
+				buildDescription "${GITHUB_PR_SOURCE_BRANCH}"
+				dir("${GITHUB_PR_SOURCE_BRANCH}") {
+					deleteDir()
+				}
+			}
+		}
+
+	}
+
+	post {
+      success {
+          writeGitHubPullRequestStatus("Job finished", 'SUCCESS')
+      }
+      failure {
+          writeGitHubPullRequestStatus("Job finished", 'FAILURE')
+      }
+    }
+}
