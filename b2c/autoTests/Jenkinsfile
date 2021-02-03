@@ -13,6 +13,9 @@ pipeline {
 		skipDefaultCheckout true
 		parallelsAlwaysFailFast()
 	}
+	environment {
+        DOCKER_REGISTRY='registry.digitalocean.com/jf-toplyvo'
+    }
 	stages {
 
 		stage ('Checkout from git') {
