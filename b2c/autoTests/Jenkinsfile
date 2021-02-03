@@ -97,7 +97,7 @@ pipeline {
 							},
                             acceptanceTest: {
                                 sh 'docker-compose exec -T php vendor/bin/codecept run acceptance'
-                            }
+                            },
 							phpstan: {
 								sh 'docker-compose exec -T php vendor/bin/phpstan analyze'
 							}
