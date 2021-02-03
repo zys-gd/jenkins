@@ -8,7 +8,7 @@ def writeGitHubPullRequestStatus(text, state)
 writeGitHubPullRequestStatus('Job started', 'PENDING')
 
 pipeline {
-	agent { node { label 'toplivo-dev-ssh'} }
+	agent any
 	options {
 		skipDefaultCheckout true
 		parallelsAlwaysFailFast()
