@@ -92,6 +92,7 @@ pipeline {
 	                sh "docker-compose down"
 	                sh "docker-compose up -d composer redis rabbitmq mysql"
 	                sh "docker-compose exec -T composer composer install --no-scripts --no-dev"
+	                sh "docker-compose exec -T composer composer dump-autoload --classmap-authoritative"
 	                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
 	                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:clear --env=prod"
 	                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:warmup --env=prod"
