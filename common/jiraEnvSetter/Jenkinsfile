@@ -15,7 +15,7 @@ def issueID = ''
 @NonCPS
 def extractIssueID()
 {
-	return ("${COMMIT_MESSAGE}" =~ /(TPLV-\d{1,})/)[0][1]
+	return ("${COMMIT_MESSAGE}" =~ /((TPLV|TAV)-\d{1,})/)[0][0]
 }
 
 @NonCPS
