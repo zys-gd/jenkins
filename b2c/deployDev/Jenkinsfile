@@ -38,7 +38,7 @@ pipeline {
 
 					sh "docker-compose up -d --force-recreate --remove-orphans --build"
 
-                    sh "docker-compose exec php rm -R vendor/"
+//                     sh "docker-compose exec php rm -R vendor/"
                     sh "docker-compose exec php composer install --no-interaction"
 
                     sh "docker-compose exec php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=dev"
