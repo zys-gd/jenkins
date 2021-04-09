@@ -79,13 +79,6 @@ node ('master') {
 	def objIssue = getJiraIssue(issueID)
 
 	if(ensureMerged()) {
-	    setTaskEnv(issueID, env[1])
-	    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
-
-	    gitHubPRStatus githubPRMessage('Set Jira issue ENV to ' + env[0])
-	    def jobDesc = "Set Jira issue ${issueID} ENV to " + env[0]
-	    buildDescription jobDesc
-
 		try {
 			sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 				sh "git config --global user.email 'develop@toplyvo.app'"
@@ -112,6 +105,14 @@ node ('master') {
             buildDescription jobDesc
 		}
 
+		try {
+		    setTaskEnv(issueID, env[1])
+		    echo "Update issue " + issueID + " from repository " + "${REPOSITORY_NAME}"
+
+		    gitHubPRStatus githubPRMessage('Set Jira issue ENV to ' + env[0])
+		    def jobDesc = "Set Jira issue ${issueID} ENV to " + env[0]
+		    buildDescription jobDesc
+	    } catch (exc) { }
 	} else if(env[0] == 'LOCAL' && (objIssue.data.fields.customfield_10049 == null || objIssue.data.fields.customfield_10049.id != 10106)) {
 		setTaskEnv(issueID, env[1], 1)
 		buildDescription "LOCAL"
