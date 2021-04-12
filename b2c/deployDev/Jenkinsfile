@@ -42,13 +42,13 @@ pipeline {
 						sh "docker-compose up -d --force-recreate --remove-orphans --build"
 
 	//                     sh "docker-compose exec php rm -R vendor/"
-	                    sh "docker-compose exec php composer install --no-interaction"
+	                    sh "docker-compose exec -T php composer install --no-interaction"
 
-	                    sh "docker-compose exec php php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=dev"
-	                    sh "docker-compose exec php php bin/console --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=dev"
+	                    sh "docker-compose exec -T php bin/console --configuration=./app/config/doctrine/migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=dev"
+	                    sh "docker-compose exec -T php bin/console --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=dev"
 
-	                    sh "docker-compose exec -u www-data php bin/console doctrine:cache:clear-metadata"
-	                    sh "docker-compose exec -u www-data php bin/console cache:clear"
+	                    sh "docker-compose exec -T -u www-data php bin/console doctrine:cache:clear-metadata"
+	                    sh "docker-compose exec -T -u www-data php bin/console cache:clear"
 						withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 							try {
 								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "DEVELOP was deployed"}\' $URL'
