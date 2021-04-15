@@ -106,7 +106,7 @@ pipeline {
 	                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
 	                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:clear --env=prod"
 	                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:warmup --env=prod"
-	                sh "docker-compose run --rm ${envs} -T composer php bin/console assets:install --env=prod --symlink web "
+	                sh "docker-compose run --rm ${envs} -T composer php bin/console assets:install --env=prod"
 	                sh "docker-compose down"
                 }
 
