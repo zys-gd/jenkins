@@ -48,7 +48,8 @@ pipeline {
 	                    sh "docker-compose exec -T php bin/console --configuration=./app/config/doctrine/tracking_migrations.yml doctrine:migrations:migrate --allow-no-migration --no-interaction --env=dev"
 
 	                    sh "docker-compose exec -T -u www-data php bin/console doctrine:cache:clear-metadata"
-	                    sh "docker-compose exec -T -u www-data php bin/console cache:clear"
+	                    sh "docker-compose exec -T php bin/console cache:clear"
+	                    sh "docker-compose exec -T php chown www-data:www-data -R var/"
 						withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 							try {
 								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "DEVELOP was deployed"}\' $URL'
