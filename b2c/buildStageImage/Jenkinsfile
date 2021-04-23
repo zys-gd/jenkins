@@ -47,16 +47,16 @@ pipeline {
 			}
 		}
 
-		stage ('Remove previous builds') {
-			steps {
-				script {
-					try {
-                        sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/stage_toplyvo_php_fpm' --filter=reference='${DOCKER_REGISTRY}/*')"
-					} catch (exc) {}
-                }
-
-			}
-		}
+// 		stage ('Remove previous builds') {
+// 			steps {
+// 				script {
+// 					try {
+//                         sh "docker rmi -f \$(docker images -q --filter 'before=${DOCKER_REGISTRY}/stage_toplyvo_php_fpm' --filter=reference='${DOCKER_REGISTRY}/*')"
+// 					} catch (exc) {}
+//                 }
+//
+// 			}
+// 		}
 
 		stage ('Build pure php image') {
 			steps {
