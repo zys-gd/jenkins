@@ -90,13 +90,18 @@ pipeline {
 					def reqDirs = "var/cache var/logs var/spool var/sessions web/public/img/uploads"
 					def envs = "-e REDIS_HOST=stage_build_toplivo_back_redis -e RABBITMQ_HOST=stage_build_toplyvo_rabbitmq -e DATABASE_HOST=stage_build_toplyvo_mysql -e SHELL_DATABASE_HOST='' -e SHELL_DATABASE_PORT=''"
 	                sh "docker-compose down"
-	                sh "docker-compose up -d composer redis rabbitmq mysql"
-	                sh "docker-compose exec -T composer composer install --no-scripts --no-dev"
-	                sh "docker-compose exec -T composer composer dump-autoload --classmap-authoritative"
-	                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
-	                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:clear --env=prod"
-	                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:warmup --env=prod"
-	                sh "docker-compose run --rm ${envs} -T composer php bin/console assets:install --env=prod"
+	                try {
+		                sh "docker-compose up -d composer redis rabbitmq mysql"
+		                sh "docker-compose exec -T composer composer install --no-scripts --no-dev"
+		                sh "docker-compose exec -T composer composer dump-autoload --classmap-authoritative"
+		                sh "docker-compose exec -T composer mkdir -p ${reqDirs}"
+		                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:clear --env=prod"
+		                sh "docker-compose run --rm ${envs} -T composer php bin/console cache:warmup --env=prod"
+		                sh "docker-compose run --rm ${envs} -T composer php bin/console assets:install --env=prod"
+                    } catch (exc) {
+                        sh "docker-compose down"
+                    }
+
 	                sh "docker-compose down"
                 }
 
