@@ -106,7 +106,7 @@ pipeline {
 		stage ('Build production php') {
 			steps {
 				script {
-	                sh "docker-compose build --parallel --no-cache php-fpm php-cron php-consumer"
+	                sh "docker-compose build --parallel php-fpm php-cron php-consumer"
 
 	                sh "docker tag $DOCKER_REGISTRY/stage_toplyvo_php_fpm $DOCKER_REGISTRY/stage_toplyvo_php_fpm"
                     sh "docker push $DOCKER_REGISTRY/stage_toplyvo_php_fpm"
