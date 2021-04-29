@@ -1,0 +1,58 @@
+pipeline {
+	agent { node { label 'toplyvo-dev' } }
+	options {
+		skipDefaultCheckout true
+	}
+	stages {
+		stage ('Checkout') {
+			steps {
+				script {
+					dir('/home/toplyvo/Project/Core/core.toplyvo.app') {
+						def specificCause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+						def user = specificCause ? specificCause.userName : '-'
+		                buildDescription "Started by ${user}"
+						try {
+							checkout([
+								$class: 'GitSCM',
+								branches: [[name: '*/develop']],
+								doGenerateSubmoduleConfigurations: false,
+								extensions: [],
+								submoduleCfg: [],
+								userRemoteConfigs: [[
+									credentialsId: '7303d04c-541b-49a3-83f2-834b64810cc5',
+									url: 'git@github.com:transloyd/b2c.core.admin.git'
+								]]
+							])
+						} catch (exc) {}
+					}
+				}
+			}
+		}
+
+		stage ('Apply changes') {
+			steps {
+				script {
+					dir('/home/toplyvo/Project/Core/core.toplyvo.app') {
+						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
+							sh "git clone git@github.com:transloyd/environments.git"
+						}
+						sh "cp environments/b2c/.env.dev .env"
+						sh 'rm -rf environments || true'
+
+						sh "docker-compose up -d --force-recreate --remove-orphans --build"
+
+	                    sh "docker-compose exec -T php composer install --no-interaction"
+
+	                    sh "docker-compose exec -T php bin/console cache:clear"
+	                    sh "docker-compose exec -T php chown www-data:www-data -R var/"
+						withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
+							try {
+								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "B2C ADMIN: DEVELOP was deployed"}\' $URL'
+							} catch (e){}
+						}
+					}
+				}
+			}
+		}
+	}
+}
