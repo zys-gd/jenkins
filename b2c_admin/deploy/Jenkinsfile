@@ -46,7 +46,7 @@ pipeline {
 
 		stage ('Apply changes') {
 			environment {
-		        CONTAINER_NAME_PREFIX=BRANCH
+		        CONTAINER_NAME_PREFIX='${BRANCH}'
 		    }
 			steps {
 				script {
