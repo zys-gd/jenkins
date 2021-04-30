@@ -14,7 +14,7 @@ switch(BRANCH) {
 }
 
 pipeline {
-	agent { node { label '${NODE}' } }
+	agent { node { label NODE } }
 	options {
 		skipDefaultCheckout true
 	}
