@@ -61,7 +61,7 @@ pipeline {
 
                     sh "docker-compose exec -T php composer install --no-interaction"
 
-                    sh "docker-compose exec -T php bin/console cache:clear"
+                    sh "docker-compose exec -T php bin/console cache:clear --env=prod"
                     sh "docker-compose exec -T php chown www-data:www-data -R var/"
 					withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 						try {
