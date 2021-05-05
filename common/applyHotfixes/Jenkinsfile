@@ -12,7 +12,7 @@ pipeline {
 
 				script {
 					buildDescription "${env.Repository}"
-					try {
+
 						sh "rm -R *"
 						sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 							sh "git config --global user.email 'develop@toplyvo.app'"
@@ -24,10 +24,7 @@ pipeline {
 							sh "git checkout hotfix"
 						}
 
-					}
-					catch (exc) {
-						currentBuild.result = 'FAILURE'
-					}
+
 				}
 
 			}
@@ -37,7 +34,6 @@ pipeline {
         			steps {
 
         				script {
-        					try {
         						dir("${env.Repository}") {
         							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
         								sh "git checkout master"
@@ -46,11 +42,7 @@ pipeline {
         								sh "git push --progress origin master"
         	                        }
                                 }
-        					}
-        					catch (exc) {
-        						sh "git status"
-        						currentBuild.result = 'FAILURE'
-        					}
+
 
         				}
 
@@ -61,7 +53,6 @@ pipeline {
 			steps {
 
 				script {
-					try {
 						dir("${env.Repository}") {
 							sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
 								sh "git checkout stage"
@@ -70,11 +61,6 @@ pipeline {
 								sh "git push --progress origin stage"
 	                        }
                         }
-					}
-					catch (exc) {
-						sh "git status"
-						currentBuild.result = 'FAILURE'
-					}
 
 				}
 
@@ -85,7 +71,6 @@ pipeline {
             steps {
 
                 script {
-                    try {
                         dir("${env.Repository}") {
                             sh "git remote -v"
 	                        sshagent(['7303d04c-541b-49a3-83f2-834b64810cc5']) {
@@ -95,11 +80,6 @@ pipeline {
 	                            sh "git push --progress origin develop"
 	                        }
                         }
-                    }
-                    catch (exc) {
-                        sh "git status"
-                        currentBuild.result = 'FAILURE'
-                    }
 
                 }
 
