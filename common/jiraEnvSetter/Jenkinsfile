@@ -91,6 +91,8 @@ node ('master') {
 			        sh "git push --progress --porcelain origin :${issueID}"
 			    }
 			}
+			jobDesc = 'Delete branch'
+			buildDescription jobDesc
 		} catch (exc) {
 			jobDesc = jobDesc + "\nError while deleting branch"
 			buildDescription jobDesc
