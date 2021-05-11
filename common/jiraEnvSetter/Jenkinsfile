@@ -76,7 +76,11 @@ node ('master') {
     }
 
 	def env = getEnvironment()
-	def objIssue = getJiraIssue(issueID)
+	try {
+		def objIssue = getJiraIssue(issueID)
+	} catch (exc) {
+		echo 'CANT CONNECT TO JIRA'
+	}
 
 	if(ensureMerged()) {
 		def jobDesc = "Set Jira issue ${issueID} ENV to " + env[0]
