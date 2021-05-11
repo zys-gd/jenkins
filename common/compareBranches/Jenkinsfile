@@ -1,6 +1,6 @@
 import groovy.transform.Field
 @Field
-def REPOSITORIES = ['core.toplyvo.app','toplyvotransporter','toplyvodesktop','toplyvosmsauth','insurance']
+def REPOSITORIES = ['core.toplyvo.app', 'b2c.core.admin', 'toplyvotransporter','toplyvodesktop','toplyvosmsauth','insurance']
 
 pipeline {
 	agent { node { label 'master' } }
