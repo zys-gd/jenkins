@@ -34,7 +34,7 @@ pipeline {
 						sh "docker-compose up -d --force-recreate --remove-orphans --build"
 						withCredentials([string(credentialsId: 'teams_channel_dev_team', variable: 'URL')]) {
 							try {
-								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "B2B-desktop was deployed"}\' $URL'
+								sh 'curl --retry 5 -H \'Content-Type: application/json\' -d \'{"text": "B2B-desktop (dev) was deployed"}\' $URL'
 							} catch (e){}
 						}
 				}
